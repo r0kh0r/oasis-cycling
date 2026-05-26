@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Claude Code local config
+.claude/
+
+# Vercel CLI artifacts (in case the CLI is ever used)
+.vercel/
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Backup files
+*.bak
