@@ -50,7 +50,7 @@ html, body {
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   line-height: 1.5; letter-spacing: -0.005em;
 }
-section[id], [id="games"], [id="earn"] { scroll-margin-top: 80px; }
+section[id], [id="games"] { scroll-margin-top: 80px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
   overflow-x: hidden;
@@ -1456,7 +1456,6 @@ section { padding: 100px 0; position: relative; }
       <div class="nav__links">
         <a href="#challenges">Challenges</a>
         <a href="#leaderboard">Leaderboard</a>
-        <a href="#earn">Earn</a>
         <a href="#faq">FAQ</a>
       </div>
       <a class="nav__cta" href="portal.html">Join the Race</a>
@@ -1675,30 +1674,6 @@ section { padding: 100px 0; position: relative; }
 
           </aside>
 
-          <!-- Earn CTA -->
-          <div id="earn" class="portal-tile" style="background: radial-gradient(400px 240px at 100% 0%, rgba(61,123,255,0.16), transparent 65%), var(--bg-1); border-color: rgba(61, 123, 255, 0.2);">
-            <span class="eyebrow"><span class="dot"></span> EARN BONUS · OPTIONAL</span>
-            <h3 style="margin-top: 10px;">Boost your GC.</h3>
-            <p style="font-size: 13px; color: var(--text-2); margin: 6px 0 16px;">Deposit USDC into Earn. Get bonus ROSE and a one-time ~40 pt boost.</p>
-
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div style="display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 0; background: var(--bg-2); border: 1px solid var(--line); font-size: 13px;">
-                <span>$100 →</span>
-                <span class="text-mono">2,000 ROSE · +40 pts</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 0; background: var(--bg-2); border: 1px solid var(--line); font-size: 13px;">
-                <span>$500 →</span>
-                <span class="text-mono">5,000 ROSE</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 0; background: rgba(61, 123, 255, 0.1); border: 1px solid rgba(61, 123, 255, 0.2); font-size: 13px;">
-                <span style="color: var(--oasis-blue);">$1,000 →</span>
-                <span class="text-mono" style="color: var(--oasis-blue);">10,000 ROSE</span>
-              </div>
-            </div>
-
-            <button class="btn btn--blue" style="width: 100%; margin-top: 16px;">Deposit into Earn</button>
-            <p class="text-3 text-mono" style="font-size: 10px; letter-spacing: 0.1em; margin-top: 10px; text-align: center;">90-DAY LOCK · 4.5% APY · NON-CUSTODIAL</p>
-          </div>
         </aside>
 
       </div>
