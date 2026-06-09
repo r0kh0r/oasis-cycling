@@ -99,15 +99,18 @@ p { color: var(--text-2); }
 .nav__cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 0; background: var(--oasis-blue); color: white; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; transition: background 200ms ease; }
 .nav__cta:hover { background: #002DB3; }
 @media (max-width: 860px) { .nav__links { display: none; } }
-/* Narrow viewports — collapse to just Oasis logo + button so nothing overflows */
+/* Narrow viewports — shrink both nav logos proportionally so the lockup still fits */
 @media (max-width: 540px) {
-  .nav__brand { gap: 8px; }
-  .nav__brand > svg:last-of-type,
-  .nav__brand .x { display: none; }
-  .nav__cta { padding: 0 18px; font-size: 18px; }
+  .nav__brand { gap: 10px; }
+  .nav__brand > svg:first-of-type { height: 26px; }    /* Oasis: 36 → 26 */
+  .nav__brand > svg:last-of-type  { height: 18px; }    /* KZS:   24 → 18 */
+  .nav__cta { padding: 0 16px; font-size: 17px; }
 }
 @media (max-width: 380px) {
-  .nav__cta { padding: 0 14px; font-size: 16px; height: 44px; }
+  .nav__brand { gap: 8px; }
+  .nav__brand > svg:first-of-type { height: 22px; }    /* Oasis */
+  .nav__brand > svg:last-of-type  { height: 14px; }    /* KZS */
+  .nav__cta { padding: 0 14px; font-size: 15px; height: 44px; }
 }
 
 /* ============================================================
@@ -1260,6 +1263,15 @@ section { padding: 100px 0; position: relative; }
       align-items: center;
     }
     .progress-ring__svg { width: 130px; height: 130px; }
+    /* Stack ring above text on narrow viewports + collapse the 3-stat breakdown */
+    @media (max-width: 640px) {
+      .progress-ring { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 18px; }
+      .progress-ring + * .points-breakdown,
+      .points-breakdown { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 860px) and (min-width: 641px) {
+      .points-breakdown { grid-template-columns: repeat(2, 1fr) !important; }
+    }
     .progress-ring__num {
       font-family: var(--font-display);
       font-size: 26px;
@@ -1381,7 +1393,7 @@ section { padding: 100px 0; position: relative; }
       gap: 12px;
       margin-top: 16px;
     }
-    .points-breakdown div {
+    .points-breakdown > div {
       padding: 14px;
       border-radius: 0;
       background: var(--bg-2);
@@ -1443,8 +1455,10 @@ section { padding: 100px 0; position: relative; }
     .pbtn--ghost:hover { background:rgba(255,255,255,0.05); }
     .pbtn:disabled { opacity:0.45; cursor:default; background:var(--bg-3); color:var(--text-3); }
     /* ticket pill in nav */
-    .tkt-pill { display:inline-flex; align-items:center; gap:8px; height:52px; padding:0 22px; background:var(--oasis-blue-bg); border:1px solid rgba(0,60,216,0.4); color:#fff; font-family:var(--font-display); font-size:18px; letter-spacing:0.05em; text-transform:uppercase; }
+    .tkt-pill { display:inline-flex; align-items:center; gap:8px; height:52px; padding:0 22px; background:var(--oasis-blue-bg); border:1px solid rgba(0,60,216,0.4); color:#fff; font-family:var(--font-display); font-size:18px; letter-spacing:0.05em; text-transform:uppercase; white-space:nowrap; flex-shrink:0; }
     .tkt-pill b { color:var(--maillot-jaune); }
+    /* Hide the nav ticket pill when there isn't room — race-bar at top still shows the count */
+    @media (max-width: 1000px) { .tkt-pill { display:none; } }
     /* picker modal */
     .pmodal { position:fixed; inset:0; z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(0,0,0,0.72); backdrop-filter:blur(4px); }
     .pmodal.open { display:flex; }
