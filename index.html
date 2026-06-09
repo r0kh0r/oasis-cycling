@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Oasis × Cycling Challenge — Predict &amp; Win a Colnago.</title>
-  <meta name="description" content="Predict the podium of cycling's biggest races — the Tour, and the men's and women's World and European Championships. Every place you call right is a raffle ticket toward a Colnago and more. Free to enter. Powered by Oasis." />
+  <title>Oasis × Cycling Challenge — Predict &amp; Win a Canyon.</title>
+  <meta name="description" content="Predict the podium of cycling's biggest races — the Tour, and the men's and women's World and European Championships. Every place you call right is a raffle ticket toward a Canyon and more. Free to enter. Powered by Oasis." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,11 +23,10 @@
   --line: rgba(255, 255, 255, 0.08);
   --line-strong: rgba(255, 255, 255, 0.16);
   --text: #ffffff;
-  --text-2: rgba(255, 255, 255, 0.66);
-  /* Text-3 / text-4 brightened one step on the scale:
-     text-3 now matches the old text-2 (0.66), text-4 matches the old text-3 (0.42). */
-  --text-3: rgba(255, 255, 255, 0.66);
-  --text-4: rgba(255, 255, 255, 0.42);
+  /* Brightened for stronger contrast on the dark theme */
+  --text-2: rgba(255, 255, 255, 0.82);
+  --text-3: rgba(255, 255, 255, 0.82);
+  --text-4: rgba(255, 255, 255, 0.58);
   --oasis-blue: #003CD8;
   --oasis-blue-soft: #002DB3;
   --oasis-blue-bg: rgba(0, 60, 216, 0.12);
@@ -73,10 +72,15 @@ h3 { font-size: clamp(24px, 2.4vw, 32px); }
 p { color: var(--text-2); }
 
 .race-bar { position: relative; z-index: 50; border-bottom: 1px solid var(--line); background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(14px); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
-.race-bar__inner { display: flex; align-items: center; justify-content: space-between; height: 36px; gap: 24px; white-space: nowrap; }
+.race-bar__inner { display: flex; align-items: center; justify-content: space-between; height: 36px; gap: 24px; white-space: nowrap; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+.race-bar__inner::-webkit-scrollbar { display: none; }
 .race-bar__item { display: flex; align-items: center; gap: 8px; color: var(--text-3); flex-shrink: 0; }
 @media (max-width: 1200px) { .race-bar__item--opt { display: none; } }
 @media (max-width: 900px) { .race-bar__item--opt2 { display: none; } }
+/* At narrow viewports stop forcing space-between so items hug left */
+@media (max-width: 720px) {
+  .race-bar__inner { justify-content: flex-start; gap: 18px; }
+}
 .race-bar__item strong { color: var(--text); font-weight: 500; }
 .race-bar__wallet { background: none; border: 0; padding: 0; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; transition: color 150ms; }
 .race-bar__wallet:hover { color: var(--text); }
@@ -90,13 +94,23 @@ p { color: var(--text-2); }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .nav__brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 400; font-size: 20px; letter-spacing: 0.1em; text-transform: uppercase; }
 .nav__brand .x { color: var(--oasis-blue); font-weight: 500; }
-.nav__brand .sub { color: var(--text-3); font-weight: 500; letter-spacing: 0.16em; font-size: 10px; text-transform: uppercase; border-left: 1px solid var(--line); padding-left: 12px; white-space: nowrap; }
+.nav__brand .sub { color: var(--text-3); font-weight: 500; letter-spacing: 0.16em; font-size: 11px; text-transform: uppercase; border-left: 1px solid var(--line); padding-left: 12px; white-space: nowrap; }
 @media (max-width: 1100px) { .nav__brand .sub { display: none; } }
 .nav__links { display: flex; gap: 32px; font-size: 14px; color: var(--text-2); }
 .nav__links a:hover { color: var(--text); }
 .nav__cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 0; background: var(--oasis-blue); color: white; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; transition: background 200ms ease; }
 .nav__cta:hover { background: #002DB3; }
 @media (max-width: 860px) { .nav__links { display: none; } }
+/* Narrow viewports — collapse to just Oasis logo + button so nothing overflows */
+@media (max-width: 540px) {
+  .nav__brand { gap: 8px; }
+  .nav__brand > svg:last-of-type,
+  .nav__brand .x { display: none; }
+  .nav__cta { padding: 0 18px; font-size: 18px; }
+}
+@media (max-width: 380px) {
+  .nav__cta { padding: 0 14px; font-size: 16px; height: 44px; }
+}
 
 /* ============================================================
    Hero redesign — photo background + race progress panel
@@ -158,7 +172,7 @@ p { color: var(--text-2); }
 .btn--ghost:hover { background: rgba(255, 255, 255, 0.1); }
 .btn--blue { background: var(--oasis-blue); color: white; }
 .btn--blue:hover { background: #002DB3; }
-.hero__chips { display: flex; gap: 8px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); }
+.hero__chips { display: flex; gap: 8px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); }
 .hero__chips span { border: 1px solid var(--line); padding: 5px 12px; border-radius: 0; background: rgba(255,255,255,0.03); }
 
 /* ============================================================
@@ -191,7 +205,7 @@ p { color: var(--text-2); }
 
 .gcp__brand {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -202,7 +216,7 @@ p { color: var(--text-2); }
   align-items: center;
   gap: 6px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #ff5959;
@@ -226,7 +240,7 @@ p { color: var(--text-2); }
 
 .gcp__stage-meta {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -292,7 +306,7 @@ p { color: var(--text-2); }
 
 .gcp__meta {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -322,7 +336,7 @@ p { color: var(--text-2); }
   display: flex;
   justify-content: space-between;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -345,7 +359,7 @@ p { color: var(--text-2); }
 .gcp__footer-sub {
   margin-top: 8px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-3);
   text-align: center;
@@ -356,7 +370,7 @@ p { color: var(--text-2); }
 .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
 .countdown__cell { background: var(--bg-2); border: 1px solid var(--line); border-radius: 0; padding: 16px 6px; text-align: center; }
 .countdown__cell .num { font-family: var(--font-display); font-size: clamp(24px, 2.4vw, 32px); font-variant-numeric: tabular-nums; line-height: 1; }
-.countdown__cell .lbl { display: block; margin-top: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
+.countdown__cell .lbl { display: block; margin-top: 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
 .dash-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); font-size: 13px; }
 .dash-row .lbl { color: var(--text-3); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
 .dash-row .val { color: var(--text); font-weight: 500; font-variant-numeric: tabular-nums; }
@@ -447,10 +461,19 @@ section { padding: 100px 0; position: relative; }
 
 /* Prize card internals */
 .prize__emoji {
-  font-size: 50px;
-  line-height: 1;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
   margin-bottom: 20px;
+}
+.prize__emoji img.prize__img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
 }
 
 .prize__name {
@@ -516,13 +539,26 @@ section { padding: 100px 0; position: relative; }
 /* Positions 4-10 row */
 .prize-rest {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 0;
   align-items: end;
   margin-top: 16px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
-@media (max-width: 760px) {
-  .prize-rest { grid-template-columns: 1fr; align-items: stretch; gap: 12px; }
+
+/* Rest-tier podium steps: blue brand gradient (positions 4-10) */
+.prize-rest .podium-step {
+  height: 44px;
+  font-size: 30px;
+  background: linear-gradient(140deg, #002DB3 0%, var(--oasis-blue) 100%);
+  color: white;
+  border-color: rgba(0, 60, 216, 0.55);
+}
+.prize-rest .prize {
+  background: radial-gradient(500px 260px at 50% 0%, rgba(0, 60, 216, 0.10), transparent 55%), var(--bg-1);
+  border-color: rgba(0, 60, 216, 0.22);
 }
 
 /* kept for compat */
@@ -595,7 +631,7 @@ section { padding: 100px 0; position: relative; }
 .tier__total .v { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--oasis-blue); white-space: nowrap; }
 .tier__points { margin-top: 14px; padding: 10px 14px; border-radius: 0; background: rgba(0, 224, 122, 0.08); border: 1px solid rgba(0, 224, 122, 0.18); color: var(--maillot-vert); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
 .tier--max { background: radial-gradient(500px 280px at 100% 0%, rgba(0, 60, 216, 0.16), transparent 65%), var(--bg-1); border-color: rgba(0, 60, 216, 0.22); }
-.tier--max::after { content: "MAX"; position: absolute; top: 24px; right: 24px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; padding: 3px 8px; background: var(--oasis-blue); color: white; border-radius: 0; }
+.tier--max::after { content: "MAX"; position: absolute; top: 24px; right: 24px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; padding: 3px 8px; background: var(--oasis-blue); color: white; border-radius: 0; }
 
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; }
 @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
@@ -616,14 +652,14 @@ section { padding: 100px 0; position: relative; }
 .stage-map__dot { width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line-strong); }
 .stage-map__pt.done .stage-map__dot { background: var(--oasis-blue); border-color: var(--oasis-blue); }
 .stage-map__pt.now .stage-map__dot { background: var(--maillot-jaune); border-color: var(--maillot-jaune); box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.18); }
-.stage-map__lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); text-align: center; white-space: nowrap; }
+.stage-map__lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); text-align: center; white-space: nowrap; }
 .stage-map__pt.now .stage-map__lbl, .stage-map__pt.done .stage-map__lbl { color: var(--text); }
 .stage-map__profile { margin-top: 36px; height: 80px; position: relative; }
 
 .scoreboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 @media (max-width: 980px) { .scoreboard { grid-template-columns: repeat(2, 1fr); } }
 .stat { border: 1px solid var(--line); border-top: 2px solid var(--oasis-blue); border-radius: 0; padding: 28px 24px 20px; background: var(--bg-1); position: relative; overflow: hidden; }
-.stat__k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-3); }
+.stat__k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-3); }
 .stat__v { margin-top: 4px; font-family: var(--font-display); font-size: clamp(54px, 5.8vw, 76px); font-weight: 400; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; line-height: 0.92; }
 .stat__v .unit { color: var(--text-3); font-size: 16px; margin-left: 4px; }
 .stat__d { margin-top: 8px; font-size: 13px; color: var(--text-2); }
@@ -709,7 +745,7 @@ section { padding: 100px 0; position: relative; }
   left: 16px;
   z-index: 10;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: white;
@@ -763,7 +799,7 @@ section { padding: 100px 0; position: relative; }
 }
 .editorial__badge-label {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--maillot-jaune);
@@ -779,7 +815,7 @@ section { padding: 100px 0; position: relative; }
 }
 .editorial__badge-val {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: rgba(255,255,255,0.6);
   letter-spacing: 0.08em;
   margin-top: 6px;
@@ -857,7 +893,7 @@ section { padding: 100px 0; position: relative; }
 }
 .editorial__caption-right {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -881,7 +917,8 @@ section { padding: 100px 0; position: relative; }
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: start;
-  padding: 64px 0 60px;
+  padding-top: 64px;
+  padding-bottom: 60px;
 }
 .ct2__body h2 { margin-top: 14px; font-size: clamp(24px, 3.2vw, 48px); white-space: nowrap; }
 .ct2__body .lead {
@@ -919,7 +956,7 @@ section { padding: 100px 0; position: relative; }
 }
 .ct2__cd-lbl {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -934,7 +971,7 @@ section { padding: 100px 0; position: relative; }
   background: var(--bg-1);
   padding: 12px 14px;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -1014,7 +1051,7 @@ section { padding: 100px 0; position: relative; }
 }
 .ct2__wp-lbl {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -1219,23 +1256,23 @@ section { padding: 100px 0; position: relative; }
     .su-modal.open { display:flex; }
     .su-card { width:100%; max-width:440px; background:var(--bg-1); border:1px solid var(--line-strong); position:relative; }
     .su-head { padding:28px 28px 0; }
-    .su-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--oasis-blue); }
+    .su-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size: 12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--oasis-blue); }
     .su-dot { width:6px; height:6px; border-radius:50%; background:currentColor; display:inline-block; }
     .su-title { font-family:var(--font-display); font-size:34px; letter-spacing:0.02em; line-height:1; margin-top:14px; }
-    .su-sub { font-size:14px; color:var(--text-2); margin-top:10px; line-height:1.5; }
+    .su-sub { font-size: 15px; color:var(--text-2); margin-top:10px; line-height:1.5; }
     .su-body { padding:22px 28px 28px; }
-    .su-label { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:8px; }
+    .su-label { font-family:var(--font-mono); font-size: 12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:8px; }
     .su-input { width:100%; height:52px; background:var(--bg-2); border:1px solid var(--line-strong); color:var(--text); font-family:var(--font-body); font-size:16px; padding:0 16px; outline:none; box-sizing:border-box; }
     .su-input:focus { border-color:var(--oasis-blue); }
     .su-input--code { text-align:center; letter-spacing:0.5em; font-family:var(--font-mono); font-size:22px; }
     .su-btn { width:100%; height:54px; margin-top:16px; border:none; cursor:pointer; background:var(--oasis-blue); color:#fff; font-family:var(--font-display); font-size:19px; letter-spacing:0.06em; text-transform:uppercase; transition:background 200ms ease; }
     .su-btn:hover { background:var(--oasis-blue-soft); }
     .su-close { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--text-3); font-size:28px; line-height:1; cursor:pointer; }
-    .su-meta { font-family:var(--font-mono); font-size:11px; color:var(--text-3); margin-top:14px; text-align:center; letter-spacing:0.04em; }
-    .su-back { display:block; width:100%; background:none; border:none; color:var(--text-3); font-size:13px; cursor:pointer; margin-top:14px; text-decoration:underline; }
-    .su-err { color:var(--vuelta-red); font-size:13px; margin-top:10px; min-height:18px; }
+    .su-meta { font-family:var(--font-mono); font-size: 12px; color:var(--text-3); margin-top:14px; text-align:center; letter-spacing:0.04em; }
+    .su-back { display:block; width:100%; background:none; border:none; color:var(--text-3); font-size: 14px; cursor:pointer; margin-top:14px; text-decoration:underline; }
+    .su-err { color:var(--vuelta-red); font-size: 14px; margin-top:10px; min-height:18px; }
     .su-step { display:none; } .su-step.active { display:block; }
-    .su-secure { display:flex; align-items:center; gap:8px; justify-content:center; margin-top:18px; padding-top:16px; border-top:1px solid var(--line); font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-4); }
+    .su-secure { display:flex; align-items:center; gap:8px; justify-content:center; margin-top:18px; padding-top:16px; border-top:1px solid var(--line); font-family:var(--font-mono); font-size: 11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-4); }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
@@ -1246,8 +1283,8 @@ section { padding: 100px 0; position: relative; }
     <div class="container race-bar__inner">
       <div class="race-bar__item"><span class="live-pulse"></span><strong>LIVE</strong></div>
       <div class="race-bar__item">Season <strong>2026</strong></div>
-      <div class="race-bar__item">Races <strong>4</strong></div>
-      <div class="race-bar__item race-bar__item--opt">Top Prize <strong>Colnago V4Rs</strong></div>
+      <div class="race-bar__item">Races <strong>5</strong></div>
+      <div class="race-bar__item race-bar__item--opt">Top Prize <strong>Canyon Endurance CF 5</strong></div>
       <button type="button" class="race-bar__item race-bar__item--opt race-bar__wallet" aria-label="Open wallet">
         Wallet <strong>0xa3…b91f</strong>
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1261,7 +1298,7 @@ section { padding: 100px 0; position: relative; }
   <nav class="nav">
     <div class="container nav__inner">
       <a class="nav__brand" href="/">
-        <svg height="20" viewBox="0 0 99 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+        <svg height="36" viewBox="0 0 99 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
 <g clip-path="url(#oa-nav2)">
 <path d="M30.8478 5.40882C29.3359 3.86636 27.5485 2.6009 25.5687 1.67805C25.4885 1.63723 25.4069 1.59932 25.3223 1.56287C24.9331 1.38938 24.5394 1.22318 24.137 1.07739C23.0101 0.66772 21.8292 0.368849 20.6104 0.190985C19.7575 0.0670635 18.8871 0 18.0007 0C8.07532 0 0 8.07533 0 18.0007C0 25.7334 4.90147 32.3421 11.7609 34.8847C12.5671 35.1836 13.401 35.4256 14.2583 35.6078C15.4669 35.8644 16.7178 36.0015 18.0007 36.0015C24.8383 36.0015 30.7953 32.1686 33.8423 26.5411C35.2186 23.9985 36.0015 21.09 36.0015 18.0022C36.0015 13.1051 34.0333 8.65994 30.8492 5.41174L30.8478 5.40882ZM5.36946 27.6302C3.24238 24.8252 2.11833 21.4778 2.11833 17.9512C2.11833 11.9286 5.45693 6.67282 10.3803 3.93488C10.51 3.86199 10.6398 4.03548 10.5304 4.13753C10.0814 4.56032 9.6484 5.01373 9.23727 5.49629C6.38416 8.83344 4.73964 13.3719 4.72506 17.9512C4.72506 23.8965 8.70222 30.3142 15.1272 30.3142C20.8611 30.3142 25.5264 24.7683 25.5264 17.9512C25.5264 14.7481 24.4519 11.672 22.6194 9.39035C22.5552 9.31017 22.631 9.19499 22.7302 9.22561C25.8297 10.1426 28.1477 13.7072 28.1477 17.9512C28.1477 21.6994 26.7875 25.4302 24.417 28.1886C21.9589 31.0475 18.6597 32.622 15.1272 32.6235C11.4081 32.6235 7.84789 30.7997 5.368 27.6302H5.36946ZM30.9163 8.28089C33.0419 11.0801 34.163 14.4216 34.1601 17.9468C34.1601 23.9694 30.8215 29.2251 25.8982 31.9631C25.7684 32.036 25.6387 31.8625 25.748 31.7604C26.1985 31.3362 26.6301 30.8842 27.0412 30.4017C29.8943 27.0645 31.5388 22.5261 31.5534 17.9468C31.5534 12.0015 27.5762 5.58377 21.1513 5.58377C15.4173 5.58377 10.752 11.1296 10.752 17.9468C10.752 21.1498 11.8265 24.226 13.6591 26.5076C13.7232 26.5878 13.6474 26.703 13.5483 26.6723C10.4488 25.7553 8.13072 22.1922 8.13072 17.9497C8.13072 14.2029 9.49095 10.4721 11.8615 7.71377C14.3195 4.85482 17.6202 3.28028 21.1542 3.28028C24.8718 3.28028 28.4291 5.10266 30.9177 8.27943L30.9163 8.28089ZM23.6443 17.9512C23.6443 22.1966 21.5813 25.8617 18.6247 27.5063C18.2588 27.7104 17.8068 27.6841 17.4686 27.4377L16.8359 26.9756C14.2437 25.0832 12.6327 21.6236 12.6327 17.9468C12.6327 13.7014 14.6957 10.0362 17.6523 8.39169C18.0182 8.18758 18.4702 8.21383 18.8084 8.46021L19.4411 8.92091C22.0347 10.8133 23.6457 14.2729 23.6457 17.9497L23.6443 17.9512Z" fill="white"/>
 <path d="M51.1876 12.3747C50.3843 11.86 49.4454 11.6035 48.3709 11.6035C47.2964 11.6035 46.3532 11.86 45.544 12.3747C44.7349 12.8879 44.1095 13.6241 43.6663 14.5805C43.2231 15.5369 43.0015 16.677 43.0015 18.0007C43.0015 19.3245 43.2231 20.4456 43.6663 21.4035C44.1095 22.3599 44.7349 23.099 45.544 23.618C46.3532 24.1385 47.295 24.398 48.3709 24.398C49.4469 24.398 50.3843 24.1385 51.1876 23.618C51.9909 23.099 52.6163 22.3599 53.0654 21.4035C53.5144 20.4471 53.7389 19.3128 53.7389 18.0007C53.7389 16.6886 53.5144 15.5238 53.0654 14.5717C52.6163 13.6212 51.9909 12.8879 51.1876 12.3747ZM50.7181 20.3042C50.4878 20.9428 50.1685 21.4297 49.7618 21.7665C49.355 22.1033 48.8899 22.2709 48.3709 22.2709C47.8519 22.2709 47.3839 22.1033 46.9713 21.7665C46.5573 21.4297 46.2365 20.9428 46.0062 20.3042C45.7759 19.6657 45.6607 18.8988 45.6607 18.0007C45.6607 17.1027 45.7759 16.3344 46.0062 15.6972C46.2365 15.0587 46.5587 14.5717 46.9713 14.235C47.3839 13.8982 47.8519 13.7305 48.3709 13.7305C48.8899 13.7305 49.355 13.8997 49.7618 14.235C50.17 14.5717 50.4878 15.0558 50.7181 15.6885C50.9485 16.3212 51.0637 17.091 51.0637 18.0007C51.0637 18.9105 50.9485 19.6671 50.7181 20.3042Z" fill="white"/>
@@ -1277,7 +1314,7 @@ section { padding: 100px 0; position: relative; }
 </defs>
 </svg>
         <span class="x" style="margin:0 4px;">×</span>
-        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 21910 3729" style="flex-shrink:0;">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 21910 3729" style="flex-shrink:0;">
  <defs>
   
  </defs>
@@ -1925,7 +1962,7 @@ section { padding: 100px 0; position: relative; }
 
         <div class="hero__copy">
           <h1>
-            <span class="accent">Win a Colnago</span>
+            <span class="accent">Win a Canyon</span>
             <span>Earn Rewards</span>
           </h1>
           <div style="display:flex;align-items:center;gap:20px;margin:18px 0 24px;padding:14px 0;border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.07);">
@@ -1974,7 +2011,7 @@ section { padding: 100px 0; position: relative; }
 </svg>
           </div>
           <p class="hero__lede">
-            Predict the podium of cycling's biggest races. Every place you call right is a ticket toward a Colnago V4Rs. Free to enter — your email is all it takes.
+            Predict the podium of cycling's biggest races. Every place you call right is a ticket toward a Canyon Endurance CF 5. Free to enter — your email is all it takes.
           </p>
           <div class="hero__ctas">
             <button class="btn btn--primary" type="button" onclick="openSignup()">
@@ -2008,7 +2045,7 @@ section { padding: 100px 0; position: relative; }
             </div>
 
             <div class="hgc__row">
-              <div class="hgc__pos">🌈</div>
+              <div class="hgc__pos">🌍</div>
               <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
               <div class="hgc__info">
                 <div class="hgc__name">World Championship</div>
@@ -2018,7 +2055,7 @@ section { padding: 100px 0; position: relative; }
             </div>
 
             <div class="hgc__row">
-              <div class="hgc__pos">🌈</div>
+              <div class="hgc__pos">🌍</div>
               <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
               <div class="hgc__info">
                 <div class="hgc__name">World Championship</div>
@@ -2032,7 +2069,17 @@ section { padding: 100px 0; position: relative; }
               <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
               <div class="hgc__info">
                 <div class="hgc__name">European Championship</div>
-                <div class="hgc__meta">Men &amp; Women · Oct · Oasis</div>
+                <div class="hgc__meta">Men · Oct · Oasis sponsor</div>
+              </div>
+              <div class="hgc__pts" style="color:var(--maillot-jaune);">Open</div>
+            </div>
+
+            <div class="hgc__row">
+              <div class="hgc__pos">🇪🇺</div>
+              <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
+              <div class="hgc__info">
+                <div class="hgc__name">European Championship</div>
+                <div class="hgc__meta">Women · Oct · Oasis sponsor</div>
               </div>
               <div class="hgc__pts" style="color:var(--maillot-jaune);">Open</div>
             </div>
@@ -2080,10 +2127,12 @@ section { padding: 100px 0; position: relative; }
         <!-- 2nd — left -->
         <div class="podium-col podium-col--silver">
           <article class="prize">
-            <div class="prize__emoji">🥈</div>
-            <div class="prize__name">Signed Jersey + Helmet</div>
-            <div class="prize__desc">Team race jersey and aero helmet, signed by the Slovenian Cycling Federation squad.</div>
-            <div class="prize__value">≈ $300 · Kit</div>
+            <div class="prize__emoji">
+              <img class="prize__img" src="prizes/jersey.png" alt="Signed Slovenia team jersey" />
+            </div>
+            <div class="prize__name">Signed Team Jersey</div>
+            <div class="prize__desc">Official Slovenian Cycling Federation race jersey, signed by the full national team. One signed kit per campaign.</div>
+            <div class="prize__value">Partnership · Kit</div>
           </article>
           <div class="podium-step">2</div>
         </div>
@@ -2091,10 +2140,12 @@ section { padding: 100px 0; position: relative; }
         <!-- 1st — centre, tallest -->
         <div class="podium-col podium-col--gold">
           <article class="prize">
-            <div class="prize__emoji">🏆</div>
-            <div class="prize__name">Colnago V4Rs</div>
-            <div class="prize__desc">Carbon team-edition frame, full Dura-Ace build. The same machine raced in the WorldTour.</div>
-            <div class="prize__value">≈ $5,000 · Race Bike</div>
+            <div class="prize__emoji">
+              <img class="prize__img" src="prizes/bike.png" alt="Canyon Endurance CF 5 race bike" />
+            </div>
+            <div class="prize__name">Canyon Endurance CF 5</div>
+            <div class="prize__desc">Carbon endurance frame, full Shimano build. The same machine ridden by the Slovenian Cycling Federation.</div>
+            <div class="prize__value">≈ €1,699 · Race Bike</div>
           </article>
           <div class="podium-step">1</div>
         </div>
@@ -2102,54 +2153,38 @@ section { padding: 100px 0; position: relative; }
         <!-- 3rd — right -->
         <div class="podium-col podium-col--bronze">
           <article class="prize">
-            <div class="prize__emoji">🥉</div>
-            <div class="prize__name">Signed Team Jersey</div>
-            <div class="prize__desc">Official race-day jersey, signed by the full Slovenian Cycling Federation team.</div>
-            <div class="prize__value">≈ $200 · Kit</div>
+            <div class="prize__emoji">
+              <img class="prize__img" src="prizes/jersey.png" alt="Slovenia team jersey" />
+            </div>
+            <div class="prize__name">Team Jersey · ×3</div>
+            <div class="prize__desc">Official Slovenian Cycling Federation race jersey, in your size. Three winners share the 3rd-place tier.</div>
+            <div class="prize__value">Partnership · Kit</div>
           </article>
           <div class="podium-step">3</div>
         </div>
 
       </div>
 
-      <!-- Positions 4–10 — physical kit -->
+      <!-- Positions 4–10 — Canyon helmets -->
       <div class="prize-rest">
 
         <div class="podium-col">
           <article class="prize">
-            <div class="prize__emoji">⛑️</div>
-            <div class="prize__name">Aero Race Helmet</div>
-            <div class="prize__desc">A pro-grade aero helmet in team colours, as worn by the WorldTour peloton.</div>
-            <div class="prize__value">≈ $300 · Kit</div>
+            <div class="prize__emoji">
+              <img class="prize__img" src="prizes/helmet.png" alt="Canyon aero helmet" />
+            </div>
+            <div class="prize__name">Canyon Helmet · ×5</div>
+            <div class="prize__desc">Canyon Stingr CFR aero road helmet — Canyon's flagship lid. Five winners share positions 4 through 10.</div>
+            <div class="prize__value">≈ €199 · Kit</div>
           </article>
-          <div class="podium-step">4</div>
-        </div>
-
-        <div class="podium-col">
-          <article class="prize">
-            <div class="prize__emoji">👕</div>
-            <div class="prize__name">Official Race Jersey</div>
-            <div class="prize__desc">An official Slovenian Cycling Federation race jersey, in your size.</div>
-            <div class="prize__value">≈ $150 · Kit</div>
-          </article>
-          <div class="podium-step">5</div>
-        </div>
-
-        <div class="podium-col">
-          <article class="prize">
-            <div class="prize__emoji">🧢</div>
-            <div class="prize__name">Helmets &amp; Jerseys</div>
-            <div class="prize__desc">An aero helmet or official race jersey — one prize each for positions 6 through 10.</div>
-            <div class="prize__value">≈ $150 · Kit</div>
-          </article>
-          <div class="podium-step">6–10</div>
+          <div class="podium-step">4–10</div>
         </div>
 
       </div>
 
       <div style="margin-top: 32px; padding: 18px 24px; border-radius: 0; background: rgba(255, 214, 10, 0.04); border: 1px solid rgba(255, 214, 10, 0.16); display: flex; gap: 14px; align-items: center; font-size: 14px; color: var(--text-2);">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0;"><path d="M10 1l2.5 6h6l-5 4 2 7-5.5-4-5.5 4 2-7-5-4h6z" fill="rgba(255,214,10,0.6)" stroke="var(--maillot-jaune)" stroke-width="1"/></svg>
-        <span><strong style="color: var(--text);">How to win:</strong> Create a free account to claim your first ticket, then predict race winners to earn more. The 10 winners are drawn at the season's close, weighted by tickets — more tickets, better odds, and anyone with a ticket can win. No purchase necessary. <strong style="color: var(--maillot-jaune);">Total prize value ≈ $6,500.</strong></span>
+        <span><strong style="color: var(--text);">How to win:</strong> Create a free account to claim your first ticket, then predict race winners to earn more. The 10 winners are drawn at the season's close, weighted by tickets — more tickets, better odds, and anyone with a ticket can win. No purchase necessary. <strong style="color: var(--maillot-jaune);">Total prize value ≈ €2,700.</strong></span>
       </div>
     </div>
   </section>
@@ -2197,7 +2232,7 @@ section { padding: 100px 0; position: relative; }
             <div class="ct2__cd-meta-item">Entrants<strong>4,217</strong></div>
             <div class="ct2__cd-meta-item">Races<strong>5</strong></div>
             <div class="ct2__cd-meta-item">Next Race<strong style="color:var(--maillot-jaune)">Tour de France</strong></div>
-            <div class="ct2__cd-meta-item">Top Prize<strong>Colnago V4Rs</strong></div>
+            <div class="ct2__cd-meta-item">Top Prize<strong>Canyon Endurance CF 5</strong></div>
           </div>
         </div>
       </div>
@@ -2349,7 +2384,7 @@ section { padding: 100px 0; position: relative; }
 </defs>
 </svg>
             <span class="x" style="margin:0 2px;">×</span>
-            <svg xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 0 21910 3729" style="flex-shrink:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 21910 3729" style="flex-shrink:0;">
  <defs>
   
  </defs>
@@ -2524,7 +2559,7 @@ section { padding: 100px 0; position: relative; }
           <input class="su-input" id="suEmail" type="email" placeholder="you@example.com" autocomplete="email" />
           <div class="su-err" id="suErr1"></div>
           <button class="su-btn" id="suSend" onclick="sendCode()">Send me a code</button>
-          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:12px;color:var(--text-3);line-height:1.5;cursor:pointer;">
+          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size: 13px;color:var(--text-3);line-height:1.5;cursor:pointer;">
             <input type="checkbox" id="suConsent" checked style="margin-top:2px;flex-shrink:0;" />
             <span>Email me race results, prediction reminders and occasional updates from Oasis &amp; Privana. Unsubscribe anytime.</span>
           </label>

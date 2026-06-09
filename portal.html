@@ -21,11 +21,10 @@
   --line: rgba(255, 255, 255, 0.08);
   --line-strong: rgba(255, 255, 255, 0.16);
   --text: #ffffff;
-  --text-2: rgba(255, 255, 255, 0.66);
-  /* Text-3 / text-4 brightened one step on the scale:
-     text-3 now matches the old text-2 (0.66), text-4 matches the old text-3 (0.42). */
-  --text-3: rgba(255, 255, 255, 0.66);
-  --text-4: rgba(255, 255, 255, 0.42);
+  /* Brightened for stronger contrast on the dark theme */
+  --text-2: rgba(255, 255, 255, 0.82);
+  --text-3: rgba(255, 255, 255, 0.82);
+  --text-4: rgba(255, 255, 255, 0.58);
   --oasis-blue: #003CD8;
   --oasis-blue-soft: #002DB3;
   --oasis-blue-bg: rgba(0, 60, 216, 0.12);
@@ -71,10 +70,15 @@ h3 { font-size: clamp(24px, 2.4vw, 32px); }
 p { color: var(--text-2); }
 
 .race-bar { position: relative; z-index: 50; border-bottom: 1px solid var(--line); background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(14px); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
-.race-bar__inner { display: flex; align-items: center; justify-content: space-between; height: 36px; gap: 24px; white-space: nowrap; }
+.race-bar__inner { display: flex; align-items: center; justify-content: space-between; height: 36px; gap: 24px; white-space: nowrap; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+.race-bar__inner::-webkit-scrollbar { display: none; }
 .race-bar__item { display: flex; align-items: center; gap: 8px; color: var(--text-3); flex-shrink: 0; }
 @media (max-width: 1200px) { .race-bar__item--opt { display: none; } }
 @media (max-width: 900px) { .race-bar__item--opt2 { display: none; } }
+/* At narrow viewports stop forcing space-between so items hug left */
+@media (max-width: 720px) {
+  .race-bar__inner { justify-content: flex-start; gap: 18px; }
+}
 .race-bar__item strong { color: var(--text); font-weight: 500; }
 .race-bar__wallet { background: none; border: 0; padding: 0; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; transition: color 150ms; }
 .race-bar__wallet:hover { color: var(--text); }
@@ -88,13 +92,23 @@ p { color: var(--text-2); }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
 .nav__brand { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 400; font-size: 20px; letter-spacing: 0.1em; text-transform: uppercase; }
 .nav__brand .x { color: var(--oasis-blue); font-weight: 500; }
-.nav__brand .sub { color: var(--text-3); font-weight: 500; letter-spacing: 0.16em; font-size: 10px; text-transform: uppercase; border-left: 1px solid var(--line); padding-left: 12px; white-space: nowrap; }
+.nav__brand .sub { color: var(--text-3); font-weight: 500; letter-spacing: 0.16em; font-size: 11px; text-transform: uppercase; border-left: 1px solid var(--line); padding-left: 12px; white-space: nowrap; }
 @media (max-width: 1100px) { .nav__brand .sub { display: none; } }
 .nav__links { display: flex; gap: 32px; font-size: 14px; color: var(--text-2); }
 .nav__links a:hover { color: var(--text); }
 .nav__cta { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 0; background: var(--oasis-blue); color: white; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; transition: background 200ms ease; }
 .nav__cta:hover { background: #002DB3; }
 @media (max-width: 860px) { .nav__links { display: none; } }
+/* Narrow viewports — collapse to just Oasis logo + button so nothing overflows */
+@media (max-width: 540px) {
+  .nav__brand { gap: 8px; }
+  .nav__brand > svg:last-of-type,
+  .nav__brand .x { display: none; }
+  .nav__cta { padding: 0 18px; font-size: 18px; }
+}
+@media (max-width: 380px) {
+  .nav__cta { padding: 0 14px; font-size: 16px; height: 44px; }
+}
 
 /* ============================================================
    Hero redesign — photo background + race progress panel
@@ -156,7 +170,7 @@ p { color: var(--text-2); }
 .btn--ghost:hover { background: rgba(255, 255, 255, 0.1); }
 .btn--blue { background: var(--oasis-blue); color: white; }
 .btn--blue:hover { background: #002DB3; }
-.hero__chips { display: flex; gap: 8px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); }
+.hero__chips { display: flex; gap: 8px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); }
 .hero__chips span { border: 1px solid var(--line); padding: 5px 12px; border-radius: 0; background: rgba(255,255,255,0.03); }
 
 /* ============================================================
@@ -189,7 +203,7 @@ p { color: var(--text-2); }
 
 .gcp__brand {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -200,7 +214,7 @@ p { color: var(--text-2); }
   align-items: center;
   gap: 6px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #ff5959;
@@ -224,7 +238,7 @@ p { color: var(--text-2); }
 
 .gcp__stage-meta {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -290,7 +304,7 @@ p { color: var(--text-2); }
 
 .gcp__meta {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -320,7 +334,7 @@ p { color: var(--text-2); }
   display: flex;
   justify-content: space-between;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -343,7 +357,7 @@ p { color: var(--text-2); }
 .gcp__footer-sub {
   margin-top: 8px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--text-3);
   text-align: center;
@@ -354,7 +368,7 @@ p { color: var(--text-2); }
 .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
 .countdown__cell { background: var(--bg-2); border: 1px solid var(--line); border-radius: 0; padding: 16px 6px; text-align: center; }
 .countdown__cell .num { font-family: var(--font-display); font-size: clamp(24px, 2.4vw, 32px); font-variant-numeric: tabular-nums; line-height: 1; }
-.countdown__cell .lbl { display: block; margin-top: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
+.countdown__cell .lbl { display: block; margin-top: 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
 .dash-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-top: 1px solid var(--line); font-size: 13px; }
 .dash-row .lbl { color: var(--text-3); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
 .dash-row .val { color: var(--text); font-weight: 500; font-variant-numeric: tabular-nums; }
@@ -593,7 +607,7 @@ section { padding: 100px 0; position: relative; }
 .tier__total .v { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--oasis-blue); white-space: nowrap; }
 .tier__points { margin-top: 14px; padding: 10px 14px; border-radius: 0; background: rgba(0, 224, 122, 0.08); border: 1px solid rgba(0, 224, 122, 0.18); color: var(--maillot-vert); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
 .tier--max { background: radial-gradient(500px 280px at 100% 0%, rgba(0, 60, 216, 0.16), transparent 65%), var(--bg-1); border-color: rgba(0, 60, 216, 0.22); }
-.tier--max::after { content: "MAX"; position: absolute; top: 24px; right: 24px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; padding: 3px 8px; background: var(--oasis-blue); color: white; border-radius: 0; }
+.tier--max::after { content: "MAX"; position: absolute; top: 24px; right: 24px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; padding: 3px 8px; background: var(--oasis-blue); color: white; border-radius: 0; }
 
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; position: relative; }
 @media (max-width: 980px) { .steps { grid-template-columns: repeat(2, 1fr); } }
@@ -615,14 +629,14 @@ section { padding: 100px 0; position: relative; }
 .stage-map__dot { width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line-strong); }
 .stage-map__pt.done .stage-map__dot { background: var(--oasis-blue); border-color: var(--oasis-blue); }
 .stage-map__pt.now .stage-map__dot { background: var(--maillot-jaune); border-color: var(--maillot-jaune); box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.18); }
-.stage-map__lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); text-align: center; white-space: nowrap; }
+.stage-map__lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); text-align: center; white-space: nowrap; }
 .stage-map__pt.now .stage-map__lbl, .stage-map__pt.done .stage-map__lbl { color: var(--text); }
 .stage-map__profile { margin-top: 36px; height: 80px; position: relative; }
 
 .scoreboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 @media (max-width: 980px) { .scoreboard { grid-template-columns: repeat(2, 1fr); } }
 .stat { border: 1px solid var(--line); border-top: 2px solid var(--oasis-blue); border-radius: 0; padding: 28px 24px 20px; background: var(--bg-1); position: relative; overflow: hidden; }
-.stat__k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-3); }
+.stat__k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-3); }
 .stat__v { margin-top: 4px; font-family: var(--font-display); font-size: clamp(54px, 5.8vw, 76px); font-weight: 400; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; line-height: 0.92; }
 .stat__v .unit { color: var(--text-3); font-size: 16px; margin-left: 4px; }
 .stat__d { margin-top: 8px; font-size: 13px; color: var(--text-2); }
@@ -708,7 +722,7 @@ section { padding: 100px 0; position: relative; }
   left: 16px;
   z-index: 10;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: white;
@@ -762,7 +776,7 @@ section { padding: 100px 0; position: relative; }
 }
 .editorial__badge-label {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--maillot-jaune);
@@ -778,7 +792,7 @@ section { padding: 100px 0; position: relative; }
 }
 .editorial__badge-val {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: rgba(255,255,255,0.6);
   letter-spacing: 0.08em;
   margin-top: 6px;
@@ -856,7 +870,7 @@ section { padding: 100px 0; position: relative; }
 }
 .editorial__caption-right {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -918,7 +932,7 @@ section { padding: 100px 0; position: relative; }
 }
 .ct2__cd-lbl {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -933,7 +947,7 @@ section { padding: 100px 0; position: relative; }
   background: var(--bg-1);
   padding: 12px 14px;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -1013,7 +1027,7 @@ section { padding: 100px 0; position: relative; }
 }
 .ct2__wp-lbl {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -1374,7 +1388,7 @@ section { padding: 100px 0; position: relative; }
     }
     .points-breakdown .k {
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-3);
@@ -1395,6 +1409,7 @@ section { padding: 100px 0; position: relative; }
   </style>
   <style>
     /* ===== Predictions + raffle (v3) ===== */
+    .pred-notice { display:flex; gap:14px; align-items:center; padding:16px 22px; margin-bottom:28px; background:rgba(0,60,216,0.06); border:1px solid rgba(0,60,216,0.32); border-left-width:3px; font-size: 15px; color:var(--text-2); line-height:1.5; }
     .predictions-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
     @media (max-width:860px){ .predictions-grid{ grid-template-columns:1fr; } }
     .pcard { position:relative; display:flex; flex-direction:column; background:var(--bg-1); border:1px solid var(--line); overflow:hidden; transition:border-color 200ms ease, transform 200ms ease; }
@@ -1402,20 +1417,24 @@ section { padding: 100px 0; position: relative; }
     .pcard--sponsor { border-color:rgba(0,60,216,0.4); }
     .pcard__head { position:relative; padding:22px 24px; border-bottom:1px solid var(--line); background:linear-gradient(120deg, rgba(0,60,216,0.14), transparent 70%); }
     .pcard__flag { font-size:30px; line-height:1; }
-    .pcard__title { font-family:var(--font-display); font-size:30px; letter-spacing:0.02em; margin-top:6px; line-height:1; }
-    .pcard__meta { font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-top:8px; }
-    .pcard__cat { font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-2); border:1px solid var(--line-strong); padding:4px 9px; align-self:flex-start; }
-    .pcard__toprow { display:flex; justify-content:space-between; align-items:flex-start; }
+    .pcard__title { font-family:var(--font-display); font-size:30px; letter-spacing:0.02em; margin-top:4px; line-height:1; }
+    .pcard__meta { font-family:var(--font-mono); font-size: 12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-top:8px; }
+    /* Men/women race tag — strong color-coded chip, sits just above the title */
+    .pcard__cat { display:inline-flex; align-items:center; font-family:var(--font-mono); font-size: 11px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; padding:5px 11px; margin-top:10px; align-self:flex-start; }
+    .pcard__cat--men { background:rgba(0,60,216,0.22); color:#7da4ff; border:1px solid rgba(0,60,216,0.6); }
+    .pcard__cat--women { background:rgba(255,44,122,0.22); color:#ff6ea3; border:1px solid rgba(255,44,122,0.6); }
+    .pcard__toprow { display:flex; justify-content:flex-start; align-items:center; gap:12px; }
     .pcard__body { padding:22px 24px; display:flex; flex-direction:column; gap:16px; flex:1; }
-    .sponsor-badge { display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--oasis-blue); background:var(--oasis-blue-bg); border:1px solid rgba(0,60,216,0.32); padding:6px 11px; align-self:flex-start; }
-    .pstatus { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; padding:5px 10px; align-self:flex-start; }
+    .sponsor-badge { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size: 12px; letter-spacing:0.14em; text-transform:uppercase; color:white; background:var(--oasis-blue); border:1px solid var(--oasis-blue); padding:7px 13px; align-self:flex-start; font-weight: 500; }
+    .sponsor-badge::before { content:""; display:inline-block; width:8px; height:8px; background:var(--maillot-jaune); transform:rotate(45deg); flex-shrink:0; }
+    .pstatus { font-family:var(--font-mono); font-size: 12px; letter-spacing:0.12em; text-transform:uppercase; padding:5px 10px; align-self:flex-start; }
     .pstatus--open { color:var(--maillot-jaune); border:1px solid rgba(255,214,10,0.35); }
     .pstatus--resolved { color:var(--maillot-vert); border:1px solid rgba(0,224,122,0.35); }
     .ppick { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; background:var(--bg-2); border:1px solid var(--line); min-height:64px; }
     .ppick--correct { border-color:rgba(0,224,122,0.4); background:rgba(0,224,122,0.06); }
-    .ppick__label { font-family:var(--font-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
+    .ppick__label { font-family:var(--font-mono); font-size: 11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
     .ppick__rider { font-family:var(--font-display); font-size:22px; letter-spacing:0.02em; line-height:1.05; margin-top:2px; }
-    .ppick__tag { font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; text-align:right; white-space:nowrap; }
+    .ppick__tag { font-family:var(--font-mono); font-size: 11px; letter-spacing:0.1em; text-transform:uppercase; text-align:right; white-space:nowrap; }
     .pbtn { display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; height:54px; border:none; cursor:pointer; background:var(--oasis-blue); color:#fff; font-family:var(--font-display); font-size:19px; letter-spacing:0.06em; text-transform:uppercase; transition:background 200ms ease; }
     .pbtn:hover { background:var(--oasis-blue-soft); }
     .pbtn--ghost { background:transparent; border:1px solid var(--line-strong); color:var(--text); }
@@ -1430,7 +1449,7 @@ section { padding: 100px 0; position: relative; }
     .pmodal__card { width:100%; max-width:460px; max-height:86vh; overflow-y:auto; background:var(--bg-1); border:1px solid var(--line-strong); }
     .pmodal__head { padding:22px 24px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; position:sticky; top:0; background:var(--bg-1); z-index:1; }
     .pmodal__title { font-family:var(--font-display); font-size:26px; letter-spacing:0.02em; line-height:1; }
-    .pmodal__sub { font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-top:6px; }
+    .pmodal__sub { font-family:var(--font-mono); font-size: 12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-top:6px; }
     .pmodal__close { background:none; border:none; color:var(--text-3); font-size:26px; cursor:pointer; line-height:1; }
     .pmodal__list { padding:12px; display:flex; flex-direction:column; gap:8px; }
     .prider { display:flex; align-items:center; gap:12px; padding:13px 14px; background:var(--bg-2); border:1px solid var(--line); cursor:pointer; text-align:left; width:100%; transition:border-color 150ms ease, background 150ms ease; }
@@ -1439,22 +1458,27 @@ section { padding: 100px 0; position: relative; }
     .prider__radio { width:18px; height:18px; border-radius:50%; border:2px solid var(--line-strong); flex-shrink:0; }
     .prider.sel .prider__radio { border-color:var(--oasis-blue); background:radial-gradient(circle, var(--oasis-blue) 0 42%, transparent 46%); }
     .prider__name { font-family:var(--font-display); font-size:19px; letter-spacing:0.02em; flex:1; }
-    .prider__team { font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--text-3); text-transform:uppercase; }
+    .prider__team { font-family:var(--font-mono); font-size: 11px; letter-spacing:0.08em; color:var(--text-3); text-transform:uppercase; }
     .pmodal__foot { padding:16px 24px 22px; position:sticky; bottom:0; background:var(--bg-1); border-top:1px solid var(--line); display:flex; gap:10px; }
     .pmodal__foot .pbtn { flex:1; }
     .pmodal__foot .pbtn--ghost { flex:0 0 auto; padding:0 18px; }
-    .pmodal__note { padding:0 24px 18px; font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.03em; color:var(--text-4); text-align:center; line-height:1.5; }
-    /* podium progress inside picker */
-    .pmodal__podium { display:flex; gap:8px; padding:14px 24px 2px; }
-    .pmslot { flex:1; padding:9px 8px; border:1px solid var(--line); background:var(--bg-2); text-align:center; opacity:0.5; transition:opacity 150ms ease, border-color 150ms ease; }
-    .pmslot.active { opacity:1; border-color:var(--oasis-blue); }
-    .pmslot.filled { opacity:1; }
-    .pmslot__pos { font-family:var(--font-mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
-    .pmslot__name { font-family:var(--font-display); font-size:13px; letter-spacing:0.02em; margin-top:3px; line-height:1.05; min-height:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pmodal__note { padding:0 24px 18px; font-family:var(--font-mono); font-size: 12px; letter-spacing:0.03em; color:var(--text-4); text-align:center; line-height:1.5; }
+    /* Podium progress inside picker — each slot is now a clickable button */
+    .pmodal__podium { display:flex; gap:8px; padding:14px 24px 4px; }
+    .pmslot { position:relative; flex:1; padding:11px 8px 9px; border:1px solid var(--line); background:var(--bg-2); text-align:center; cursor:pointer; transition:border-color 150ms ease, background 150ms ease; font:inherit; color:inherit; }
+    .pmslot:hover:not(.active) { border-color:var(--line-strong); background:rgba(255,255,255,0.03); }
+    .pmslot.active { border-color:var(--oasis-blue); background:rgba(0,60,216,0.10); }
+    .pmslot__pos { font-family:var(--font-mono); font-size: 11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
+    .pmslot.active .pmslot__pos { color:var(--oasis-blue); }
+    .pmslot__name { font-family:var(--font-display); font-size: 14px; letter-spacing:0.02em; margin-top:3px; line-height:1.05; min-height:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .pmslot.empty .pmslot__name { color:var(--text-4); }
-    /* a rider already used in another podium slot */
-    .prider.dim { opacity:0.32; pointer-events:none; }
-    .prider__used { font-family:var(--font-mono); font-size:9px; letter-spacing:0.1em; color:var(--text-4); text-transform:uppercase; }
+    .pmslot__clear { position:absolute; top:3px; right:4px; width:16px; height:16px; border:none; background:none; color:var(--text-3); cursor:pointer; font-size: 15px; line-height:1; padding:0; opacity:0; transition:opacity 150ms ease, color 150ms ease; }
+    .pmslot:hover .pmslot__clear,
+    .pmslot.filled .pmslot__clear { opacity:0.75; }
+    .pmslot__clear:hover { opacity:1; color:#ff6b6b; }
+    /* Rider already in another slot — shows the slot they hold so user can re-assign */
+    .prider__used { font-family:var(--font-mono); font-size: 11px; letter-spacing:0.12em; padding:3px 7px; background:rgba(0,60,216,0.12); color:var(--oasis-blue); text-transform:uppercase; }
+    .prider.sel { border-color:var(--oasis-blue); background:rgba(0,60,216,0.08); }
     /* podium display on the contest cards */
     .ppodium { display:flex; flex-direction:column; gap:6px; width:100%; }
     .ppod-row { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--bg-2); border:1px solid var(--line); }
@@ -1462,8 +1486,8 @@ section { padding: 100px 0; position: relative; }
     .ppod-row.wrong { border-color:rgba(225,29,72,0.32); }
     .ppod-pos { font-family:var(--font-display); font-size:16px; width:16px; flex-shrink:0; color:var(--maillot-jaune); }
     .ppod-name { font-family:var(--font-display); font-size:16px; letter-spacing:0.02em; flex:1; line-height:1.05; }
-    .ppod-name.empty { color:var(--text-4); font-family:var(--font-body); font-size:13px; letter-spacing:0; }
-    .ppod-mark { font-size:13px; flex-shrink:0; min-width:14px; text-align:right; }
+    .ppod-name.empty { color:var(--text-4); font-family:var(--font-body); font-size: 14px; letter-spacing:0; }
+    .ppod-mark { font-size: 14px; flex-shrink:0; min-width:14px; text-align:right; }
   </style>
 </head>
 <body>
@@ -1486,7 +1510,7 @@ section { padding: 100px 0; position: relative; }
   <nav class="nav">
     <div class="container nav__inner">
       <a class="nav__brand" href="index.html">
-        <svg height="20" viewBox="0 0 99 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+        <svg height="36" viewBox="0 0 99 36" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
 <g clip-path="url(#oa-nav2)">
 <path d="M30.8478 5.40882C29.3359 3.86636 27.5485 2.6009 25.5687 1.67805C25.4885 1.63723 25.4069 1.59932 25.3223 1.56287C24.9331 1.38938 24.5394 1.22318 24.137 1.07739C23.0101 0.66772 21.8292 0.368849 20.6104 0.190985C19.7575 0.0670635 18.8871 0 18.0007 0C8.07532 0 0 8.07533 0 18.0007C0 25.7334 4.90147 32.3421 11.7609 34.8847C12.5671 35.1836 13.401 35.4256 14.2583 35.6078C15.4669 35.8644 16.7178 36.0015 18.0007 36.0015C24.8383 36.0015 30.7953 32.1686 33.8423 26.5411C35.2186 23.9985 36.0015 21.09 36.0015 18.0022C36.0015 13.1051 34.0333 8.65994 30.8492 5.41174L30.8478 5.40882ZM5.36946 27.6302C3.24238 24.8252 2.11833 21.4778 2.11833 17.9512C2.11833 11.9286 5.45693 6.67282 10.3803 3.93488C10.51 3.86199 10.6398 4.03548 10.5304 4.13753C10.0814 4.56032 9.6484 5.01373 9.23727 5.49629C6.38416 8.83344 4.73964 13.3719 4.72506 17.9512C4.72506 23.8965 8.70222 30.3142 15.1272 30.3142C20.8611 30.3142 25.5264 24.7683 25.5264 17.9512C25.5264 14.7481 24.4519 11.672 22.6194 9.39035C22.5552 9.31017 22.631 9.19499 22.7302 9.22561C25.8297 10.1426 28.1477 13.7072 28.1477 17.9512C28.1477 21.6994 26.7875 25.4302 24.417 28.1886C21.9589 31.0475 18.6597 32.622 15.1272 32.6235C11.4081 32.6235 7.84789 30.7997 5.368 27.6302H5.36946ZM30.9163 8.28089C33.0419 11.0801 34.163 14.4216 34.1601 17.9468C34.1601 23.9694 30.8215 29.2251 25.8982 31.9631C25.7684 32.036 25.6387 31.8625 25.748 31.7604C26.1985 31.3362 26.6301 30.8842 27.0412 30.4017C29.8943 27.0645 31.5388 22.5261 31.5534 17.9468C31.5534 12.0015 27.5762 5.58377 21.1513 5.58377C15.4173 5.58377 10.752 11.1296 10.752 17.9468C10.752 21.1498 11.8265 24.226 13.6591 26.5076C13.7232 26.5878 13.6474 26.703 13.5483 26.6723C10.4488 25.7553 8.13072 22.1922 8.13072 17.9497C8.13072 14.2029 9.49095 10.4721 11.8615 7.71377C14.3195 4.85482 17.6202 3.28028 21.1542 3.28028C24.8718 3.28028 28.4291 5.10266 30.9177 8.27943L30.9163 8.28089ZM23.6443 17.9512C23.6443 22.1966 21.5813 25.8617 18.6247 27.5063C18.2588 27.7104 17.8068 27.6841 17.4686 27.4377L16.8359 26.9756C14.2437 25.0832 12.6327 21.6236 12.6327 17.9468C12.6327 13.7014 14.6957 10.0362 17.6523 8.39169C18.0182 8.18758 18.4702 8.21383 18.8084 8.46021L19.4411 8.92091C22.0347 10.8133 23.6457 14.2729 23.6457 17.9497L23.6443 17.9512Z" fill="white"/>
 <path d="M51.1876 12.3747C50.3843 11.86 49.4454 11.6035 48.3709 11.6035C47.2964 11.6035 46.3532 11.86 45.544 12.3747C44.7349 12.8879 44.1095 13.6241 43.6663 14.5805C43.2231 15.5369 43.0015 16.677 43.0015 18.0007C43.0015 19.3245 43.2231 20.4456 43.6663 21.4035C44.1095 22.3599 44.7349 23.099 45.544 23.618C46.3532 24.1385 47.295 24.398 48.3709 24.398C49.4469 24.398 50.3843 24.1385 51.1876 23.618C51.9909 23.099 52.6163 22.3599 53.0654 21.4035C53.5144 20.4471 53.7389 19.3128 53.7389 18.0007C53.7389 16.6886 53.5144 15.5238 53.0654 14.5717C52.6163 13.6212 51.9909 12.8879 51.1876 12.3747ZM50.7181 20.3042C50.4878 20.9428 50.1685 21.4297 49.7618 21.7665C49.355 22.1033 48.8899 22.2709 48.3709 22.2709C47.8519 22.2709 47.3839 22.1033 46.9713 21.7665C46.5573 21.4297 46.2365 20.9428 46.0062 20.3042C45.7759 19.6657 45.6607 18.8988 45.6607 18.0007C45.6607 17.1027 45.7759 16.3344 46.0062 15.6972C46.2365 15.0587 46.5587 14.5717 46.9713 14.235C47.3839 13.8982 47.8519 13.7305 48.3709 13.7305C48.8899 13.7305 49.355 13.8997 49.7618 14.235C50.17 14.5717 50.4878 15.0558 50.7181 15.6885C50.9485 16.3212 51.0637 17.091 51.0637 18.0007C51.0637 18.9105 50.9485 19.6671 50.7181 20.3042Z" fill="white"/>
@@ -1502,7 +1526,7 @@ section { padding: 100px 0; position: relative; }
 </defs>
 </svg>
         <span class="x" style="margin:0 4px;">×</span>
-        <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 21910 3729" style="flex-shrink:0;">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 21910 3729" style="flex-shrink:0;">
  <defs>
   
  </defs>
@@ -1546,7 +1570,7 @@ section { padding: 100px 0; position: relative; }
         <div>
           <span class="eyebrow"><span class="dot"></span> WELCOME BACK, ROK</span>
           <h1 style="margin-top: 14px;">You're in the raffle. Now stack the odds.</h1>
-          <p class="portal-hero__sub text-2">Creating your account already earned you <strong style="color:var(--text);">1 free ticket</strong> in the draw for a Colnago V4Rs. Predict the <strong style="color:var(--text);">podium</strong> — top three — in each race and earn <strong style="color:var(--text);">+1 ticket for every place you call right</strong>, up to <strong style="color:var(--text);">16 tickets</strong> in all.</p>
+          <p class="portal-hero__sub text-2">Creating your account already earned you <strong style="color:var(--text);">1 free ticket</strong> in the draw for a Canyon Endurance CF 5. Predict the <strong style="color:var(--text);">podium</strong> — top three — in each race and earn <strong style="color:var(--text);">+1 ticket for every place you call right</strong>, up to <strong style="color:var(--text);">16 tickets</strong> in all.</p>
         </div>
         <div class="countdown" id="countdown-portal" style="min-width: 360px;">
           <div class="countdown__cell"><span class="num" data-cd="d">67</span><span class="lbl">Days</span></div>
@@ -1615,16 +1639,16 @@ section { padding: 100px 0; position: relative; }
             <span class="eyebrow muted"><span class="dot"></span> HOW THE RAFFLE WORKS</span>
             <div style="display:flex; gap:20px; margin-top:16px; flex-wrap:wrap;">
               <div style="flex:1; min-width:160px;">
-                <div class="text-mono text-3" style="font-size:11px; letter-spacing:0.14em;">01 · JOIN</div>
-                <p style="font-size:14px; color:var(--text-2); margin-top:6px;">Creating your account gives you your first raffle ticket automatically.</p>
+                <div class="text-mono text-3" style="font-size: 12px; letter-spacing:0.14em;">01 · JOIN</div>
+                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">Creating your account gives you your first raffle ticket automatically.</p>
               </div>
               <div style="flex:1; min-width:160px;">
-                <div class="text-mono text-3" style="font-size:11px; letter-spacing:0.14em;">02 · PREDICT</div>
-                <p style="font-size:14px; color:var(--text-2); margin-top:6px;">Predict the podium of each race. Every place you call right earns one more ticket — up to 16.</p>
+                <div class="text-mono text-3" style="font-size: 12px; letter-spacing:0.14em;">02 · PREDICT</div>
+                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">Predict the podium of each race. Every place you call right earns one more ticket — up to 16.</p>
               </div>
               <div style="flex:1; min-width:160px;">
-                <div class="text-mono text-3" style="font-size:11px; letter-spacing:0.14em;">03 · WIN</div>
-                <p style="font-size:14px; color:var(--text-2); margin-top:6px;">10 winners are drawn at the season's end. More tickets, better odds.</p>
+                <div class="text-mono text-3" style="font-size: 12px; letter-spacing:0.14em;">03 · WIN</div>
+                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">10 winners are drawn at the season's end. More tickets, better odds.</p>
               </div>
             </div>
             <a class="pbtn" href="#predictions" style="margin-top:20px; text-decoration:none;">Make your predictions ↓</a>
@@ -1637,24 +1661,24 @@ section { padding: 100px 0; position: relative; }
           <!-- Rewards teaser -->
           <div class="portal-tile">
             <span class="eyebrow"><span class="dot"></span> THE PRIZES</span>
-            <h3 style="margin-top:10px;">10 winners. One Colnago.</h3>
-            <p style="font-size:13px; color:var(--text-2); margin:6px 0 16px;">Drawn from all tickets when the season ends. No purchase necessary.</p>
+            <h3 style="margin-top:10px;">10 winners. One Canyon.</h3>
+            <p style="font-size: 14px; color:var(--text-2); margin:6px 0 16px;">Drawn from all tickets when the season ends. No purchase necessary.</p>
 
             <div style="display:flex; flex-direction:column; gap:8px;">
-              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:rgba(255,214,10,0.05); border:1px solid rgba(255,214,10,0.22); font-size:13px;">
-                <span style="display:flex; gap:8px;"><b style="color:var(--maillot-jaune);">1st</b> Colnago V4Rs</span>
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:rgba(255,214,10,0.05); border:1px solid rgba(255,214,10,0.22); font-size: 14px;">
+                <span style="display:flex; gap:8px;"><b style="color:var(--maillot-jaune);">1st</b> Canyon Endurance CF 5</span>
                 <span class="text-mono text-3">🚲</span>
               </div>
-              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size:13px;">
-                <span style="display:flex; gap:8px;"><b>2nd</b> Signed jersey + helmet</span>
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size: 14px;">
+                <span style="display:flex; gap:8px;"><b>2nd</b> Signed team jersey</span>
                 <span class="text-mono text-3">🥈</span>
               </div>
-              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size:13px;">
-                <span style="display:flex; gap:8px;"><b>3rd</b> Signed team jersey</span>
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size: 14px;">
+                <span style="display:flex; gap:8px;"><b>3rd</b> Team jersey · ×3</span>
                 <span class="text-mono text-3">🥉</span>
               </div>
-              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size:13px;">
-                <span style="display:flex; gap:8px;"><b>4–10</b> Aero helmets &amp; race jerseys</span>
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size: 14px;">
+                <span style="display:flex; gap:8px;"><b>4–10</b> Canyon helmet · ×5</span>
                 <span class="text-mono text-3">⛑️</span>
               </div>
             </div>
@@ -1679,12 +1703,21 @@ section { padding: 100px 0; position: relative; }
         <p class="lead">Predict the full podium — 1st, 2nd and 3rd — for each of cycling's biggest races, men's and women's. When a race finishes we update the result here, and every place you called correctly adds <strong style="color:var(--text);">one more ticket</strong> to your raffle entry (up to 3 per race, 16 in total). You can change your podium any time up until <strong style="color:var(--text);">24 hours before each race starts</strong> — and we'll email you the outcome once it's decided.</p>
       </div>
 
+      <div class="pred-notice">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="flex-shrink:0;">
+          <circle cx="10" cy="10" r="8.5" stroke="var(--oasis-blue)" stroke-width="1.4"/>
+          <path d="M10 5.5v5M10 13.5h.01" stroke="var(--oasis-blue)" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span><strong style="color:var(--text);">World &amp; European Championships have two separate races</strong> — one for men and one for women, each with its own podium. That's why you'll see them as separate cards below. Predict both for double the ticket chances.</span>
+      </div>
+
       <div class="predictions-grid">
 
         <!-- Tour de France · Men -->
         <article class="pcard" data-c="tour">
           <div class="pcard__head">
-            <div class="pcard__toprow"><div class="pcard__flag">🇫🇷</div><span class="pcard__cat">Men</span></div>
+            <div class="pcard__flag">🇫🇷</div>
+            <span class="pcard__cat pcard__cat--men">Men's race</span>
             <div class="pcard__title">Tour de France</div>
             <div class="pcard__meta">4–26 Jul 2026 · Barcelona → Paris</div>
           </div>
@@ -1698,12 +1731,13 @@ section { padding: 100px 0; position: relative; }
         <!-- World Championship · Men · Oasis sponsor -->
         <article class="pcard pcard--sponsor" data-c="worldsm">
           <div class="pcard__head">
-            <div class="pcard__toprow"><div class="pcard__flag">🌈</div><span class="pcard__cat">Men</span></div>
+            <div class="pcard__flag">🌍</div>
+            <span class="pcard__cat pcard__cat--men">Men's race</span>
             <div class="pcard__title">World Championship</div>
             <div class="pcard__meta">27 Sep 2026 · Montréal 🇨🇦</div>
           </div>
           <div class="pcard__body">
-            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="sponsor-badge">Oasis · Official Sponsor</span>
             <span class="pstatus" id="st-worldsm"></span>
             <div class="ppick" id="pick-worldsm"></div>
             <button class="pbtn" id="btn-worldsm"></button>
@@ -1713,12 +1747,13 @@ section { padding: 100px 0; position: relative; }
         <!-- World Championship · Women · Oasis sponsor -->
         <article class="pcard pcard--sponsor" data-c="worldsw">
           <div class="pcard__head">
-            <div class="pcard__toprow"><div class="pcard__flag">🌈</div><span class="pcard__cat">Women</span></div>
+            <div class="pcard__flag">🌍</div>
+            <span class="pcard__cat pcard__cat--women">Women's race</span>
             <div class="pcard__title">World Championship</div>
             <div class="pcard__meta">26 Sep 2026 · Montréal 🇨🇦</div>
           </div>
           <div class="pcard__body">
-            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="sponsor-badge">Oasis · Official Sponsor</span>
             <span class="pstatus" id="st-worldsw"></span>
             <div class="ppick" id="pick-worldsw"></div>
             <button class="pbtn" id="btn-worldsw"></button>
@@ -1728,12 +1763,13 @@ section { padding: 100px 0; position: relative; }
         <!-- European Championship · Men · Oasis sponsor -->
         <article class="pcard pcard--sponsor" data-c="eurosm">
           <div class="pcard__head">
-            <div class="pcard__toprow"><div class="pcard__flag">🇪🇺</div><span class="pcard__cat">Men</span></div>
+            <div class="pcard__flag">🇪🇺</div>
+            <span class="pcard__cat pcard__cat--men">Men's race</span>
             <div class="pcard__title">European Championship</div>
             <div class="pcard__meta">4 Oct 2026 · Ljubljana 🇸🇮</div>
           </div>
           <div class="pcard__body">
-            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="sponsor-badge">Oasis · Official Sponsor</span>
             <span class="pstatus" id="st-eurosm"></span>
             <div class="ppick" id="pick-eurosm"></div>
             <button class="pbtn" id="btn-eurosm"></button>
@@ -1743,12 +1779,13 @@ section { padding: 100px 0; position: relative; }
         <!-- European Championship · Women · Oasis sponsor -->
         <article class="pcard pcard--sponsor" data-c="eurosw">
           <div class="pcard__head">
-            <div class="pcard__toprow"><div class="pcard__flag">🇪🇺</div><span class="pcard__cat">Women</span></div>
+            <div class="pcard__flag">🇪🇺</div>
+            <span class="pcard__cat pcard__cat--women">Women's race</span>
             <div class="pcard__title">European Championship</div>
             <div class="pcard__meta">3 Oct 2026 · Ljubljana 🇸🇮</div>
           </div>
           <div class="pcard__body">
-            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="sponsor-badge">Oasis · Official Sponsor</span>
             <span class="pstatus" id="st-eurosw"></span>
             <div class="ppick" id="pick-eurosw"></div>
             <button class="pbtn" id="btn-eurosw"></button>
@@ -1792,7 +1829,7 @@ section { padding: 100px 0; position: relative; }
             <span>What can I win?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">PRIZES</span>
           </div>
-          <p class="faq__a">A Colnago V4Rs race bike for first place, signed jerseys and helmets on the podium, and aero helmets and official race jerseys for places 4 through 10 — ten winners in total, drawn from all tickets when the season ends. More tickets, better odds.</p>
+          <p class="faq__a">A Canyon Endurance CF 5 race bike for first place, a signed Slovenia team jersey for second, three unsigned team jerseys for third, and five Canyon helmets for places 4 through 10 — ten winners in total, drawn from all tickets when the season ends. More tickets, better odds.</p>
         </div>
 
         <div class="faq__item">
@@ -1844,7 +1881,7 @@ section { padding: 100px 0; position: relative; }
 </defs>
 </svg>
             <span class="x" style="margin:0 2px;">×</span>
-            <svg xmlns="http://www.w3.org/2000/svg" height="22" viewBox="0 0 21910 3729" style="flex-shrink:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 21910 3729" style="flex-shrink:0;">
  <defs>
   
  </defs>
@@ -1992,7 +2029,7 @@ section { padding: 100px 0; position: relative; }
     // A pick is an array [p1, p2, p3]. Demo: Tour podium pre-filled (pending) to show the edit + pending state.
     const picks = { tour:["Tadej Pogačar","Jonas Vingegaard","Remco Evenepoel"], worldsm:null, worldsw:null, eurosm:null, eurosw:null };
     const MAX_TICKETS = 1 + Object.keys(CONTESTS).length * 3; // 16
-    let current = null, step = 0, draft = [null,null,null], sel = null;
+    let current = null, step = 0, draft = [null,null,null], baseline = [null,null,null];
 
     function correctCount(){ let n=0; for(const k in CONTESTS){ const c=CONTESTS[k]; if(c.podium && picks[k]){ for(let i=0;i<3;i++) if(picks[k][i] && picks[k][i]===c.podium[i]) n++; } } return n; }
     function pendingCount(){ let n=0; for(const k in CONTESTS){ const c=CONTESTS[k]; if(!c.podium && picks[k]){ for(let i=0;i<3;i++) if(picks[k][i]) n++; } } return n; }
@@ -2046,41 +2083,84 @@ section { padding: 100px 0; position: relative; }
     }
     function renderAll(){ ['tour','worldsm','worldsw','eurosm','eurosw'].forEach(renderCard); updateTickets(); }
 
+    function nextEmptyFrom(idx){
+      for(let i=idx+1;i<3;i++) if(!draft[i]) return i;
+      for(let i=0;i<3;i++) if(!draft[i]) return i;
+      return -1;
+    }
+    function draftChanged(){
+      for(let i=0;i<3;i++) if(draft[i]!==baseline[i]) return true;
+      return false;
+    }
+    function setSlot(i){ step=i; renderStep(); }
+    function clearSlot(i, evt){ if(evt){ evt.stopPropagation(); } draft[i]=null; step=i; renderStep(); }
+    function pickRider(name){
+      // If the rider is already in another slot, swap them
+      const existingIdx = draft.indexOf(name);
+      if(existingIdx !== -1 && existingIdx !== step){
+        draft[existingIdx] = draft[step];   // move current slot's pick to where the rider was
+      }
+      draft[step] = name;
+      // Auto-advance to next empty slot if there is one
+      const next = nextEmptyFrom(step);
+      if(next !== -1) step = next;
+      renderStep();
+    }
     function renderStep(){
       const c=CONTESTS[current];
-      document.getElementById('pmTitle').textContent = POS_TITLE[step];
-      document.getElementById('pmSub').textContent = c.name + ' · ' + POS_LABEL[step];
-      // podium progress slots
+      document.getElementById('pmTitle').textContent = 'Predict the podium';
+      document.getElementById('pmSub').textContent = c.name + ' · pick any position';
+      // podium progress slots — all clickable, with optional clear button
       const pod=document.getElementById('pmPodium'); pod.innerHTML='';
       for(let i=0;i<3;i++){
-        const d=document.createElement('div');
-        d.className='pmslot'+(i===step?' active':'')+(draft[i]?' filled':' empty');
-        d.innerHTML='<div class="pmslot__pos">'+POS_SHORT[i]+'</div><div class="pmslot__name">'+(draft[i]||'—')+'</div>';
+        const filled = !!draft[i];
+        const d=document.createElement('button');
+        d.type='button';
+        d.className='pmslot'+(i===step?' active':'')+(filled?' filled':' empty');
+        d.innerHTML='<div class="pmslot__pos">'+POS_SHORT[i]+'</div><div class="pmslot__name">'+(draft[i]||'—')+'</div>'+
+          (filled ? '<button type="button" class="pmslot__clear" aria-label="Clear">×</button>' : '');
+        d.onclick = ()=> setSlot(i);
+        if(filled){
+          const x = d.querySelector('.pmslot__clear');
+          if(x) x.onclick = (evt)=> clearSlot(i, evt);
+        }
         pod.appendChild(d);
       }
-      // rider list — gray out riders already used in another slot
+      // rider list
       const list=document.getElementById('pmList'); list.innerHTML='';
       c.riders.forEach(r=>{
-        const usedElsewhere = draft.some((x,idx)=> x===r.n && idx!==step );
+        const slotIdx = draft.indexOf(r.n);
+        const isCurrentSlot = slotIdx === step;
+        const inOtherSlot = slotIdx !== -1 && !isCurrentSlot;
         const b=document.createElement('button');
-        b.className='prider'+(sel===r.n?' sel':'')+(usedElsewhere?' dim':'');
+        b.type='button';
+        b.className='prider'+(isCurrentSlot?' sel':'');
         b.innerHTML='<span class="prider__radio"></span><span class="prider__name">'+r.n+'</span>'+
-          (usedElsewhere ? '<span class="prider__used">Picked</span>' : '<span class="prider__team">'+r.t+'</span>');
-        if(!usedElsewhere){ b.onclick=()=>{ sel=r.n; [...list.children].forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); document.getElementById('pmCast').disabled=false; }; }
+          (inOtherSlot ? '<span class="prider__used">'+POS_SHORT[slotIdx]+'</span>'
+                       : '<span class="prider__team">'+r.t+'</span>');
+        b.onclick = ()=> pickRider(r.n);
         list.appendChild(b);
       });
-      const cast=document.getElementById('pmCast'); cast.textContent=POS_CONFIRM[step]; cast.disabled=!sel;
+      // Save button — enabled once any change vs baseline
+      const cast=document.getElementById('pmCast');
+      cast.textContent = draftChanged() ? 'Save podium' : 'No changes';
+      cast.disabled = !draftChanged();
     }
     function openPicker(k){
-      current=k; draft = picks[k] ? picks[k].slice() : [null,null,null]; step=0; sel=draft[0];
+      current=k;
+      baseline = picks[k] ? picks[k].slice() : [null,null,null];
+      draft = baseline.slice();
+      // Start on first empty slot, or 1st if all filled
+      step = draft.findIndex(x=>!x);
+      if(step === -1) step = 0;
       renderStep();
       document.getElementById('predModal').classList.add('open');
     }
     function confirmStep(){
-      if(!sel) return;
-      draft[step]=sel;
-      if(step<2){ step++; sel=draft[step]||null; renderStep(); }
-      else { picks[current]=draft.slice(); renderCard(current); updateTickets(); closePicker(); }
+      if(!draftChanged()) return;
+      picks[current] = draft.slice();
+      renderCard(current); updateTickets();
+      closePicker();
     }
     function closePicker(){ document.getElementById('predModal').classList.remove('open'); }
     document.getElementById('predModal').addEventListener('click', e=>{ if(e.target.id==='predModal') closePicker(); });
