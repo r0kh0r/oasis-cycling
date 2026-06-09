@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Oasis × Cycling Challenge — Win a Colnago. Earn ROSE.</title>
-  <meta name="description" content="Complete 4 challenges. Top 10 on the leaderboard win. Deposit into Earn for bonus ROSE tokens. A 90-day campaign powered by Oasis." />
+  <title>Oasis × Cycling Challenge — Predict &amp; Win a Colnago.</title>
+  <meta name="description" content="Predict the podium of cycling's biggest races — the Tour, and the men's and women's World and European Championships. Every place you call right is a raffle ticket toward a Colnago and more. Free to enter. Powered by Oasis." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1211,6 +1211,32 @@ section { padding: 100px 0; position: relative; }
   pointer-events: none;
 }
   </style>
+  <style>
+    /* normalize <button> elements reusing link button styles */
+    button.btn, button.nav__cta { border: none; cursor: pointer; -webkit-appearance: none; appearance: none; }
+    /* ===== Signup modal (Turnkey email onboarding) ===== */
+    .su-modal { position:fixed; inset:0; z-index:1100; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(0,0,0,0.78); backdrop-filter:blur(5px); }
+    .su-modal.open { display:flex; }
+    .su-card { width:100%; max-width:440px; background:var(--bg-1); border:1px solid var(--line-strong); position:relative; }
+    .su-head { padding:28px 28px 0; }
+    .su-eyebrow { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--oasis-blue); }
+    .su-dot { width:6px; height:6px; border-radius:50%; background:currentColor; display:inline-block; }
+    .su-title { font-family:var(--font-display); font-size:34px; letter-spacing:0.02em; line-height:1; margin-top:14px; }
+    .su-sub { font-size:14px; color:var(--text-2); margin-top:10px; line-height:1.5; }
+    .su-body { padding:22px 28px 28px; }
+    .su-label { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:8px; }
+    .su-input { width:100%; height:52px; background:var(--bg-2); border:1px solid var(--line-strong); color:var(--text); font-family:var(--font-body); font-size:16px; padding:0 16px; outline:none; box-sizing:border-box; }
+    .su-input:focus { border-color:var(--oasis-blue); }
+    .su-input--code { text-align:center; letter-spacing:0.5em; font-family:var(--font-mono); font-size:22px; }
+    .su-btn { width:100%; height:54px; margin-top:16px; border:none; cursor:pointer; background:var(--oasis-blue); color:#fff; font-family:var(--font-display); font-size:19px; letter-spacing:0.06em; text-transform:uppercase; transition:background 200ms ease; }
+    .su-btn:hover { background:var(--oasis-blue-soft); }
+    .su-close { position:absolute; top:14px; right:18px; background:none; border:none; color:var(--text-3); font-size:28px; line-height:1; cursor:pointer; }
+    .su-meta { font-family:var(--font-mono); font-size:11px; color:var(--text-3); margin-top:14px; text-align:center; letter-spacing:0.04em; }
+    .su-back { display:block; width:100%; background:none; border:none; color:var(--text-3); font-size:13px; cursor:pointer; margin-top:14px; text-decoration:underline; }
+    .su-err { color:var(--vuelta-red); font-size:13px; margin-top:10px; min-height:18px; }
+    .su-step { display:none; } .su-step.active { display:block; }
+    .su-secure { display:flex; align-items:center; gap:8px; justify-content:center; margin-top:18px; padding-top:16px; border-top:1px solid var(--line); font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-4); }
+  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 </head>
 <body>
@@ -1219,10 +1245,9 @@ section { padding: 100px 0; position: relative; }
   <div class="race-bar">
     <div class="container race-bar__inner">
       <div class="race-bar__item"><span class="live-pulse"></span><strong>LIVE</strong></div>
-      <div class="race-bar__item">Stage <strong>23</strong> / 90</div>
-      <div class="race-bar__item">Rank <strong>#8</strong></div>
-      <div class="race-bar__item">Points <strong>156</strong></div>
-      <div class="race-bar__item race-bar__item--opt">Challenges <strong>3 / 4</strong></div>
+      <div class="race-bar__item">Season <strong>2026</strong></div>
+      <div class="race-bar__item">Races <strong>4</strong></div>
+      <div class="race-bar__item race-bar__item--opt">Top Prize <strong>Colnago V4Rs</strong></div>
       <button type="button" class="race-bar__item race-bar__item--opt race-bar__wallet" aria-label="Open wallet">
         Wallet <strong>0xa3…b91f</strong>
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1281,7 +1306,7 @@ section { padding: 100px 0; position: relative; }
 </svg>
       </a>
       <div class="nav__links"></div>
-      <a class="nav__cta" href="portal.html">Join the Race</a>
+      <button class="nav__cta" type="button" onclick="openSignup()">Join the Raffle</button>
     </div>
   </nav>
 
@@ -1949,12 +1974,12 @@ section { padding: 100px 0; position: relative; }
 </svg>
           </div>
           <p class="hero__lede">
-            Compete in challenges, climb the leaderboard, become a champion.
+            Predict the podium of cycling's biggest races. Every place you call right is a ticket toward a Colnago V4Rs. Free to enter — your email is all it takes.
           </p>
           <div class="hero__ctas">
-            <a class="btn btn--primary" href="portal.html">
-              Join the Race
-            </a>
+            <button class="btn btn--primary" type="button" onclick="openSignup()">
+              Join the Raffle
+            </button>
             <a class="btn btn--ghost" href="#how">How it works</a>
           </div>
         </div>
@@ -1964,8 +1989,8 @@ section { padding: 100px 0; position: relative; }
 
           <div class="hgc__header">
             <div>
-              <div class="hgc__label">Leaderboard</div>
-              <div class="hgc__stage">In Progress</div>
+              <div class="hgc__label">Predict &amp; Win</div>
+              <div class="hgc__stage">5 podiums · men &amp; women</div>
             </div>
             <span class="hgc__live"><span class="live-pulse"></span>Live</span>
           </div>
@@ -1973,72 +1998,50 @@ section { padding: 100px 0; position: relative; }
           <div class="hgc__rows">
 
             <div class="hgc__row hgc__row--1">
-              <div class="hgc__pos hgc__pos--gold">01</div>
+              <div class="hgc__pos">🇫🇷</div>
               <div class="hgc__dot" style="background:var(--maillot-jaune);"></div>
               <div class="hgc__info">
-                <div class="hgc__name">Pogi_Wins</div>
-                <div class="hgc__meta">🇸🇮 SLO · Leader</div>
+                <div class="hgc__name">Tour de France</div>
+                <div class="hgc__meta">Men · Jul 2026 · open</div>
               </div>
-              <div class="hgc__pts hgc__pts--gold">187 <span class="hgc__pts-unit">pts</span></div>
+              <div class="hgc__pts" style="color:var(--maillot-jaune);">Open</div>
             </div>
 
             <div class="hgc__row">
-              <div class="hgc__pos">02</div>
-              <div class="hgc__dot" style="background:#d4d4d8;"></div>
-              <div class="hgc__info">
-                <div class="hgc__name">Pogi_Wins</div>
-                <div class="hgc__meta">🇪🇨 ECU · +0:03</div>
-              </div>
-              <div class="hgc__pts">184 <span class="hgc__pts-unit">pts</span></div>
-            </div>
-
-            <div class="hgc__row">
-              <div class="hgc__pos">03</div>
-              <div class="hgc__dot" style="background:var(--bronze);"></div>
-              <div class="hgc__info">
-                <div class="hgc__name">rogla_89</div>
-                <div class="hgc__meta">🇸🇮 SLO · +0:08</div>
-              </div>
-              <div class="hgc__pts">179 <span class="hgc__pts-unit">pts</span></div>
-            </div>
-
-            <div class="hgc__row">
-              <div class="hgc__pos">04</div>
-              <div class="hgc__dot" style="background:rgba(255,255,255,0.3);"></div>
-              <div class="hgc__info">
-                <div class="hgc__name">Mathieu_VDP</div>
-                <div class="hgc__meta">🇳🇱 NED · +0:15</div>
-              </div>
-              <div class="hgc__pts">172 <span class="hgc__pts-unit">pts</span></div>
-            </div>
-
-            <div class="hgc__row">
-              <div class="hgc__pos">05</div>
-              <div class="hgc__dot" style="background:rgba(255,255,255,0.3);"></div>
-              <div class="hgc__info">
-                <div class="hgc__name">WoutVA</div>
-                <div class="hgc__meta">🇧🇪 BEL · +0:19</div>
-              </div>
-              <div class="hgc__pts">168 <span class="hgc__pts-unit">pts</span></div>
-            </div>
-
-            <div class="hgc__separator">· · · 4,212 more riders · · ·</div>
-
-            <div class="hgc__row hgc__row--you">
-              <div class="hgc__pos hgc__pos--you">47</div>
+              <div class="hgc__pos">🌈</div>
               <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
               <div class="hgc__info">
-                <div class="hgc__name">rok.horvat</div>
-                <div class="hgc__meta">🇸🇮 SLO · You</div>
+                <div class="hgc__name">World Championship</div>
+                <div class="hgc__meta">Men · Sep · Oasis sponsor</div>
               </div>
-              <div class="hgc__pts hgc__pts--you">62 <span class="hgc__pts-unit">pts</span></div>
+              <div class="hgc__pts" style="color:var(--maillot-jaune);">Open</div>
+            </div>
+
+            <div class="hgc__row">
+              <div class="hgc__pos">🌈</div>
+              <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
+              <div class="hgc__info">
+                <div class="hgc__name">World Championship</div>
+                <div class="hgc__meta">Women · Sep · Oasis sponsor</div>
+              </div>
+              <div class="hgc__pts" style="color:var(--maillot-jaune);">Open</div>
+            </div>
+
+            <div class="hgc__row">
+              <div class="hgc__pos">🇪🇺</div>
+              <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
+              <div class="hgc__info">
+                <div class="hgc__name">European Championship</div>
+                <div class="hgc__meta">Men &amp; Women · Oct · Oasis</div>
+              </div>
+              <div class="hgc__pts" style="color:var(--maillot-jaune);">Open</div>
             </div>
 
           </div>
 
           <div class="hgc__footer">
-            <span class="hgc__footer-stat">4,217 riders · $13K prize pool</span>
-            <a class="hgc__footer-link" href="portal.html#leaderboard">Full Leaderboard →</a>
+            <span class="hgc__footer-stat">+1 ticket per correct podium place</span>
+            <a class="hgc__footer-link" href="#" onclick="openSignup();return false;">Make predictions →</a>
           </div>
 
         </aside>
@@ -2109,50 +2112,35 @@ section { padding: 100px 0; position: relative; }
 
       </div>
 
-      <!-- Positions 4–10 -->
+      <!-- Positions 4–10 — physical kit -->
       <div class="prize-rest">
 
-        <div class="podium-col podium-col--rose">
+        <div class="podium-col">
           <article class="prize">
-            <div class="prize__name">
-              <svg class="prize__name-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect width="42" height="42" rx="21" fill="#0500E2"/>
-                <path d="M32.4191 9.80765C31.0753 8.43662 29.4866 7.31182 27.7268 6.49154C27.6555 6.45525 27.583 6.42156 27.5078 6.38916C27.1618 6.23496 26.8119 6.08723 26.4543 5.95764C25.4526 5.5935 24.4029 5.32785 23.3196 5.16976C22.5615 5.05961 21.7879 5 21 5C12.1778 5 5 12.1778 5 21C5 27.8732 9.35669 33.7474 15.4537 36.0074C16.1703 36.273 16.9116 36.4881 17.6735 36.6501C18.7478 36.8782 19.8596 37 21 37C27.0776 37 32.3725 33.5932 35.0808 28.5912C36.3041 26.3312 37 23.7459 37 21.0013C37 16.6485 35.2506 12.6974 32.4204 9.81024L32.4191 9.80765ZM9.77266 29.5592C7.882 27.0659 6.88289 24.0906 6.88289 20.9559C6.88289 15.6027 9.85041 10.9312 14.2265 8.49753C14.3419 8.43274 14.4572 8.58694 14.36 8.67765C13.9609 9.05345 13.576 9.45647 13.2106 9.8854C10.6746 12.8516 9.21285 16.8856 9.19989 20.9559C9.19989 26.2405 12.735 31.9448 18.4459 31.9448C23.5425 31.9448 27.6892 27.0154 27.6892 20.9559C27.6892 18.1089 26.7342 15.3747 25.1053 13.3466C25.0483 13.2754 25.1157 13.173 25.2038 13.2002C27.9588 14.0153 30.0192 17.1837 30.0192 20.9559C30.0192 24.2876 28.8102 27.6037 26.7031 30.0555C24.5183 32.5967 21.5857 33.9962 18.4459 33.9975C15.1401 33.9975 11.9756 32.3764 9.77136 29.5592H9.77266ZM32.48 12.3605C34.3694 14.8485 35.3659 17.8187 35.3633 20.9521C35.3633 26.3053 32.3958 30.9768 28.0197 33.4105C27.9043 33.4753 27.789 33.321 27.8862 33.2303C28.2866 32.8532 28.6702 32.4515 29.0356 32.0226C31.5716 29.0564 33.0334 25.0224 33.0463 20.9521C33.0463 15.6675 29.5112 9.96315 23.8004 9.96315C18.7037 9.96315 14.557 14.8926 14.557 20.9521C14.557 23.7991 15.512 26.5333 17.1409 28.5614C17.1979 28.6326 17.1306 28.735 17.0424 28.7078C14.2874 27.8927 12.227 24.7256 12.227 20.9546C12.227 17.6243 13.4361 14.3082 15.5431 11.8564C17.7279 9.31522 20.6618 7.91569 23.8029 7.91569C27.1074 7.91569 30.2693 9.53551 32.4813 12.3592L32.48 12.3605ZM26.0163 20.9559C26.0163 24.7295 24.1826 27.9873 21.5546 29.449C21.2294 29.6304 20.8276 29.6071 20.527 29.3881L19.9646 28.9773C17.6606 27.2953 16.2286 24.2202 16.2286 20.9521C16.2286 17.1785 18.0623 13.9207 20.6903 12.459C21.0156 12.2776 21.4173 12.3009 21.7179 12.5199L22.2803 12.9294C24.5856 14.6114 26.0176 17.6865 26.0176 20.9546L26.0163 20.9559Z" fill="white"/>
-              </svg>
-              <span>300K ROSE</span>
-            </div>
-            <div class="prize__desc">A 300,000 ROSE token allocation, delivered when the campaign closes on Day 90.</div>
-            <div class="prize__value">≈ $3,000 · Token</div>
+            <div class="prize__emoji">⛑️</div>
+            <div class="prize__name">Aero Race Helmet</div>
+            <div class="prize__desc">A pro-grade aero helmet in team colours, as worn by the WorldTour peloton.</div>
+            <div class="prize__value">≈ $300 · Kit</div>
           </article>
           <div class="podium-step">4</div>
         </div>
 
-        <div class="podium-col podium-col--rose">
+        <div class="podium-col">
           <article class="prize">
-            <div class="prize__name">
-              <svg class="prize__name-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect width="42" height="42" rx="21" fill="#0500E2"/>
-                <path d="M32.4191 9.80765C31.0753 8.43662 29.4866 7.31182 27.7268 6.49154C27.6555 6.45525 27.583 6.42156 27.5078 6.38916C27.1618 6.23496 26.8119 6.08723 26.4543 5.95764C25.4526 5.5935 24.4029 5.32785 23.3196 5.16976C22.5615 5.05961 21.7879 5 21 5C12.1778 5 5 12.1778 5 21C5 27.8732 9.35669 33.7474 15.4537 36.0074C16.1703 36.273 16.9116 36.4881 17.6735 36.6501C18.7478 36.8782 19.8596 37 21 37C27.0776 37 32.3725 33.5932 35.0808 28.5912C36.3041 26.3312 37 23.7459 37 21.0013C37 16.6485 35.2506 12.6974 32.4204 9.81024L32.4191 9.80765ZM9.77266 29.5592C7.882 27.0659 6.88289 24.0906 6.88289 20.9559C6.88289 15.6027 9.85041 10.9312 14.2265 8.49753C14.3419 8.43274 14.4572 8.58694 14.36 8.67765C13.9609 9.05345 13.576 9.45647 13.2106 9.8854C10.6746 12.8516 9.21285 16.8856 9.19989 20.9559C9.19989 26.2405 12.735 31.9448 18.4459 31.9448C23.5425 31.9448 27.6892 27.0154 27.6892 20.9559C27.6892 18.1089 26.7342 15.3747 25.1053 13.3466C25.0483 13.2754 25.1157 13.173 25.2038 13.2002C27.9588 14.0153 30.0192 17.1837 30.0192 20.9559C30.0192 24.2876 28.8102 27.6037 26.7031 30.0555C24.5183 32.5967 21.5857 33.9962 18.4459 33.9975C15.1401 33.9975 11.9756 32.3764 9.77136 29.5592H9.77266ZM32.48 12.3605C34.3694 14.8485 35.3659 17.8187 35.3633 20.9521C35.3633 26.3053 32.3958 30.9768 28.0197 33.4105C27.9043 33.4753 27.789 33.321 27.8862 33.2303C28.2866 32.8532 28.6702 32.4515 29.0356 32.0226C31.5716 29.0564 33.0334 25.0224 33.0463 20.9521C33.0463 15.6675 29.5112 9.96315 23.8004 9.96315C18.7037 9.96315 14.557 14.8926 14.557 20.9521C14.557 23.7991 15.512 26.5333 17.1409 28.5614C17.1979 28.6326 17.1306 28.735 17.0424 28.7078C14.2874 27.8927 12.227 24.7256 12.227 20.9546C12.227 17.6243 13.4361 14.3082 15.5431 11.8564C17.7279 9.31522 20.6618 7.91569 23.8029 7.91569C27.1074 7.91569 30.2693 9.53551 32.4813 12.3592L32.48 12.3605ZM26.0163 20.9559C26.0163 24.7295 24.1826 27.9873 21.5546 29.449C21.2294 29.6304 20.8276 29.6071 20.527 29.3881L19.9646 28.9773C17.6606 27.2953 16.2286 24.2202 16.2286 20.9521C16.2286 17.1785 18.0623 13.9207 20.6903 12.459C21.0156 12.2776 21.4173 12.3009 21.7179 12.5199L22.2803 12.9294C24.5856 14.6114 26.0176 17.6865 26.0176 20.9546L26.0163 20.9559Z" fill="white"/>
-              </svg>
-              <span>200K ROSE</span>
-            </div>
-            <div class="prize__desc">A 200,000 ROSE token allocation, delivered when the campaign closes on Day 90.</div>
-            <div class="prize__value">≈ $2,000 · Token</div>
+            <div class="prize__emoji">👕</div>
+            <div class="prize__name">Official Race Jersey</div>
+            <div class="prize__desc">An official Slovenian Cycling Federation race jersey, in your size.</div>
+            <div class="prize__value">≈ $150 · Kit</div>
           </article>
           <div class="podium-step">5</div>
         </div>
 
-        <div class="podium-col podium-col--rose">
+        <div class="podium-col">
           <article class="prize">
-            <div class="prize__name">
-              <svg class="prize__name-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <rect width="42" height="42" rx="21" fill="#0500E2"/>
-                <path d="M32.4191 9.80765C31.0753 8.43662 29.4866 7.31182 27.7268 6.49154C27.6555 6.45525 27.583 6.42156 27.5078 6.38916C27.1618 6.23496 26.8119 6.08723 26.4543 5.95764C25.4526 5.5935 24.4029 5.32785 23.3196 5.16976C22.5615 5.05961 21.7879 5 21 5C12.1778 5 5 12.1778 5 21C5 27.8732 9.35669 33.7474 15.4537 36.0074C16.1703 36.273 16.9116 36.4881 17.6735 36.6501C18.7478 36.8782 19.8596 37 21 37C27.0776 37 32.3725 33.5932 35.0808 28.5912C36.3041 26.3312 37 23.7459 37 21.0013C37 16.6485 35.2506 12.6974 32.4204 9.81024L32.4191 9.80765ZM9.77266 29.5592C7.882 27.0659 6.88289 24.0906 6.88289 20.9559C6.88289 15.6027 9.85041 10.9312 14.2265 8.49753C14.3419 8.43274 14.4572 8.58694 14.36 8.67765C13.9609 9.05345 13.576 9.45647 13.2106 9.8854C10.6746 12.8516 9.21285 16.8856 9.19989 20.9559C9.19989 26.2405 12.735 31.9448 18.4459 31.9448C23.5425 31.9448 27.6892 27.0154 27.6892 20.9559C27.6892 18.1089 26.7342 15.3747 25.1053 13.3466C25.0483 13.2754 25.1157 13.173 25.2038 13.2002C27.9588 14.0153 30.0192 17.1837 30.0192 20.9559C30.0192 24.2876 28.8102 27.6037 26.7031 30.0555C24.5183 32.5967 21.5857 33.9962 18.4459 33.9975C15.1401 33.9975 11.9756 32.3764 9.77136 29.5592H9.77266ZM32.48 12.3605C34.3694 14.8485 35.3659 17.8187 35.3633 20.9521C35.3633 26.3053 32.3958 30.9768 28.0197 33.4105C27.9043 33.4753 27.789 33.321 27.8862 33.2303C28.2866 32.8532 28.6702 32.4515 29.0356 32.0226C31.5716 29.0564 33.0334 25.0224 33.0463 20.9521C33.0463 15.6675 29.5112 9.96315 23.8004 9.96315C18.7037 9.96315 14.557 14.8926 14.557 20.9521C14.557 23.7991 15.512 26.5333 17.1409 28.5614C17.1979 28.6326 17.1306 28.735 17.0424 28.7078C14.2874 27.8927 12.227 24.7256 12.227 20.9546C12.227 17.6243 13.4361 14.3082 15.5431 11.8564C17.7279 9.31522 20.6618 7.91569 23.8029 7.91569C27.1074 7.91569 30.2693 9.53551 32.4813 12.3592L32.48 12.3605ZM26.0163 20.9559C26.0163 24.7295 24.1826 27.9873 21.5546 29.449C21.2294 29.6304 20.8276 29.6071 20.527 29.3881L19.9646 28.9773C17.6606 27.2953 16.2286 24.2202 16.2286 20.9521C16.2286 17.1785 18.0623 13.9207 20.6903 12.459C21.0156 12.2776 21.4173 12.3009 21.7179 12.5199L22.2803 12.9294C24.5856 14.6114 26.0176 17.6865 26.0176 20.9546L26.0163 20.9559Z" fill="white"/>
-              </svg>
-              <span>50K ROSE</span>
-            </div>
-            <div class="prize__desc">50,000 ROSE each for positions 6 through 10. Same payout, delivered at campaign close.</div>
-            <div class="prize__value">≈ $500 · Token</div>
+            <div class="prize__emoji">🧢</div>
+            <div class="prize__name">Helmets &amp; Jerseys</div>
+            <div class="prize__desc">An aero helmet or official race jersey — one prize each for positions 6 through 10.</div>
+            <div class="prize__value">≈ $150 · Kit</div>
           </article>
           <div class="podium-step">6–10</div>
         </div>
@@ -2161,7 +2149,7 @@ section { padding: 100px 0; position: relative; }
 
       <div style="margin-top: 32px; padding: 18px 24px; border-radius: 0; background: rgba(255, 214, 10, 0.04); border: 1px solid rgba(255, 214, 10, 0.16); display: flex; gap: 14px; align-items: center; font-size: 14px; color: var(--text-2);">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0;"><path d="M10 1l2.5 6h6l-5 4 2 7-5.5-4-5.5 4 2-7-5-4h6z" fill="rgba(255,214,10,0.6)" stroke="var(--maillot-jaune)" stroke-width="1"/></svg>
-        <span><strong style="color: var(--text);">Eligibility:</strong> All four challenges must be completed by Day 90 to qualify for prizes. Riders who haven't finished all challenges still appear on the GC but are marked ineligible. <strong style="color: var(--maillot-jaune);">Total prize pool ≈ $13,000.</strong></span>
+        <span><strong style="color: var(--text);">How to win:</strong> Create a free account to claim your first ticket, then predict race winners to earn more. The 10 winners are drawn at the season's close, weighted by tickets — more tickets, better odds, and anyone with a ticket can win. No purchase necessary. <strong style="color: var(--maillot-jaune);">Total prize value ≈ $6,500.</strong></span>
       </div>
     </div>
   </section>
@@ -2180,8 +2168,8 @@ section { padding: 100px 0; position: relative; }
       <!-- Left: section identifier + title + lead (matches other sections) -->
       <div>
         <div class="stage-tag"><b>Stage 2</b><span>In Progress</span></div>
-        <h2>Sixty Days to the Finish</h2>
-        <p class="lead">Thousands of riders competing across hundreds of stages from June to October 2026.</p>
+        <h2>From the Tour to the Worlds</h2>
+        <p class="lead">Four marquee races to predict across the 2026 season, from May through October. The more you call right, the more tickets you hold.</p>
       </div>
 
       <!-- Right: countdown + live stats strip -->
@@ -2206,10 +2194,10 @@ section { padding: 100px 0; position: relative; }
             </div>
           </div>
           <div class="ct2__cd-meta">
-            <div class="ct2__cd-meta-item">Progress<strong>25%</strong></div>
-            <div class="ct2__cd-meta-item">Riders<strong>4,217</strong></div>
-            <div class="ct2__cd-meta-item">GC Leader<strong style="color:var(--maillot-jaune)">Pogi_Wins</strong></div>
-            <div class="ct2__cd-meta-item">Prize Pool<strong>$13,000</strong></div>
+            <div class="ct2__cd-meta-item">Entrants<strong>4,217</strong></div>
+            <div class="ct2__cd-meta-item">Races<strong>5</strong></div>
+            <div class="ct2__cd-meta-item">Next Race<strong style="color:var(--maillot-jaune)">Tour de France</strong></div>
+            <div class="ct2__cd-meta-item">Top Prize<strong>Colnago V4Rs</strong></div>
           </div>
         </div>
       </div>
@@ -2266,27 +2254,27 @@ section { padding: 100px 0; position: relative; }
         </div>
         <div class="ct2__wp ct2__wp--done">
           <div class="ct2__wp-dot"></div>
-          <div class="ct2__wp-lbl">D14<br>Sprint</div>
+          <div class="ct2__wp-lbl">May<br>Start</div>
         </div>
         <div class="ct2__wp ct2__wp--now">
           <div class="ct2__wp-dot"></div>
-          <div class="ct2__wp-lbl">D23<br>Now</div>
+          <div class="ct2__wp-lbl">Now<br>Jun</div>
         </div>
         <div class="ct2__wp">
           <div class="ct2__wp-dot"></div>
-          <div class="ct2__wp-lbl">D45<br>Mid</div>
+          <div class="ct2__wp-lbl">Jul<br>Tour</div>
         </div>
         <div class="ct2__wp">
           <div class="ct2__wp-dot"></div>
-          <div class="ct2__wp-lbl">D60<br>Queen</div>
+          <div class="ct2__wp-lbl">Sep<br>Worlds</div>
         </div>
         <div class="ct2__wp">
           <div class="ct2__wp-dot"></div>
-          <div class="ct2__wp-lbl">D83<br>Final</div>
+          <div class="ct2__wp-lbl">Oct<br>Euros</div>
         </div>
         <div class="ct2__wp">
           <div class="ct2__wp-dot"></div>
-          <div class="ct2__wp-lbl">D90<br>Finish</div>
+          <div class="ct2__wp-lbl">Oct<br>Draw</div>
         </div>
       </div>
     </div>
@@ -2312,22 +2300,22 @@ section { padding: 100px 0; position: relative; }
         <div class="step">
           <div class="step__num">01</div>
           <div class="step__title">Create account</div>
-          <p class="step__desc">Enter an email and confirm.</p>
+          <p class="step__desc">Enter your email, confirm the code, and you're in — that's your first ticket.</p>
         </div>
         <div class="step">
           <div class="step__num">02</div>
-          <div class="step__title">Compete</div>
-          <p class="step__desc">Test your skills and earn leaderboard points.</p>
+          <div class="step__title">Predict</div>
+          <p class="step__desc">Predict the podium of each big race. Every place you call right earns another ticket.</p>
         </div>
         <div class="step">
           <div class="step__num">03</div>
           <div class="step__title">Win</div>
-          <p class="step__desc">Climb the leaderboard and become a champion.</p>
+          <p class="step__desc">10 winners are drawn at season's end. More tickets, better odds.</p>
         </div>
       </div>
 
       <div class="section-cta-row">
-        <a class="btn btn--primary" href="portal.html">Join the Race</a>
+        <button class="btn btn--primary" type="button" onclick="openSignup()">Join the Raffle</button>
       </div>
     </div>
   </section>
@@ -2389,7 +2377,7 @@ section { padding: 100px 0; position: relative; }
  </g>
 </svg>
           </div>
-          <p>The Oasis × Slovenian Cycling Federation campaign — a 90-day rollout introducing crypto-native incentives to cycling fans worldwide.</p>
+          <p>The Oasis × Slovenian Cycling Federation campaign — a season-long predict-and-win raffle bringing cycling fans worldwide into the Oasis ecosystem.</p>
         </div>
         <div class="foot__col">
           <h4>Legal</h4>
@@ -2400,7 +2388,7 @@ section { padding: 100px 0; position: relative; }
       </div>
 
       <p class="foot__legal">
-        No purchase necessary to enter or win. The Oasis × Cycling Campaign runs from May 15 to August 13, 2026. Prize eligibility requires completion of all four challenges. ROSE token rewards are locked for 90 days from the moment of deposit; early withdrawal forfeits ROSE rewards but not principal or yield. Yields are variable and sourced from Aave (~4.5% APY trailing — not guaranteed). ROSE/USD values are estimates based on spot pricing at ~$0.01/ROSE as of May 2026. This is not financial advice. Token values may decrease as well as increase. Always read the campaign rules and consult local regulations before participating. Confidential — Specification v1, May 2026.
+        No purchase necessary to enter or win. The Oasis × Cycling Campaign runs from May 15 to October 15, 2026. A free account earns one raffle ticket; each correctly predicted race winner earns one additional ticket. Ten prize winners are drawn at random from all tickets at the close of the campaign — odds of winning depend on the total number of tickets entered. Prizes are physical goods (a race bike, helmets and jerseys), non-transferable and not exchangeable for cash. Accounts are secured via Turnkey; no cryptocurrency purchase is required to participate. Always read the campaign rules and consult local regulations before participating. Void where prohibited. Confidential — Specification v2, June 2026.
       </p>
     </div>
   </footer>
@@ -2420,7 +2408,7 @@ section { padding: 100px 0; position: relative; }
       }, 4500);
     })();
 
-    const CAMPAIGN_END = new Date(Date.now() + (67 * 24 + 14) * 3600 * 1000 + 22 * 60 * 1000);
+    const CAMPAIGN_END = new Date(Date.now() + (129 * 24) * 3600 * 1000);
     function pad(n) { return n < 10 ? "0" + n : "" + n; }
     function tick() {
       const now = new Date();
@@ -2515,6 +2503,92 @@ section { padding: 100px 0; position: relative; }
       .to('.hbv-wisp4 path',   { x: -30, attr: { d: 'M60,159 L50,159' }, ease: 'sine', stagger: 0.45 }, 0.5)
       .to('.hbv-wisp4 path',   { duration: 0.1, scale: 0, ease: 'power2.in', stagger: 0.45 }, 0.9);
   })();
+  </script>
+
+  <!-- ============================================================
+       Signup modal — Turnkey email onboarding
+       ============================================================ -->
+  <div class="su-modal" id="signupModal" aria-hidden="true">
+    <div class="su-card" role="dialog" aria-modal="true" aria-label="Create your account">
+      <button class="su-close" onclick="closeSignup()" aria-label="Close">×</button>
+
+      <!-- Step 1 — email -->
+      <div class="su-step active" id="suStep1">
+        <div class="su-head">
+          <span class="su-eyebrow"><span class="su-dot"></span> Join the Raffle</span>
+          <div class="su-title">Start with your email</div>
+          <div class="su-sub">Create your account and claim your first raffle ticket. No password and no crypto — your account is a secure wallet created for you by Turnkey.</div>
+        </div>
+        <div class="su-body">
+          <label class="su-label" for="suEmail">Email address</label>
+          <input class="su-input" id="suEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+          <div class="su-err" id="suErr1"></div>
+          <button class="su-btn" id="suSend" onclick="sendCode()">Send me a code</button>
+          <label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:12px;color:var(--text-3);line-height:1.5;cursor:pointer;">
+            <input type="checkbox" id="suConsent" checked style="margin-top:2px;flex-shrink:0;" />
+            <span>Email me race results, prediction reminders and occasional updates from Oasis &amp; Privana. Unsubscribe anytime.</span>
+          </label>
+          <div class="su-secure">🔒 Secured by Turnkey · No seed phrase</div>
+        </div>
+      </div>
+
+      <!-- Step 2 — code -->
+      <div class="su-step" id="suStep2">
+        <div class="su-head">
+          <span class="su-eyebrow"><span class="su-dot"></span> Check your inbox</span>
+          <div class="su-title">Enter your code</div>
+          <div class="su-sub">We sent a 6-digit code to <strong id="suEmailEcho" style="color:var(--text);"></strong>. Enter it below to finish creating your account.</div>
+        </div>
+        <div class="su-body">
+          <label class="su-label" for="suCode">Confirmation code</label>
+          <input class="su-input su-input--code" id="suCode" inputmode="numeric" maxlength="6" placeholder="••••••" />
+          <div class="su-err" id="suErr2"></div>
+          <button class="su-btn" id="suVerify" onclick="verifyCode()">Verify &amp; create account</button>
+          <div class="su-meta">Demo — enter any 6 digits to continue</div>
+          <button class="su-back" onclick="suBack()">← Use a different email</button>
+        </div>
+      </div>
+
+      <!-- Step 3 — success -->
+      <div class="su-step" id="suStep3">
+        <div class="su-head" style="text-align:center;">
+          <div style="font-size:48px;line-height:1;">🎟</div>
+          <div class="su-title" style="margin-top:12px;">You're in!</div>
+          <div class="su-sub">Your account is created and your first raffle ticket is secured. Next stop — your predictions.</div>
+        </div>
+        <div class="su-body">
+          <a class="su-btn" href="portal.html" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">Enter the portal →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* ===== Signup (Turnkey email onboarding) — front-end demo flow ===== */
+    function openSignup(){ document.getElementById('signupModal').classList.add('open'); setTimeout(()=>document.getElementById('suEmail').focus(),50); }
+    function closeSignup(){ document.getElementById('signupModal').classList.remove('open'); }
+    function suShow(step){ document.querySelectorAll('.su-step').forEach(s=>s.classList.remove('active')); document.getElementById('suStep'+step).classList.add('active'); }
+    function suBack(){ document.getElementById('suErr2').textContent=''; suShow(1); }
+    function sendCode(){
+      const email=document.getElementById('suEmail').value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ document.getElementById('suErr1').textContent='Please enter a valid email address.'; return; }
+      document.getElementById('suErr1').textContent='';
+      document.getElementById('suEmailEcho').textContent=email;
+      suShow(2);
+      setTimeout(()=>document.getElementById('suCode').focus(),50);
+    }
+    function verifyCode(){
+      const code=document.getElementById('suCode').value.trim();
+      if(!/^\d{6}$/.test(code)){ document.getElementById('suErr2').textContent='Enter the 6-digit code from your email.'; return; }
+      document.getElementById('suErr2').textContent='';
+      suShow(3);
+    }
+    document.getElementById('signupModal').addEventListener('click',e=>{ if(e.target.id==='signupModal') closeSignup(); });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSignup(); });
+    document.getElementById('suCode').addEventListener('input',e=>{ e.target.value=e.target.value.replace(/\D/g,'').slice(0,6); });
+    document.getElementById('suEmail').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); sendCode(); } });
+    document.getElementById('suCode').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); verifyCode(); } });
   </script>
 
 </body>
