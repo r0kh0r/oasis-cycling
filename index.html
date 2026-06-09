@@ -40,7 +40,7 @@
   --font-body: "Geist", system-ui, -apple-system, sans-serif;
   --font-mono: "Geist Mono", "SF Mono", ui-monospace, monospace;
   --r-sm: 8px; --r: 12px; --r-lg: 18px; --r-xl: 24px;
-  --container: 1280px;
+  --container: 1480px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,17 +50,18 @@ html, body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   line-height: 1.5; letter-spacing: -0.005em;
+  overflow-x: clip;
+  max-width: 100vw;
 }
 section[id] { scroll-margin-top: 80px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
-  overflow-x: hidden;
   background: radial-gradient(900px 600px at 50% -200px, rgba(0, 60, 216, 0.1), transparent 60%), var(--bg);
 }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; font: inherit; color: inherit; background: none; border: none; }
 img, svg { display: block; max-width: 100%; }
-.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 32px; }
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 20px; }
 @media (max-width: 720px) { .container { padding: 0 24px; } }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--oasis-blue); }
 .eyebrow.muted { color: var(--text-3); }
@@ -146,12 +147,12 @@ p { color: var(--text-2); }
 .hero__grid {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 48px;
+  grid-template-columns: 1fr 320px;
+  gap: 72px;
   align-items: start;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1100px) {
   .hero__grid { grid-template-columns: 1fr; gap: 40px; }
   .hero { min-height: auto; }
   .hero__inner { padding: 80px 0 60px; }
@@ -170,7 +171,7 @@ p { color: var(--text-2); }
   background-clip: text;
   color: transparent;
 }
-.hero__lede { font-size: 16px; max-width: 520px; margin-bottom: 36px; line-height: 1.55; position: relative; z-index: 20; }
+.hero__lede { font-size: 16px; max-width: 440px; margin-bottom: 36px; line-height: 1.55; position: relative; z-index: 20; }
 .hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; position: relative; z-index: 20; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 0; font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; transition: transform 120ms ease, background 200ms ease; white-space: nowrap; }
 .btn:hover { transform: translateY(-2px); }
@@ -583,7 +584,7 @@ section { padding: 100px 0; position: relative; }
 .prize__head { display: none; }
 .prize__medal { display: none; }
 
-.challenges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.challenges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 @media (max-width: 980px) { .challenges { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .challenges { grid-template-columns: 1fr; } }
 .challenge { border-radius: 0; padding: 24px; background: var(--bg-1); border: 1px solid var(--line); position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 360px; transition: transform 200ms ease; }
@@ -627,7 +628,7 @@ section { padding: 100px 0; position: relative; }
 .cls__prize { text-align: right; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--text-2); }
 @media (max-width: 760px) { .classification__head, .classification__row { grid-template-columns: 50px 1fr 90px; } .cls__games, .cls__prize { display: none; } }
 
-.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 @media (max-width: 860px) { .tiers { grid-template-columns: 1fr; } }
 .tier { border: 1px solid var(--line); border-radius: 0; padding: 28px; background: var(--bg-1); position: relative; overflow: hidden; }
 .tier__num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3); }
@@ -646,7 +647,7 @@ section { padding: 100px 0; position: relative; }
 .tier--max { background: radial-gradient(500px 280px at 100% 0%, rgba(0, 60, 216, 0.16), transparent 65%), var(--bg-1); border-color: rgba(0, 60, 216, 0.22); }
 .tier--max::after { content: "MAX"; position: absolute; top: 24px; right: 24px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; padding: 3px 8px; background: var(--oasis-blue); color: white; border-radius: 0; }
 
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; position: relative; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; position: relative; }
 @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
 .step { border: 1px solid var(--line); border-radius: 0; padding: 28px; background: var(--bg-1); position: relative; min-height: 200px; display: flex; flex-direction: column; }
 .step__num { font-family: var(--font-display); font-size: 44px; font-weight: 600; letter-spacing: -0.04em; color: var(--oasis-blue); line-height: 1; }
@@ -1233,7 +1234,7 @@ section { padding: 100px 0; position: relative; }
    ============================================================ */
 .hero__rider {
   position: absolute;
-  bottom: 0;
+  bottom: -60px;
   left: 50%;
   transform: translateX(-40%);
   height: 84vh;
@@ -1244,10 +1245,19 @@ section { padding: 100px 0; position: relative; }
   mask-image: linear-gradient(to top, transparent 0%, black 8%);
 }
 @media (max-width: 1100px) {
-  .hero__rider { height: 70vh; transform: translateX(-40%); }
-}
-@media (max-width: 980px) {
-  .hero__rider { display: none; }
+  /* In-flow between copy and GC panel on narrow viewports — no longer absolute, scales with content */
+  .hero__rider {
+    position: static;
+    display: block;
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    max-height: 56vh;
+    margin: 8px auto 24px;
+    transform: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 
@@ -2034,6 +2044,9 @@ section { padding: 100px 0; position: relative; }
           </div>
         </div>
 
+        <!-- Cyclist hero image — absolute on desktop, in-flow between copy and GC on narrow viewports -->
+        <img class="hero__rider" src="rider.png" alt="Tadej Pogačar, Primož Roglič, and Urška Žigart — Slovenian Cycling Federation riders" />
+
         <!-- GC Summary Panel — hero right side -->
         <aside class="hero__gc-panel">
 
@@ -2109,9 +2122,6 @@ section { padding: 100px 0; position: relative; }
 
       </div>
     </div>
-
-    <!-- Cyclist hero overlay — direct child of section, full-viewport coords -->
-    <img class="hero__rider" src="rider.png" alt="Tadej Pogačar, Primož Roglič, and Urška Žigart — Slovenian Cycling Federation riders" />
 
     <!-- Decorative race route SVG -->
     <svg style="position:absolute; left:0; bottom:0; width:100%; height:80px; pointer-events:none;" viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
