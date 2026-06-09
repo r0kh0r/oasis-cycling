@@ -1417,10 +1417,11 @@ section { padding: 100px 0; position: relative; }
     .pcard--sponsor { border-color:rgba(0,60,216,0.4); }
     .pcard__head { position:relative; padding:22px 24px; border-bottom:1px solid var(--line); background:linear-gradient(120deg, rgba(0,60,216,0.14), transparent 70%); }
     .pcard__flag { font-size:30px; line-height:1; }
-    .pcard__title { font-family:var(--font-display); font-size:30px; letter-spacing:0.02em; margin-top:4px; line-height:1; }
+    .pcard__title { font-family:var(--font-display); font-size:30px; letter-spacing:0.02em; line-height:1; }
     .pcard__meta { font-family:var(--font-mono); font-size: 12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-top:8px; }
-    /* Men/women race tag — strong color-coded chip, sits just above the title */
-    .pcard__cat { display:inline-flex; align-items:center; font-family:var(--font-mono); font-size: 11px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; padding:5px 11px; margin-top:10px; align-self:flex-start; }
+    /* Title + men/women race tag on the same row */
+    .pcard__titlerow { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:12px; }
+    .pcard__cat { display:inline-flex; align-items:center; font-family:var(--font-mono); font-size: 11px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; padding:5px 11px; }
     .pcard__cat--men { background:rgba(0,60,216,0.22); color:#7da4ff; border:1px solid rgba(0,60,216,0.6); }
     .pcard__cat--women { background:rgba(255,44,122,0.22); color:#ff6ea3; border:1px solid rgba(255,44,122,0.6); }
     .pcard__toprow { display:flex; justify-content:flex-start; align-items:center; gap:12px; }
@@ -1717,8 +1718,10 @@ section { padding: 100px 0; position: relative; }
         <article class="pcard" data-c="tour">
           <div class="pcard__head">
             <div class="pcard__flag">🇫🇷</div>
-            <span class="pcard__cat pcard__cat--men">Men's race</span>
-            <div class="pcard__title">Tour de France</div>
+            <div class="pcard__titlerow">
+              <div class="pcard__title">Tour de France</div>
+              <span class="pcard__cat pcard__cat--men">Men's race</span>
+            </div>
             <div class="pcard__meta">4–26 Jul 2026 · Barcelona → Paris</div>
           </div>
           <div class="pcard__body">
@@ -1732,8 +1735,10 @@ section { padding: 100px 0; position: relative; }
         <article class="pcard pcard--sponsor" data-c="worldsm">
           <div class="pcard__head">
             <div class="pcard__flag">🌍</div>
-            <span class="pcard__cat pcard__cat--men">Men's race</span>
-            <div class="pcard__title">World Championship</div>
+            <div class="pcard__titlerow">
+              <div class="pcard__title">World Championship</div>
+              <span class="pcard__cat pcard__cat--men">Men's race</span>
+            </div>
             <div class="pcard__meta">27 Sep 2026 · Montréal 🇨🇦</div>
           </div>
           <div class="pcard__body">
@@ -1748,8 +1753,10 @@ section { padding: 100px 0; position: relative; }
         <article class="pcard pcard--sponsor" data-c="worldsw">
           <div class="pcard__head">
             <div class="pcard__flag">🌍</div>
-            <span class="pcard__cat pcard__cat--women">Women's race</span>
-            <div class="pcard__title">World Championship</div>
+            <div class="pcard__titlerow">
+              <div class="pcard__title">World Championship</div>
+              <span class="pcard__cat pcard__cat--women">Women's race</span>
+            </div>
             <div class="pcard__meta">26 Sep 2026 · Montréal 🇨🇦</div>
           </div>
           <div class="pcard__body">
@@ -1764,8 +1771,10 @@ section { padding: 100px 0; position: relative; }
         <article class="pcard pcard--sponsor" data-c="eurosm">
           <div class="pcard__head">
             <div class="pcard__flag">🇪🇺</div>
-            <span class="pcard__cat pcard__cat--men">Men's race</span>
-            <div class="pcard__title">European Championship</div>
+            <div class="pcard__titlerow">
+              <div class="pcard__title">European Championship</div>
+              <span class="pcard__cat pcard__cat--men">Men's race</span>
+            </div>
             <div class="pcard__meta">4 Oct 2026 · Ljubljana 🇸🇮</div>
           </div>
           <div class="pcard__body">
@@ -1780,8 +1789,10 @@ section { padding: 100px 0; position: relative; }
         <article class="pcard pcard--sponsor" data-c="eurosw">
           <div class="pcard__head">
             <div class="pcard__flag">🇪🇺</div>
-            <span class="pcard__cat pcard__cat--women">Women's race</span>
-            <div class="pcard__title">European Championship</div>
+            <div class="pcard__titlerow">
+              <div class="pcard__title">European Championship</div>
+              <span class="pcard__cat pcard__cat--women">Women's race</span>
+            </div>
             <div class="pcard__meta">3 Oct 2026 · Ljubljana 🇸🇮</div>
           </div>
           <div class="pcard__body">
