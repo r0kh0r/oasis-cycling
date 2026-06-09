@@ -1386,6 +1386,84 @@ section { padding: 100px 0; position: relative; }
       font-weight: 600;
       line-height: 1;
     }
+    .points-breakdown .d {
+      margin-top: 8px;
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--text-3);
+    }
+  </style>
+  <style>
+    /* ===== Predictions + raffle (v3) ===== */
+    .predictions-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+    @media (max-width:860px){ .predictions-grid{ grid-template-columns:1fr; } }
+    .pcard { position:relative; display:flex; flex-direction:column; background:var(--bg-1); border:1px solid var(--line); overflow:hidden; transition:border-color 200ms ease, transform 200ms ease; }
+    .pcard:hover { border-color:var(--line-strong); transform:translateY(-3px); }
+    .pcard--sponsor { border-color:rgba(0,60,216,0.4); }
+    .pcard__head { position:relative; padding:22px 24px; border-bottom:1px solid var(--line); background:linear-gradient(120deg, rgba(0,60,216,0.14), transparent 70%); }
+    .pcard__flag { font-size:30px; line-height:1; }
+    .pcard__title { font-family:var(--font-display); font-size:30px; letter-spacing:0.02em; margin-top:6px; line-height:1; }
+    .pcard__meta { font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-top:8px; }
+    .pcard__cat { font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-2); border:1px solid var(--line-strong); padding:4px 9px; align-self:flex-start; }
+    .pcard__toprow { display:flex; justify-content:space-between; align-items:flex-start; }
+    .pcard__body { padding:22px 24px; display:flex; flex-direction:column; gap:16px; flex:1; }
+    .sponsor-badge { display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--oasis-blue); background:var(--oasis-blue-bg); border:1px solid rgba(0,60,216,0.32); padding:6px 11px; align-self:flex-start; }
+    .pstatus { font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; padding:5px 10px; align-self:flex-start; }
+    .pstatus--open { color:var(--maillot-jaune); border:1px solid rgba(255,214,10,0.35); }
+    .pstatus--resolved { color:var(--maillot-vert); border:1px solid rgba(0,224,122,0.35); }
+    .ppick { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; background:var(--bg-2); border:1px solid var(--line); min-height:64px; }
+    .ppick--correct { border-color:rgba(0,224,122,0.4); background:rgba(0,224,122,0.06); }
+    .ppick__label { font-family:var(--font-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
+    .ppick__rider { font-family:var(--font-display); font-size:22px; letter-spacing:0.02em; line-height:1.05; margin-top:2px; }
+    .ppick__tag { font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; text-align:right; white-space:nowrap; }
+    .pbtn { display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; height:54px; border:none; cursor:pointer; background:var(--oasis-blue); color:#fff; font-family:var(--font-display); font-size:19px; letter-spacing:0.06em; text-transform:uppercase; transition:background 200ms ease; }
+    .pbtn:hover { background:var(--oasis-blue-soft); }
+    .pbtn--ghost { background:transparent; border:1px solid var(--line-strong); color:var(--text); }
+    .pbtn--ghost:hover { background:rgba(255,255,255,0.05); }
+    .pbtn:disabled { opacity:0.45; cursor:default; background:var(--bg-3); color:var(--text-3); }
+    /* ticket pill in nav */
+    .tkt-pill { display:inline-flex; align-items:center; gap:8px; height:52px; padding:0 22px; background:var(--oasis-blue-bg); border:1px solid rgba(0,60,216,0.4); color:#fff; font-family:var(--font-display); font-size:18px; letter-spacing:0.05em; text-transform:uppercase; }
+    .tkt-pill b { color:var(--maillot-jaune); }
+    /* picker modal */
+    .pmodal { position:fixed; inset:0; z-index:1000; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(0,0,0,0.72); backdrop-filter:blur(4px); }
+    .pmodal.open { display:flex; }
+    .pmodal__card { width:100%; max-width:460px; max-height:86vh; overflow-y:auto; background:var(--bg-1); border:1px solid var(--line-strong); }
+    .pmodal__head { padding:22px 24px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; position:sticky; top:0; background:var(--bg-1); z-index:1; }
+    .pmodal__title { font-family:var(--font-display); font-size:26px; letter-spacing:0.02em; line-height:1; }
+    .pmodal__sub { font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-top:6px; }
+    .pmodal__close { background:none; border:none; color:var(--text-3); font-size:26px; cursor:pointer; line-height:1; }
+    .pmodal__list { padding:12px; display:flex; flex-direction:column; gap:8px; }
+    .prider { display:flex; align-items:center; gap:12px; padding:13px 14px; background:var(--bg-2); border:1px solid var(--line); cursor:pointer; text-align:left; width:100%; transition:border-color 150ms ease, background 150ms ease; }
+    .prider:hover { border-color:var(--line-strong); }
+    .prider.sel { border-color:var(--oasis-blue); background:var(--oasis-blue-bg); }
+    .prider__radio { width:18px; height:18px; border-radius:50%; border:2px solid var(--line-strong); flex-shrink:0; }
+    .prider.sel .prider__radio { border-color:var(--oasis-blue); background:radial-gradient(circle, var(--oasis-blue) 0 42%, transparent 46%); }
+    .prider__name { font-family:var(--font-display); font-size:19px; letter-spacing:0.02em; flex:1; }
+    .prider__team { font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--text-3); text-transform:uppercase; }
+    .pmodal__foot { padding:16px 24px 22px; position:sticky; bottom:0; background:var(--bg-1); border-top:1px solid var(--line); display:flex; gap:10px; }
+    .pmodal__foot .pbtn { flex:1; }
+    .pmodal__foot .pbtn--ghost { flex:0 0 auto; padding:0 18px; }
+    .pmodal__note { padding:0 24px 18px; font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.03em; color:var(--text-4); text-align:center; line-height:1.5; }
+    /* podium progress inside picker */
+    .pmodal__podium { display:flex; gap:8px; padding:14px 24px 2px; }
+    .pmslot { flex:1; padding:9px 8px; border:1px solid var(--line); background:var(--bg-2); text-align:center; opacity:0.5; transition:opacity 150ms ease, border-color 150ms ease; }
+    .pmslot.active { opacity:1; border-color:var(--oasis-blue); }
+    .pmslot.filled { opacity:1; }
+    .pmslot__pos { font-family:var(--font-mono); font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-3); }
+    .pmslot__name { font-family:var(--font-display); font-size:13px; letter-spacing:0.02em; margin-top:3px; line-height:1.05; min-height:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pmslot.empty .pmslot__name { color:var(--text-4); }
+    /* a rider already used in another podium slot */
+    .prider.dim { opacity:0.32; pointer-events:none; }
+    .prider__used { font-family:var(--font-mono); font-size:9px; letter-spacing:0.1em; color:var(--text-4); text-transform:uppercase; }
+    /* podium display on the contest cards */
+    .ppodium { display:flex; flex-direction:column; gap:6px; width:100%; }
+    .ppod-row { display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--bg-2); border:1px solid var(--line); }
+    .ppod-row.correct { border-color:rgba(0,224,122,0.4); background:rgba(0,224,122,0.06); }
+    .ppod-row.wrong { border-color:rgba(225,29,72,0.32); }
+    .ppod-pos { font-family:var(--font-display); font-size:16px; width:16px; flex-shrink:0; color:var(--maillot-jaune); }
+    .ppod-name { font-family:var(--font-display); font-size:16px; letter-spacing:0.02em; flex:1; line-height:1.05; }
+    .ppod-name.empty { color:var(--text-4); font-family:var(--font-body); font-size:13px; letter-spacing:0; }
+    .ppod-mark { font-size:13px; flex-shrink:0; min-width:14px; text-align:right; }
   </style>
 </head>
 <body>
@@ -1394,10 +1472,9 @@ section { padding: 100px 0; position: relative; }
   <div class="race-bar">
     <div class="container race-bar__inner">
       <div class="race-bar__item"><span class="live-pulse"></span><strong>LIVE</strong></div>
-      <div class="race-bar__item">Stage <strong>23</strong> / 90</div>
-      <div class="race-bar__item">Rank <strong>#8</strong></div>
-      <div class="race-bar__item">Points <strong>156</strong></div>
-      <div class="race-bar__item race-bar__item--opt">Challenges <strong>3 / 4</strong></div>
+      <div class="race-bar__item">Season <strong>2026</strong></div>
+      <div class="race-bar__item">🎟 Tickets <strong id="barTickets">1</strong> / <span class="js-maxtickets">16</span></div>
+      <div class="race-bar__item race-bar__item--opt">Podiums <strong id="barPicks">1</strong> / 5</div>
       <button type="button" class="race-bar__item race-bar__item--opt race-bar__wallet" aria-label="Open wallet">
         Wallet <strong>0xa3…b91f</strong>
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1454,11 +1531,11 @@ section { padding: 100px 0; position: relative; }
 </svg>
       </a>
       <div class="nav__links">
-        <a href="#challenges">Challenges</a>
-        <a href="#leaderboard">Leaderboard</a>
+        <a href="#predictions">Predictions</a>
+        <a href="index.html#prizes">Rewards</a>
         <a href="#faq">FAQ</a>
       </div>
-      <a class="nav__cta" href="portal.html">Join the Race</a>
+      <div class="tkt-pill">🎟 <b id="navTicketCount">1</b>&nbsp;/&nbsp;<span class="js-maxtickets" style="color:var(--text-3);">16</span>&nbsp;Tickets</div>
     </div>
   </nav>
 
@@ -1468,8 +1545,8 @@ section { padding: 100px 0; position: relative; }
       <div class="portal-hero__top">
         <div>
           <span class="eyebrow"><span class="dot"></span> WELCOME BACK, ROK</span>
-          <h1 style="margin-top: 14px;">You're 1 challenge from the line.</h1>
-          <p class="portal-hero__sub text-2">Open Privana to confirm Challenge 4 and become eligible for prizes. You currently sit 8th — a single move from the podium.</p>
+          <h1 style="margin-top: 14px;">You're in the raffle. Now stack the odds.</h1>
+          <p class="portal-hero__sub text-2">Creating your account already earned you <strong style="color:var(--text);">1 free ticket</strong> in the draw for a Colnago V4Rs. Predict the <strong style="color:var(--text);">podium</strong> — top three — in each race and earn <strong style="color:var(--text);">+1 ticket for every place you call right</strong>, up to <strong style="color:var(--text);">16 tickets</strong> in all.</p>
         </div>
         <div class="countdown" id="countdown-portal" style="min-width: 360px;">
           <div class="countdown__cell"><span class="num" data-cd="d">67</span><span class="lbl">Days</span></div>
@@ -1494,9 +1571,9 @@ section { padding: 100px 0; position: relative; }
             <div class="progress-ring">
               <svg class="progress-ring__svg" viewBox="0 0 120 120">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="var(--bg-3)" stroke-width="10"/>
-                <circle cx="60" cy="60" r="50" fill="none"
+                <circle id="ringProgress" cx="60" cy="60" r="50" fill="none"
                   stroke="url(#ringGrad)" stroke-width="10"
-                  stroke-dasharray="314" stroke-dashoffset="78.5"
+                  stroke-dasharray="314" stroke-dashoffset="294"
                   stroke-linecap="round"
                   transform="rotate(-90 60 60)"/>
                 <defs>
@@ -1505,174 +1582,85 @@ section { padding: 100px 0; position: relative; }
                     <stop offset="1" stop-color="#B47FFF"/>
                   </linearGradient>
                 </defs>
-                <text x="60" y="58" text-anchor="middle" fill="white" font-family="Bebas Neue" font-size="22" font-weight="600">3/4</text>
-                <text x="60" y="76" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Geist Mono" font-size="9" letter-spacing="2">CHALLENGES</text>
+                <text id="ringTickets" x="60" y="56" text-anchor="middle" fill="white" font-family="Bebas Neue" font-size="34" font-weight="600">1</text>
+                <text id="ringMax" x="60" y="74" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Geist Mono" font-size="9" letter-spacing="2">OF 16</text>
               </svg>
               <div>
-                <div class="progress-ring__lbl">YOUR CAMPAIGN</div>
-                <div class="progress-ring__num">75% complete</div>
-                <p style="color: var(--text-2); font-size: 14px;">Games complete · 156 of ~195 max points · Final challenge: <span style="color: var(--oasis-blue); font-weight: 500;">Open Privana</span></p>
-                <div class="points-breakdown">
+                <div class="progress-ring__lbl">YOUR RAFFLE TICKETS</div>
+                <div class="progress-ring__num"><span id="ticketCountBig">1</span> of <span class="js-maxtickets">16</span> tickets earned</div>
+                <p style="color: var(--text-2); font-size: 14px;">The ring shows how many of the <strong style="color:var(--text);">16 possible</strong> tickets you've banked so far — 1 just for signing up, plus 1 for each podium place you call correctly across the 5 races. Each ticket is one entry in the final draw, so <strong style="color:var(--text);">the more you collect, the better your odds</strong>. We'll email you every race result, win or lose.</p>
+                <div class="points-breakdown" style="grid-template-columns:repeat(3,1fr);">
                   <div>
-                    <div class="k">FROM GAMES</div>
-                    <div class="v">156</div>
+                    <div class="k">FROM SIGNUP</div>
+                    <div class="v">1</div>
+                    <div class="d">Banked automatically when you created your account.</div>
                   </div>
                   <div>
-                    <div class="k">FROM DEPOSIT</div>
-                    <div class="v text-3">0</div>
+                    <div class="k">CORRECT PLACES</div>
+                    <div class="v" id="bdPicks">0</div>
+                    <div class="d">Podium places you've already called right — each one is a locked-in ticket.</div>
+                  </div>
+                  <div>
+                    <div class="k">PENDING</div>
+                    <div class="v text-3" id="bdPending">3</div>
+                    <div class="d">Places you've predicted in races still to come — they become tickets only if you're right.</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Challenges list -->
-          <div id="games" style="display: flex; flex-direction: column; gap: 12px;">
-
-            <div class="game-card done">
-              <div class="game-card__num">✓</div>
-              <div class="game-card__body">
-                <h4>The Sprint</h4>
-                <p>Tap-speed reaction game · 60 seconds</p>
+          <!-- How the raffle works -->
+          <div class="portal-tile">
+            <span class="eyebrow muted"><span class="dot"></span> HOW THE RAFFLE WORKS</span>
+            <div style="display:flex; gap:20px; margin-top:16px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:160px;">
+                <div class="text-mono text-3" style="font-size:11px; letter-spacing:0.14em;">01 · JOIN</div>
+                <p style="font-size:14px; color:var(--text-2); margin-top:6px;">Creating your account gives you your first raffle ticket automatically.</p>
               </div>
-              <div class="game-card__score">
-                <b>48 / 50</b>
-                <span>Best score</span>
+              <div style="flex:1; min-width:160px;">
+                <div class="text-mono text-3" style="font-size:11px; letter-spacing:0.14em;">02 · PREDICT</div>
+                <p style="font-size:14px; color:var(--text-2); margin-top:6px;">Predict the podium of each race. Every place you call right earns one more ticket — up to 16.</p>
               </div>
-              <button class="game-card__cta">Replay</button>
+              <div style="flex:1; min-width:160px;">
+                <div class="text-mono text-3" style="font-size:11px; letter-spacing:0.14em;">03 · WIN</div>
+                <p style="font-size:14px; color:var(--text-2); margin-top:6px;">10 winners are drawn at the season's end. More tickets, better odds.</p>
+              </div>
             </div>
-
-            <div class="game-card done">
-              <div class="game-card__num">✓</div>
-              <div class="game-card__body">
-                <h4>Pace Setter</h4>
-                <p>Rhythm and cadence game · 60 seconds</p>
-              </div>
-              <div class="game-card__score">
-                <b>44 / 50</b>
-                <span>Best score</span>
-              </div>
-              <button class="game-card__cta">Replay</button>
-            </div>
-
-            <div class="game-card done">
-              <div class="game-card__num">✓</div>
-              <div class="game-card__body">
-                <h4>Pick the Champion</h4>
-                <p>Race-outcome prediction · varies</p>
-              </div>
-              <div class="game-card__score">
-                <b>40 / 50</b>
-                <span>Best score</span>
-              </div>
-              <button class="game-card__cta">Replay</button>
-            </div>
-
-            <!-- Final challenge — Open Privana -->
-            <div class="game-card" style="background: linear-gradient(135deg, rgba(0, 60, 216, 0.08), rgba(180, 127, 255, 0.02)); border-color: rgba(0, 60, 216, 0.32);">
-              <div class="game-card__num" style="background: var(--oasis-blue); color: white; border-color: var(--oasis-blue);">4</div>
-              <div class="game-card__body">
-                <h4 style="display: flex; align-items: center; gap: 10px;">
-                  Open Privana
-                  <span class="text-mono" style="font-size: 10px; letter-spacing: 0.18em; background: rgba(0, 60, 216, 0.18); color: var(--oasis-blue); padding: 3px 8px; border-radius: 0;">REQUIRED</span>
-                </h4>
-                <p>One-click identity confirmation · same wallet, no new login</p>
-              </div>
-              <div class="game-card__score">
-                <b style="color: var(--oasis-blue);">Final step</b>
-                <span>30 sec</span>
-              </div>
-              <button class="game-card__cta game-card__cta--blue">Open Privana →</button>
-            </div>
+            <a class="pbtn" href="#predictions" style="margin-top:20px; text-decoration:none;">Make your predictions ↓</a>
           </div>
         </main>
 
         <!-- Side column -->
         <aside class="portal-side">
 
-          <!-- Leaderboard summary — race-board style, copied from landing hero -->
-          <aside class="hero__gc-panel">
+          <!-- Rewards teaser -->
+          <div class="portal-tile">
+            <span class="eyebrow"><span class="dot"></span> THE PRIZES</span>
+            <h3 style="margin-top:10px;">10 winners. One Colnago.</h3>
+            <p style="font-size:13px; color:var(--text-2); margin:6px 0 16px;">Drawn from all tickets when the season ends. No purchase necessary.</p>
 
-            <div class="hgc__header">
-              <div>
-                <div class="hgc__label">Leaderboard</div>
-                <div class="hgc__stage">In Progress</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:rgba(255,214,10,0.05); border:1px solid rgba(255,214,10,0.22); font-size:13px;">
+                <span style="display:flex; gap:8px;"><b style="color:var(--maillot-jaune);">1st</b> Colnago V4Rs</span>
+                <span class="text-mono text-3">🚲</span>
               </div>
-              <span class="hgc__live"><span class="live-pulse"></span>Live</span>
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size:13px;">
+                <span style="display:flex; gap:8px;"><b>2nd</b> Signed jersey + helmet</span>
+                <span class="text-mono text-3">🥈</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size:13px;">
+                <span style="display:flex; gap:8px;"><b>3rd</b> Signed team jersey</span>
+                <span class="text-mono text-3">🥉</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; gap:12px; padding:11px 14px; background:var(--bg-2); border:1px solid var(--line); font-size:13px;">
+                <span style="display:flex; gap:8px;"><b>4–10</b> Aero helmets &amp; race jerseys</span>
+                <span class="text-mono text-3">⛑️</span>
+              </div>
             </div>
 
-            <div class="hgc__rows">
-
-              <div class="hgc__row hgc__row--1">
-                <div class="hgc__pos hgc__pos--gold">01</div>
-                <div class="hgc__dot" style="background:var(--maillot-jaune);"></div>
-                <div class="hgc__info">
-                  <div class="hgc__name">Pogi_Wins</div>
-                  <div class="hgc__meta">🇸🇮 SLO · Leader</div>
-                </div>
-                <div class="hgc__pts hgc__pts--gold">187 <span class="hgc__pts-unit">pts</span></div>
-              </div>
-
-              <div class="hgc__row">
-                <div class="hgc__pos">02</div>
-                <div class="hgc__dot" style="background:#d4d4d8;"></div>
-                <div class="hgc__info">
-                  <div class="hgc__name">Pogi_Wins</div>
-                  <div class="hgc__meta">🇪🇨 ECU · +0:03</div>
-                </div>
-                <div class="hgc__pts">184 <span class="hgc__pts-unit">pts</span></div>
-              </div>
-
-              <div class="hgc__row">
-                <div class="hgc__pos">03</div>
-                <div class="hgc__dot" style="background:var(--bronze);"></div>
-                <div class="hgc__info">
-                  <div class="hgc__name">rogla_89</div>
-                  <div class="hgc__meta">🇸🇮 SLO · +0:08</div>
-                </div>
-                <div class="hgc__pts">179 <span class="hgc__pts-unit">pts</span></div>
-              </div>
-
-              <div class="hgc__row">
-                <div class="hgc__pos">04</div>
-                <div class="hgc__dot" style="background:rgba(255,255,255,0.3);"></div>
-                <div class="hgc__info">
-                  <div class="hgc__name">Mathieu_VDP</div>
-                  <div class="hgc__meta">🇳🇱 NED · +0:15</div>
-                </div>
-                <div class="hgc__pts">172 <span class="hgc__pts-unit">pts</span></div>
-              </div>
-
-              <div class="hgc__row">
-                <div class="hgc__pos">05</div>
-                <div class="hgc__dot" style="background:rgba(255,255,255,0.3);"></div>
-                <div class="hgc__info">
-                  <div class="hgc__name">WoutVA</div>
-                  <div class="hgc__meta">🇧🇪 BEL · +0:19</div>
-                </div>
-                <div class="hgc__pts">168 <span class="hgc__pts-unit">pts</span></div>
-              </div>
-
-              <div class="hgc__separator">· · · 4,212 more riders · · ·</div>
-
-              <div class="hgc__row hgc__row--you">
-                <div class="hgc__pos hgc__pos--you">47</div>
-                <div class="hgc__dot" style="background:var(--oasis-blue);"></div>
-                <div class="hgc__info">
-                  <div class="hgc__name">rok.horvat</div>
-                  <div class="hgc__meta">🇸🇮 SLO · You</div>
-                </div>
-                <div class="hgc__pts hgc__pts--you">62 <span class="hgc__pts-unit">pts</span></div>
-              </div>
-
-            </div>
-
-            <div class="hgc__footer">
-              <span class="hgc__footer-stat">4,217 riders · $13K prize pool</span>
-              <a class="hgc__footer-link" href="#leaderboard">Full Leaderboard →</a>
-            </div>
-
-          </aside>
+            <a class="pbtn pbtn--ghost" href="index.html#prizes" style="margin-top:16px; text-decoration:none;">See all rewards →</a>
+          </div>
 
         </aside>
 
@@ -1681,376 +1669,92 @@ section { padding: 100px 0; position: relative; }
   </section>
 
   <!-- ============================================================
-       Challenges (4)
+       Predictions
        ============================================================ -->
-  <section id="challenges" style="background: linear-gradient(180deg, transparent, rgba(0, 60, 216, 0.03), transparent);">
+  <section id="predictions" style="background: linear-gradient(180deg, transparent, rgba(0, 60, 216, 0.03), transparent);">
     <div class="container">
       <div class="section__head">
-        <div class="stage-tag"><b>Challenges</b><span>Complete All Four to Qualify</span></div>
-        <h2>Three mini-games. One Privana account.<br/>Complete all four to qualify.</h2>
-        <p class="lead">Each game can be replayed to improve your score. Points accumulate on the General Classification. After the games, the fourth challenge is a single click — confirming your existing identity inside Privana.</p>
+        <div class="stage-tag"><b>Predictions</b><span>One Ticket Per Correct Call</span></div>
+        <h2>Predict the champions.<br/>Earn tickets to the draw.</h2>
+        <p class="lead">Predict the full podium — 1st, 2nd and 3rd — for each of cycling's biggest races, men's and women's. When a race finishes we update the result here, and every place you called correctly adds <strong style="color:var(--text);">one more ticket</strong> to your raffle entry (up to 3 per race, 16 in total). You can change your podium any time up until <strong style="color:var(--text);">24 hours before each race starts</strong> — and we'll email you the outcome once it's decided.</p>
       </div>
 
-      <div class="challenges">
+      <div class="predictions-grid">
 
-        <article class="challenge challenge--sprint">
-          <div class="challenge__art">
-            <div class="phone-frame">
-              <div class="phone-frame__screen" style="background:linear-gradient(160deg,#030c05,#06140a);">
-                <svg width="100%" height="100%" viewBox="0 0 44 58">
-                  <circle cx="22" cy="21" r="11" fill="none" stroke="rgba(0,224,122,0.85)" stroke-width="1.5"/>
-                  <circle cx="22" cy="21" r="5" fill="rgba(0,224,122,0.18)"/>
-                  <text x="22" y="25" text-anchor="middle" font-size="6" fill="rgba(0,224,122,0.95)" font-family="Geist Mono">GO</text>
-                  <text x="22" y="38" text-anchor="middle" font-size="5" fill="rgba(255,255,255,0.4)" font-family="Geist Mono">00:42</text>
-                  <text x="22" y="54" text-anchor="middle" font-size="4" fill="rgba(0,224,122,0.55)" font-family="Geist Mono" letter-spacing="1">SPRINT</text>
-                </svg>
-              </div>
-            </div>
-            <div class="phone-frame">
-              <div class="phone-frame__screen" style="background:linear-gradient(160deg,#030c05,#06140a);">
-                <svg width="100%" height="100%" viewBox="0 0 44 58">
-                  <text x="22" y="14" text-anchor="middle" font-size="4" fill="rgba(255,255,255,0.3)" font-family="Geist Mono">SCORE</text>
-                  <text x="22" y="32" text-anchor="middle" font-size="15" fill="white" font-family="Geist Mono" font-weight="bold">42</text>
-                  <rect x="6" y="39" width="32" height="3" rx="1" fill="rgba(255,255,255,0.07)"/>
-                  <rect x="6" y="39" width="20" height="3" rx="1" fill="rgba(0,224,122,0.85)"/>
-                  <text x="22" y="54" text-anchor="middle" font-size="4" fill="rgba(0,224,122,0.55)" font-family="Geist Mono">50 PTS MAX</text>
-                </svg>
-              </div>
-            </div>
+        <!-- Tour de France · Men -->
+        <article class="pcard" data-c="tour">
+          <div class="pcard__head">
+            <div class="pcard__toprow"><div class="pcard__flag">🇫🇷</div><span class="pcard__cat">Men</span></div>
+            <div class="pcard__title">Tour de France</div>
+            <div class="pcard__meta">4–26 Jul 2026 · Barcelona → Paris</div>
           </div>
-          <div class="challenge__num">CHALLENGE 01 · GAME</div>
-          <h3 class="challenge__title">The Sprint</h3>
-          <p class="challenge__desc">A tap-speed reaction game. Hit the targets before time runs out. Pure reflex — the closer to the bunch finish, the more points.</p>
-          <div class="challenge__meta">
-            <span>60 sec · <b style="color: var(--maillot-vert);">50 pts</b></span>
-            <span>Replay ✓</span>
+          <div class="pcard__body">
+            <span class="pstatus" id="st-tour"></span>
+            <div class="ppick" id="pick-tour"></div>
+            <button class="pbtn" id="btn-tour"></button>
           </div>
-          <a class="btn btn--primary challenge__cta" href="portal.html">Play Challenge →</a>
         </article>
 
-        <article class="challenge challenge--pace">
-          <div class="challenge__art">
-            <div class="phone-frame">
-              <div class="phone-frame__screen" style="background:linear-gradient(160deg,#0e0a00,#1a1300);">
-                <svg width="100%" height="100%" viewBox="0 0 44 58">
-                  <text x="22" y="12" text-anchor="middle" font-size="4" fill="rgba(255,214,10,0.6)" font-family="Geist Mono" letter-spacing="1">CADENCE</text>
-                  <path d="M3,30 Q9,16 15,30 T27,30 T39,30 T41,30" fill="none" stroke="rgba(255,214,10,0.85)" stroke-width="1.5"/>
-                  <circle cx="27" cy="30" r="3" fill="#FFD60A"/>
-                  <text x="22" y="46" text-anchor="middle" font-size="10" fill="rgba(255,214,10,0.9)" font-family="Geist Mono">87</text>
-                  <text x="22" y="55" text-anchor="middle" font-size="4" fill="rgba(255,214,10,0.5)" font-family="Geist Mono">RPM</text>
-                </svg>
-              </div>
-            </div>
-            <div class="phone-frame">
-              <div class="phone-frame__screen" style="background:linear-gradient(160deg,#0e0a00,#1a1300);">
-                <svg width="100%" height="100%" viewBox="0 0 44 58">
-                  <text x="22" y="14" text-anchor="middle" font-size="4" fill="rgba(255,255,255,0.3)" font-family="Geist Mono">MULTIPLIER</text>
-                  <text x="22" y="34" text-anchor="middle" font-size="16" fill="#FFD60A" font-family="Geist Mono">×3</text>
-                  <rect x="8" y="40" width="28" height="3" rx="1" fill="rgba(255,255,255,0.07)"/>
-                  <rect x="8" y="40" width="21" height="3" rx="1" fill="rgba(255,214,10,0.85)"/>
-                  <text x="22" y="55" text-anchor="middle" font-size="4" fill="rgba(255,214,10,0.55)" font-family="Geist Mono" letter-spacing="1">PACE</text>
-                </svg>
-              </div>
-            </div>
+        <!-- World Championship · Men · Oasis sponsor -->
+        <article class="pcard pcard--sponsor" data-c="worldsm">
+          <div class="pcard__head">
+            <div class="pcard__toprow"><div class="pcard__flag">🌈</div><span class="pcard__cat">Men</span></div>
+            <div class="pcard__title">World Championship</div>
+            <div class="pcard__meta">27 Sep 2026 · Montréal 🇨🇦</div>
           </div>
-          <div class="challenge__num">CHALLENGE 02 · GAME</div>
-          <h3 class="challenge__title">Pace Setter</h3>
-          <p class="challenge__desc">A rhythm and timing game. Match the cadence of the peloton — hold the wheel, and your points multiply. Drop off, and the bunch leaves you behind.</p>
-          <div class="challenge__meta">
-            <span>60 sec · <b style="color: var(--maillot-jaune);">50 pts</b></span>
-            <span>Replay ✓</span>
+          <div class="pcard__body">
+            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="pstatus" id="st-worldsm"></span>
+            <div class="ppick" id="pick-worldsm"></div>
+            <button class="pbtn" id="btn-worldsm"></button>
           </div>
-          <a class="btn btn--primary challenge__cta" href="portal.html">Play Challenge →</a>
         </article>
 
-        <article class="challenge challenge--pick">
-          <div class="challenge__art">
-            <div class="phone-frame">
-              <div class="phone-frame__screen" style="background:linear-gradient(160deg,#060008,#0d0015);">
-                <svg width="100%" height="100%" viewBox="0 0 44 58">
-                  <text x="22" y="11" text-anchor="middle" font-size="4" fill="rgba(255,255,255,0.3)" font-family="Geist Mono">PICK WINNER</text>
-                  <rect x="3" y="16" width="17" height="22" rx="1" fill="none" stroke="rgba(0, 60, 216,0.35)" stroke-width="1"/>
-                  <rect x="24" y="16" width="17" height="22" rx="1" fill="rgba(0, 60, 216,0.14)" stroke="rgba(0, 60, 216,0.85)" stroke-width="1"/>
-                  <path d="M27 26l3 3 6-8" stroke="rgba(0, 60, 216,0.95)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                  <text x="11" y="31" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.18)" font-family="Geist Mono">?</text>
-                  <text x="22" y="52" text-anchor="middle" font-size="4" fill="rgba(0, 60, 216,0.65)" font-family="Geist Mono" letter-spacing="1">PREDICT</text>
-                </svg>
-              </div>
-            </div>
-            <div class="phone-frame">
-              <div class="phone-frame__screen" style="background:linear-gradient(160deg,#060008,#0d0015);">
-                <svg width="100%" height="100%" viewBox="0 0 44 58">
-                  <text x="22" y="13" text-anchor="middle" font-size="4" fill="rgba(0, 60, 216,0.7)" font-family="Geist Mono">CORRECT!</text>
-                  <circle cx="22" cy="28" r="9" fill="rgba(0, 60, 216,0.14)" stroke="rgba(0, 60, 216,0.85)" stroke-width="1.5"/>
-                  <path d="M17 28l4 4 8-10" stroke="rgba(0, 60, 216,0.95)" stroke-width="2" fill="none" stroke-linecap="round"/>
-                  <text x="22" y="46" text-anchor="middle" font-size="8" fill="rgba(0, 60, 216,0.9)" font-family="Geist Mono">+38</text>
-                  <text x="22" y="55" text-anchor="middle" font-size="4" fill="rgba(0, 60, 216,0.5)" font-family="Geist Mono">pts</text>
-                </svg>
-              </div>
-            </div>
+        <!-- World Championship · Women · Oasis sponsor -->
+        <article class="pcard pcard--sponsor" data-c="worldsw">
+          <div class="pcard__head">
+            <div class="pcard__toprow"><div class="pcard__flag">🌈</div><span class="pcard__cat">Women</span></div>
+            <div class="pcard__title">World Championship</div>
+            <div class="pcard__meta">26 Sep 2026 · Montréal 🇨🇦</div>
           </div>
-          <div class="challenge__num">CHALLENGE 03 · GAME</div>
-          <h3 class="challenge__title">Pick the Champion</h3>
-          <p class="challenge__desc">A race-prediction game. Pick stage winners and overall classifications. Real cycling knowledge pays off — points scale with how rare your correct call is.</p>
-          <div class="challenge__meta">
-            <span>Varies · <b style="color: var(--polka-dot);">50 pts</b></span>
-            <span>Closes D-7</span>
+          <div class="pcard__body">
+            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="pstatus" id="st-worldsw"></span>
+            <div class="ppick" id="pick-worldsw"></div>
+            <button class="pbtn" id="btn-worldsw"></button>
           </div>
-          <a class="btn btn--primary challenge__cta" href="portal.html">Play Challenge →</a>
         </article>
 
-        <article class="challenge challenge--privana challenge__final">
-          <div class="challenge__art">
-            <div class="phone-frame" style="border-color:rgba(0, 60, 216,0.5);">
-              <div class="phone-frame__screen" style="background:linear-gradient(160deg,#020510,#030a1e);">
-                <svg width="100%" height="100%" viewBox="0 0 44 58">
-                  <text x="22" y="11" text-anchor="middle" font-size="4" fill="rgba(0, 60, 216,0.7)" font-family="Geist Mono">PRIVANA</text>
-                  <circle cx="22" cy="27" r="10" fill="rgba(0, 60, 216,0.12)" stroke="rgba(0, 60, 216,0.8)" stroke-width="1.5"/>
-                  <path d="M17 27l4 4 8-10" stroke="rgba(0, 60, 216,0.95)" stroke-width="2" fill="none" stroke-linecap="round"/>
-                  <text x="22" y="46" text-anchor="middle" font-size="4" fill="rgba(0, 60, 216,0.7)" font-family="Geist Mono" letter-spacing="0.5">VERIFIED ✓</text>
-                  <text x="22" y="55" text-anchor="middle" font-size="3" fill="rgba(255,255,255,0.28)" font-family="Geist Mono">CHALLENGE COMPLETE</text>
-                </svg>
-              </div>
-            </div>
+        <!-- European Championship · Men · Oasis sponsor -->
+        <article class="pcard pcard--sponsor" data-c="eurosm">
+          <div class="pcard__head">
+            <div class="pcard__toprow"><div class="pcard__flag">🇪🇺</div><span class="pcard__cat">Men</span></div>
+            <div class="pcard__title">European Championship</div>
+            <div class="pcard__meta">4 Oct 2026 · Ljubljana 🇸🇮</div>
           </div>
-          <div class="challenge__num" style="color: var(--oasis-blue);">CHALLENGE 04 · FINAL</div>
-          <h3 class="challenge__title">Open Privana</h3>
-          <p class="challenge__desc">One click. Your portal account already exists on Privana — just confirm your identity, and you're eligible. No new login, no seed phrase.</p>
-          <div class="challenge__meta">
-            <span>30 sec · <b style="color: var(--oasis-blue);">Required</b></span>
-            <span>1 click</span>
+          <div class="pcard__body">
+            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="pstatus" id="st-eurosm"></span>
+            <div class="ppick" id="pick-eurosm"></div>
+            <button class="pbtn" id="btn-eurosm"></button>
           </div>
-          <a class="btn btn--blue challenge__cta" href="portal.html">Open Privana →</a>
         </article>
 
-      </div>
-    </div>
-  </section>
+        <!-- European Championship · Women · Oasis sponsor -->
+        <article class="pcard pcard--sponsor" data-c="eurosw">
+          <div class="pcard__head">
+            <div class="pcard__toprow"><div class="pcard__flag">🇪🇺</div><span class="pcard__cat">Women</span></div>
+            <div class="pcard__title">European Championship</div>
+            <div class="pcard__meta">3 Oct 2026 · Ljubljana 🇸🇮</div>
+          </div>
+          <div class="pcard__body">
+            <span class="sponsor-badge">★ Oasis · Official Sponsor</span>
+            <span class="pstatus" id="st-eurosw"></span>
+            <div class="ppick" id="pick-eurosw"></div>
+            <button class="pbtn" id="btn-eurosw"></button>
+          </div>
+        </article>
 
-  <!-- ============================================================
-       Leaderboard / General Classification
-       ============================================================ -->
-  <section id="leaderboard" style="position:relative;overflow:hidden;">
-    <div style="position:absolute;inset:0;background-image:url('Photos/2025_09_28 SP Kigali ME 057.jpg');background-size:cover;background-position:center 20%;opacity:0.30;pointer-events:none;z-index:0;"></div>
-    <div class="container" style="position:relative;z-index:1;">
-      <div class="section__head" style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:24px;">
-        <div>
-          <div class="stage-tag"><b>General Classification</b><span>Top 10 Win</span></div>
-          <h2>The Maillot Jaune is up for grabs.</h2>
-          <p class="lead">Live rankings update as riders complete games. Your bib appears below.</p>
-        </div>
-        <div class="pills" role="tablist">
-          <button class="active">Top 10</button>
-          <button>Around me</button>
-          <button>By country</button>
-        </div>
-      </div>
-
-      <div class="classification">
-        <div class="classification__head">
-          <span>POS</span>
-          <span>RIDER</span>
-          <span>CHALLENGES</span>
-          <span style="text-align:right;">POINTS</span>
-          <span style="text-align:right;">PRIZE</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos gold">1 <svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1l5 4-2 7H4L2 5z" fill="var(--maillot-jaune)"/></svg></span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="#FFD60A"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(0,0,0,0.18)"/>
-            </svg>
-            <div>
-              <div class="cls__name">Pogi_Wins</div>
-              <div class="cls__country">🇸🇮 SLO · GC LEADER</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">187 <span class="text-3">pts</span></span>
-          <span class="cls__prize">COLNAGO V4Rs</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos silver">2</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">Carapaz_22</div>
-              <div class="cls__country">🇪🇨 ECU · 2:34 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">184 <span class="text-3">pts</span></span>
-          <span class="cls__prize">Signed kit</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos bronze">3</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">rogla_89</div>
-              <div class="cls__country">🇸🇮 SLO · 5:12 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">179 <span class="text-3">pts</span></span>
-          <span class="cls__prize">Signed jersey</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos">4</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">Mathieu_VDP</div>
-              <div class="cls__country">🇳🇱 NED · 7:48 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">172 <span class="text-3">pts</span></span>
-          <span class="cls__prize">300K ROSE</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos">5</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">WoutVA</div>
-              <div class="cls__country">🇧🇪 BEL · 9:21 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">168 <span class="text-3">pts</span></span>
-          <span class="cls__prize">200K ROSE</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos">6</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">Roglic.eth</div>
-              <div class="cls__country">🇸🇮 SLO · 11:04 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">164 <span class="text-3">pts</span></span>
-          <span class="cls__prize">50K ROSE</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos">7</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">Evenepoel_R</div>
-              <div class="cls__country">🇧🇪 BEL · 12:55 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">159 <span class="text-3">pts</span></span>
-          <span class="cls__prize">50K ROSE</span>
-        </div>
-
-        <div class="classification__row you">
-          <span class="cls__pos" style="color: var(--oasis-blue);">8</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(0, 60, 216,0.35)" stroke="rgba(0, 60, 216,0.7)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(0, 60, 216,0.15)"/>
-            </svg>
-            <div>
-              <div class="cls__name">You · rok.horvat</div>
-              <div class="cls__country">🇸🇮 SLO · 14:30 BACK · UNCONFIRMED</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot miss"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">156 <span class="text-3">pts</span></span>
-          <span class="cls__prize" style="color: var(--oasis-blue);">→ Open Privana</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos">9</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">Alaphilippe_Pro</div>
-              <div class="cls__country">🇫🇷 FRA · 15:12 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">154 <span class="text-3">pts</span></span>
-          <span class="cls__prize">50K ROSE</span>
-        </div>
-
-        <div class="classification__row">
-          <span class="cls__pos">10</span>
-          <div class="cls__rider">
-            <svg class="cls__avatar" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="background:none; border:none; border-radius:0; width:36px; height:36px; flex-shrink:0;">
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 L32,10 L27,13.5 L27,32 L9,32 L9,13.5 L4,10 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
-              <path d="M12,4 C14.5,8.5 21.5,8.5 24,4 C22,10.5 14,10.5 12,4 Z" fill="rgba(255,255,255,0.05)"/>
-            </svg>
-            <div>
-              <div class="cls__name">Ganna_TT</div>
-              <div class="cls__country">🇮🇹 ITA · 16:47 BACK</div>
-            </div>
-          </div>
-          <div class="cls__games">
-            <span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span><span class="cls__dot done"></span>
-          </div>
-          <span class="cls__points" style="text-align:right;">151 <span class="text-3">pts</span></span>
-          <span class="cls__prize">50K ROSE</span>
-        </div>
-      </div>
-
-      <div style="margin-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-        <p class="text-3" style="font-size: 13px; max-width: 540px;">
-          Riders 11+ are visible in the full classification. <strong style="color: var(--text);">Incomplete riders</strong> appear on the GC but are ineligible for prizes until all four challenges are done.
-        </p>
-        <a class="btn btn--ghost" href="portal.html">View full classification →</a>
       </div>
     </div>
   </section>
@@ -2069,18 +1773,26 @@ section { padding: 100px 0; position: relative; }
 
         <div class="faq__item">
           <div class="faq__q">
-            <span>Who is the campaign for?</span>
-            <span class="text-3 text-mono" style="font-size: 11px;">ELIGIBILITY</span>
+            <span>How do I enter the raffle?</span>
+            <span class="text-3 text-mono" style="font-size: 11px;">ENTRY</span>
           </div>
-          <p class="faq__a">Anyone who can legally participate in a promotional campaign and open a Privana account in their jurisdiction. The campaign is run in partnership with the Slovenian Cycling Federation but is open globally where lawful. KYC may be required for deposit incentives.</p>
+          <p class="faq__a">Just create an account with your email — that alone gives you your first raffle ticket. From there, predicting race podiums is the way to earn more tickets and improve your odds, up to 16 in total. No purchase is ever necessary to enter or win.</p>
         </div>
 
         <div class="faq__item">
           <div class="faq__q">
-            <span>What is the "campaign portal" vs Privana?</span>
-            <span class="text-3 text-mono" style="font-size: 11px;">ARCHITECTURE</span>
+            <span>How do the predictions work?</span>
+            <span class="text-3 text-mono" style="font-size: 11px;">PREDICTIONS</span>
           </div>
-          <p class="faq__a">The campaign portal is the 90-day frontend where you play the games. Privana is the underlying product — a non-custodial DeFi app. Both share the same Privy embedded wallet, so when the portal retires, your account simply continues as a Privana account. No migration, no new login.</p>
+          <p class="faq__a">For each listed race, predict the full podium — 1st, 2nd and 3rd — before the race starts. You can change your picks right up until the start. When the race finishes we update the result in the portal and award <strong>+1 ticket for every place you got exactly right</strong> (so up to 3 per race, 16 across all five). We'll email you the outcome of each race either way, win or lose.</p>
+        </div>
+
+        <div class="faq__item">
+          <div class="faq__q">
+            <span>What can I win?</span>
+            <span class="text-3 text-mono" style="font-size: 11px;">PRIZES</span>
+          </div>
+          <p class="faq__a">A Colnago V4Rs race bike for first place, signed jerseys and helmets on the podium, and aero helmets and official race jerseys for places 4 through 10 — ten winners in total, drawn from all tickets when the season ends. More tickets, better odds.</p>
         </div>
 
         <div class="faq__item">
@@ -2088,39 +1800,23 @@ section { padding: 100px 0; position: relative; }
             <span>Do I need crypto to participate?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">REQUIREMENTS</span>
           </div>
-          <p class="faq__a">No. You can complete all four challenges and qualify for prizes without depositing anything. The deposit tiers are an optional path to bonus ROSE and a one-time GC point boost.</p>
+          <p class="faq__a">No. Entering and predicting is completely free and requires no crypto. Your account is a secure wallet created from your email through Turnkey — there's no seed phrase to manage and nothing to buy.</p>
         </div>
 
         <div class="faq__item">
           <div class="faq__q">
-            <span>How is the leaderboard scored?</span>
-            <span class="text-3 text-mono" style="font-size: 11px;">SCORING</span>
+            <span>What is the "campaign portal" vs Privana?</span>
+            <span class="text-3 text-mono" style="font-size: 11px;">ARCHITECTURE</span>
           </div>
-          <p class="faq__a">Up to 50 points per mini-game (max 150 from games) plus a one-time deposit boost of ~40–45 pts. Maximum theoretical score: ~195 pts. Ties are broken by earliest completion timestamp.</p>
+          <p class="faq__a">The campaign portal is the frontend where you make predictions and track your raffle tickets. Privana is the underlying product — a non-custodial app. Both share the same Turnkey wallet, so when the portal retires, your account simply continues as a Privana account. No migration, no new login.</p>
         </div>
 
         <div class="faq__item">
           <div class="faq__q">
-            <span>What happens if I withdraw my deposit early?</span>
-            <span class="text-3 text-mono" style="font-size: 11px;">LOCK & FORFEITURE</span>
+            <span>When are winners drawn?</span>
+            <span class="text-3 text-mono" style="font-size: 11px;">THE DRAW</span>
           </div>
-          <p class="faq__a">You keep your full deposit and any yield it earned on Aave. You forfeit all ROSE tokens — binary, no pro-rata unlock. Day 89 looks the same as day 1: lose the ROSE bonus, keep your money.</p>
-        </div>
-
-        <div class="faq__item">
-          <div class="faq__q">
-            <span>What is the price risk on ROSE?</span>
-            <span class="text-3 text-mono" style="font-size: 11px;">DISCLAIMER</span>
-          </div>
-          <p class="faq__a">ROSE token value fluctuates. "$20 worth of ROSE" at deposit may be worth more or less at unlock. We always show both the ROSE amount (e.g. 2,000 ROSE) and an approximate USD value. Spot price referenced: ~$0.01/ROSE (May 2026).</p>
-        </div>
-
-        <div class="faq__item">
-          <div class="faq__q">
-            <span>What happens when the 90 days end?</span>
-            <span class="text-3 text-mono" style="font-size: 11px;">POST-CAMPAIGN</span>
-          </div>
-          <p class="faq__a">The portal frontend retires. The top 10 are awarded prizes. Your wallet, identity, deposit, and any ROSE tokens stay with you on Privana. You're a fully-fledged Privana user — no migration step.</p>
+          <p class="faq__a">At the close of the season, once the final listed race has been decided. Winners are drawn at random from all tickets — so every entrant has a chance, and those who collected more tickets have proportionally better odds. All winners are notified by email.</p>
         </div>
 
       </div>
@@ -2176,7 +1872,7 @@ section { padding: 100px 0; position: relative; }
  </g>
 </svg>
           </div>
-          <p>The Oasis × Slovenian Cycling Federation campaign — a 90-day rollout introducing crypto-native incentives to cycling fans worldwide.</p>
+          <p>The Oasis × Slovenian Cycling Federation campaign — a season-long predict-and-win raffle bringing cycling fans worldwide into the Oasis ecosystem.</p>
         </div>
         <div class="foot__col">
           <h4>Legal</h4>
@@ -2187,13 +1883,33 @@ section { padding: 100px 0; position: relative; }
       </div>
 
       <p class="foot__legal">
-        No purchase necessary to enter or win. The Oasis × Cycling Campaign runs from May 15 to August 13, 2026. Prize eligibility requires completion of all four challenges. ROSE token rewards are locked for 90 days from the moment of deposit; early withdrawal forfeits ROSE rewards but not principal or yield. Yields are variable and sourced from Aave (~4.5% APY trailing — not guaranteed). ROSE/USD values are estimates based on spot pricing at ~$0.01/ROSE as of May 2026. This is not financial advice. Token values may decrease as well as increase. Always read the campaign rules and consult local regulations before participating. Confidential — Specification v1, May 2026.
+        No purchase necessary to enter or win. The Oasis × Cycling Campaign runs from May 15 to October 15, 2026. A free account earns one raffle ticket; each correctly predicted race winner earns one additional ticket. Ten prize winners are drawn at random from all tickets at the close of the campaign — odds of winning depend on the total number of tickets entered. Prizes are physical goods (a race bike, helmets and jerseys) and are non-transferable and non-exchangeable for cash. Accounts are secured via Turnkey; no cryptocurrency purchase is required to participate. Always read the campaign rules and consult local regulations before participating. Void where prohibited. Confidential — Specification v2, June 2026.
       </p>
     </div>
   </footer>
 
+  <!-- Prediction picker modal — predict the podium (1st → 2nd → 3rd) -->
+  <div class="pmodal" id="predModal" aria-hidden="true">
+    <div class="pmodal__card" role="dialog" aria-modal="true">
+      <div class="pmodal__head">
+        <div>
+          <div class="pmodal__title" id="pmTitle">Predict the winner</div>
+          <div class="pmodal__sub" id="pmSub">Race · 1st place</div>
+        </div>
+        <button class="pmodal__close" onclick="closePicker()" aria-label="Close">×</button>
+      </div>
+      <div class="pmodal__podium" id="pmPodium"></div>
+      <div class="pmodal__list" id="pmList"></div>
+      <div class="pmodal__note">We'll email you the result once the race is decided — win or lose.</div>
+      <div class="pmodal__foot">
+        <button class="pbtn" id="pmCast" onclick="confirmStep()" disabled>Confirm 1st place</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const CAMPAIGN_END = new Date(Date.now() + (67 * 24 + 14) * 3600 * 1000 + 22 * 60 * 1000);
+    /* ===== Countdown ===== */
+    const CAMPAIGN_END = new Date(Date.now() + (129 * 24) * 3600 * 1000);
     function pad(n) { return n < 10 ? "0" + n : "" + n; }
     function tick() {
       const now = new Date();
@@ -2211,6 +1927,165 @@ section { padding: 100px 0; position: relative; }
       document.querySelectorAll('[data-cd="s"]').forEach(el => el.textContent = pad(secs));
     }
     setInterval(tick, 1000); tick();
+
+    /* ===== Predictions + raffle tickets (predict the podium) ===== */
+    // Resolved contests carry a `podium` array [1st, 2nd, 3rd]; open ones have podium:null.
+    const CONTESTS = {
+      tour: { name:"Tour de France", podium:null, riders:[
+        {n:"Tadej Pogačar", t:"UAE Team Emirates–XRG"},
+        {n:"Jonas Vingegaard", t:"Visma–Lease a Bike"},
+        {n:"Remco Evenepoel", t:"Red Bull–Bora–Hansgrohe"},
+        {n:"Juan Ayuso", t:"Lidl–Trek"},
+        {n:"Primož Roglič", t:"Red Bull–Bora–Hansgrohe"},
+        {n:"Paul Seixas", t:"Decathlon CMA CGM"},
+        {n:"Florian Lipowitz", t:"Red Bull–Bora–Hansgrohe"},
+        {n:"Mattias Skjelmose", t:"Lidl–Trek"} ] },
+      worldsm: { name:"World Championship · Men", podium:null, riders:[
+        {n:"Tadej Pogačar", t:"🇸🇮 Slovenia"},
+        {n:"Remco Evenepoel", t:"🇧🇪 Belgium"},
+        {n:"Mathieu van der Poel", t:"🇳🇱 Netherlands"},
+        {n:"Mattias Skjelmose", t:"🇩🇰 Denmark"},
+        {n:"Tom Pidcock", t:"🇬🇧 Great Britain"},
+        {n:"Ben Healy", t:"🇮🇪 Ireland"},
+        {n:"Julian Alaphilippe", t:"🇫🇷 France"},
+        {n:"Primož Roglič", t:"🇸🇮 Slovenia"} ] },
+      worldsw: { name:"World Championship · Women", podium:null, riders:[
+        {n:"Demi Vollering", t:"🇳🇱 Netherlands"},
+        {n:"Lotte Kopecky", t:"🇧🇪 Belgium"},
+        {n:"Puck Pieterse", t:"🇳🇱 Netherlands"},
+        {n:"Pauline Ferrand-Prévot", t:"🇫🇷 France"},
+        {n:"Elisa Longo Borghini", t:"🇮🇹 Italy"},
+        {n:"Marlen Reusser", t:"🇨🇭 Switzerland"},
+        {n:"Kim Le Court", t:"🇲🇺 Mauritius"},
+        {n:"Katarzyna Niewiadoma", t:"🇵🇱 Poland"} ] },
+      eurosm: { name:"European Championship · Men", podium:null, riders:[
+        {n:"Tadej Pogačar", t:"🇸🇮 Slovenia"},
+        {n:"Primož Roglič", t:"🇸🇮 Slovenia"},
+        {n:"Remco Evenepoel", t:"🇧🇪 Belgium"},
+        {n:"Juan Ayuso", t:"🇪🇸 Spain"},
+        {n:"Mattias Skjelmose", t:"🇩🇰 Denmark"},
+        {n:"Matej Mohorič", t:"🇸🇮 Slovenia"},
+        {n:"Lennert Van Eetvelt", t:"🇧🇪 Belgium"},
+        {n:"Ben Healy", t:"🇮🇪 Ireland"} ] },
+      eurosw: { name:"European Championship · Women", podium:null, riders:[
+        {n:"Demi Vollering", t:"🇳🇱 Netherlands"},
+        {n:"Lotte Kopecky", t:"🇧🇪 Belgium"},
+        {n:"Puck Pieterse", t:"🇳🇱 Netherlands"},
+        {n:"Elisa Longo Borghini", t:"🇮🇹 Italy"},
+        {n:"Marlen Reusser", t:"🇨🇭 Switzerland"},
+        {n:"Pauline Ferrand-Prévot", t:"🇫🇷 France"},
+        {n:"Cédrine Kerbaol", t:"🇫🇷 France"},
+        {n:"Urška Žigart", t:"🇸🇮 Slovenia"} ] }
+    };
+    // Picks lock 24h before each race starts — shown on every card.
+    const META = {
+      tour:    { lock:"3 Jul" },
+      worldsm: { lock:"26 Sep" },
+      worldsw: { lock:"25 Sep" },
+      eurosm:  { lock:"3 Oct" },
+      eurosw:  { lock:"2 Oct" }
+    };
+    const POS_TITLE   = ["Predict the winner","Choose a 2nd place rider","Choose a 3rd place rider"];
+    const POS_LABEL   = ["1st place","2nd place","3rd place"];
+    const POS_SHORT   = ["1st","2nd","3rd"];
+    const POS_CONFIRM = ["Confirm 1st place","Confirm 2nd place","Confirm podium"];
+    // A pick is an array [p1, p2, p3]. Demo: Tour podium pre-filled (pending) to show the edit + pending state.
+    const picks = { tour:["Tadej Pogačar","Jonas Vingegaard","Remco Evenepoel"], worldsm:null, worldsw:null, eurosm:null, eurosw:null };
+    const MAX_TICKETS = 1 + Object.keys(CONTESTS).length * 3; // 16
+    let current = null, step = 0, draft = [null,null,null], sel = null;
+
+    function correctCount(){ let n=0; for(const k in CONTESTS){ const c=CONTESTS[k]; if(c.podium && picks[k]){ for(let i=0;i<3;i++) if(picks[k][i] && picks[k][i]===c.podium[i]) n++; } } return n; }
+    function pendingCount(){ let n=0; for(const k in CONTESTS){ const c=CONTESTS[k]; if(!c.podium && picks[k]){ for(let i=0;i<3;i++) if(picks[k][i]) n++; } } return n; }
+    function podiumsDone(){ let n=0; for(const k in CONTESTS){ if(picks[k] && picks[k].every(Boolean)) n++; } return n; }
+    function ticketCount(){ return 1 + correctCount(); }
+    function updateTickets(){
+      const t = ticketCount();
+      document.querySelectorAll('#navTicketCount,#ticketCountBig,#ringTickets,#barTickets').forEach(e=>{ if(e) e.textContent = t; });
+      document.querySelectorAll('.js-maxtickets').forEach(e=>{ e.textContent = MAX_TICKETS; });
+      const bp=document.getElementById('bdPicks'); if(bp) bp.textContent = correctCount();
+      const pe=document.getElementById('bdPending'); if(pe) pe.textContent = pendingCount();
+      const bm=document.getElementById('barPicks'); if(bm) bm.textContent = podiumsDone();
+      // ring fills to show tickets banked out of the maximum possible
+      const ring=document.getElementById('ringProgress');
+      if(ring){ const C=2*Math.PI*50; ring.setAttribute('stroke-dashoffset', (C*(1 - t/MAX_TICKETS)).toFixed(1)); }
+      const rm=document.getElementById('ringMax'); if(rm) rm.textContent = 'OF ' + MAX_TICKETS;
+    }
+    function podiumRows(k, resolved){
+      const c=CONTESTS[k], mine=picks[k];
+      let rows='';
+      for(let i=0;i<3;i++){
+        const pick = mine ? mine[i] : null;
+        let cls='', mark='';
+        if(resolved){ const ok = pick && pick===c.podium[i]; cls = pick ? (ok?' correct':' wrong') : ''; mark = pick ? (ok?'✓':'✕') : ''; }
+        rows += '<div class="ppod-row'+cls+'">'+
+          '<span class="ppod-pos">'+POS_SHORT[i]+'</span>'+
+          '<span class="ppod-name'+(pick?'':' empty')+'">'+(pick||'Not predicted')+'</span>'+
+          '<span class="ppod-mark">'+mark+'</span></div>';
+      }
+      return '<div class="ppodium">'+rows+'</div>';
+    }
+    function renderCard(k){
+      const c=CONTESTS[k], mine=picks[k];
+      const st=document.getElementById('st-'+k), pk=document.getElementById('pick-'+k), btn=document.getElementById('btn-'+k);
+      if(!st||!pk||!btn) return;
+      pk.className='';
+      if(c.podium){ // resolved
+        let correct=0; for(let i=0;i<3;i++) if(mine && mine[i]===c.podium[i]) correct++;
+        st.className='pstatus pstatus--resolved'; st.textContent='Resolved · Podium in';
+        pk.innerHTML=podiumRows(k, true);
+        btn.className='pbtn'; btn.disabled=true; btn.onclick=null;
+        btn.textContent = correct>0 ? ('Result final · +'+correct+' ticket'+(correct>1?'s':'')) : 'Result final · no places';
+      } else { // open
+        st.className='pstatus pstatus--open'; st.textContent='Open · edit until '+META[k].lock;
+        const has = mine && mine.some(Boolean);
+        pk.innerHTML=podiumRows(k, false);
+        btn.disabled=false; btn.onclick=()=>openPicker(k);
+        btn.className = has ? 'pbtn pbtn--ghost' : 'pbtn';
+        btn.textContent = has ? 'Edit podium' : 'Predict the podium →';
+      }
+    }
+    function renderAll(){ ['tour','worldsm','worldsw','eurosm','eurosw'].forEach(renderCard); updateTickets(); }
+
+    function renderStep(){
+      const c=CONTESTS[current];
+      document.getElementById('pmTitle').textContent = POS_TITLE[step];
+      document.getElementById('pmSub').textContent = c.name + ' · ' + POS_LABEL[step];
+      // podium progress slots
+      const pod=document.getElementById('pmPodium'); pod.innerHTML='';
+      for(let i=0;i<3;i++){
+        const d=document.createElement('div');
+        d.className='pmslot'+(i===step?' active':'')+(draft[i]?' filled':' empty');
+        d.innerHTML='<div class="pmslot__pos">'+POS_SHORT[i]+'</div><div class="pmslot__name">'+(draft[i]||'—')+'</div>';
+        pod.appendChild(d);
+      }
+      // rider list — gray out riders already used in another slot
+      const list=document.getElementById('pmList'); list.innerHTML='';
+      c.riders.forEach(r=>{
+        const usedElsewhere = draft.some((x,idx)=> x===r.n && idx!==step );
+        const b=document.createElement('button');
+        b.className='prider'+(sel===r.n?' sel':'')+(usedElsewhere?' dim':'');
+        b.innerHTML='<span class="prider__radio"></span><span class="prider__name">'+r.n+'</span>'+
+          (usedElsewhere ? '<span class="prider__used">Picked</span>' : '<span class="prider__team">'+r.t+'</span>');
+        if(!usedElsewhere){ b.onclick=()=>{ sel=r.n; [...list.children].forEach(x=>x.classList.remove('sel')); b.classList.add('sel'); document.getElementById('pmCast').disabled=false; }; }
+        list.appendChild(b);
+      });
+      const cast=document.getElementById('pmCast'); cast.textContent=POS_CONFIRM[step]; cast.disabled=!sel;
+    }
+    function openPicker(k){
+      current=k; draft = picks[k] ? picks[k].slice() : [null,null,null]; step=0; sel=draft[0];
+      renderStep();
+      document.getElementById('predModal').classList.add('open');
+    }
+    function confirmStep(){
+      if(!sel) return;
+      draft[step]=sel;
+      if(step<2){ step++; sel=draft[step]||null; renderStep(); }
+      else { picks[current]=draft.slice(); renderCard(current); updateTickets(); closePicker(); }
+    }
+    function closePicker(){ document.getElementById('predModal').classList.remove('open'); }
+    document.getElementById('predModal').addEventListener('click', e=>{ if(e.target.id==='predModal') closePicker(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePicker(); });
+    renderAll();
   </script>
 </body>
 </html>

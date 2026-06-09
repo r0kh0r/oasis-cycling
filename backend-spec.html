@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oasis × Cycling — Minimal Backend Spec (Supabase + Turnkey)</title>
+<style>
+  :root{
+    --ink:#0d1117; --ink-2:#3a4250; --ink-3:#6b7480; --line:#e3e7ec; --line-2:#cdd4dd;
+    --bg:#ffffff; --bg-2:#f6f8fa; --bg-3:#eef1f5; --blue:#003CD8; --blue-bg:#eaf0ff;
+    --green:#0a7d3c; --green-bg:#e7f6ec; --amber:#9a6700; --amber-bg:#fff8e6; --red:#b3261e;
+    --mono:"SF Mono",ui-monospace,"Cascadia Code",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg-2);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+  header.top{background:linear-gradient(135deg,#001a5e,#003CD8);color:#fff;padding:48px 0 40px;}
+  header.top .wrap{max-width:1040px;}
+  header.top .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.8;}
+  header.top h1{margin:10px 0 8px;font-size:34px;line-height:1.1;letter-spacing:-.02em;}
+  header.top p{margin:0;max-width:680px;opacity:.92;font-size:16px;}
+  header.top .meta{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;}
+  header.top .pill{font-family:var(--mono);font-size:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:5px 11px;border-radius:999px;}
+  main{padding:40px 0 80px;}
+  section{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:28px 30px;margin-bottom:22px;}
+  h2{font-size:13px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:0 0 4px;}
+  section > h3:first-of-type, section .lead{margin-top:6px;}
+  h3{font-size:23px;letter-spacing:-.01em;margin:0 0 14px;}
+  h4{font-size:17px;margin:26px 0 10px;}
+  p{margin:0 0 14px;color:var(--ink-2);}
+  ul,ol{margin:0 0 14px;padding-left:22px;color:var(--ink-2);}
+  li{margin:5px 0;}
+  code{font-family:var(--mono);font-size:.86em;background:var(--bg-3);padding:1px 6px;border-radius:5px;color:#0a3a9e;}
+  pre{background:var(--ink);color:#e6edf3;border-radius:10px;padding:16px 18px;overflow:auto;font-family:var(--mono);font-size:13px;line-height:1.5;}
+  pre code{background:none;color:inherit;padding:0;}
+  .diagram{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:18px;overflow:auto;text-align:center;}
+  .mermaid{font-size:14px;}
+  table{width:100%;border-collapse:collapse;margin:6px 0 16px;font-size:14px;}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--bg-2);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);font-weight:600;}
+  td code{font-size:.85em;}
+  .ep{border:1px solid var(--line);border-radius:10px;margin:0 0 16px;overflow:hidden;}
+  .ep__head{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg-2);border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .verb{font-family:var(--mono);font-size:12px;font-weight:700;padding:3px 9px;border-radius:6px;color:#fff;letter-spacing:.04em;}
+  .verb.get{background:#0a7d3c;} .verb.post{background:var(--blue);} .verb.patch{background:#9a6700;} .verb.del{background:#b3261e;}
+  .path{font-family:var(--mono);font-size:14px;color:var(--ink);}
+  .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:999px;margin-left:auto;}
+  .tag.pub{background:var(--green-bg);color:var(--green);}
+  .tag.auth{background:var(--blue-bg);color:var(--blue);}
+  .tag.admin{background:#fdeaea;color:var(--red);}
+  .ep__body{padding:14px 16px;}
+  .ep__body p{margin:0 0 10px;}
+  .ep__body p:last-child{margin-bottom:0;}
+  .note{display:flex;gap:10px;background:var(--amber-bg);border:1px solid #f3e2b0;border-radius:9px;padding:12px 14px;font-size:14px;color:#5c4708;margin:14px 0;}
+  .note.blue{background:var(--blue-bg);border-color:#c3d4ff;color:#102d77;}
+  .note.green{background:var(--green-bg);border-color:#bfe6cd;color:#0a4f27;}
+  .note b{color:inherit;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr;}}
+  .card{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--bg-2);}
+  .card h4{margin:0 0 8px;font-size:15px;}
+  .card p{font-size:13.5px;margin:0;}
+  nav.toc{position:sticky;top:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin-bottom:22px;font-size:14px;}
+  nav.toc b{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:8px;}
+  nav.toc a{color:var(--blue);text-decoration:none;margin-right:16px;display:inline-block;margin-bottom:4px;}
+  nav.toc a:hover{text-decoration:underline;}
+  .scope{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .scope > div{padding:16px 18px;}
+  .scope .in{background:var(--green-bg);}
+  .scope .out{background:var(--bg-2);border-left:1px solid var(--line);}
+  .scope h4{margin:0 0 8px;font-size:14px;}
+  .scope ul{margin:0;font-size:13.5px;}
+  @media(max-width:760px){.scope{grid-template-columns:1fr;} .scope .out{border-left:none;border-top:1px solid var(--line);}}
+  footer{color:var(--ink-3);font-size:13px;text-align:center;padding:24px 0 60px;}
+  .small{font-size:13px;color:var(--ink-3);}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="kicker">Oasis × Slovenian Cycling Federation</div>
+    <h1>Minimal Backend Specification</h1>
+    <p>Everything the predict-and-win raffle portal needs on the server side — built on Supabase, with Turnkey embedded wallets and the existing static frontend. Scoped to MVP: capture the email, provision the wallet, run predictions, mint raffle tickets, draw winners.</p>
+    <div class="meta">
+      <span class="pill">Supabase · Postgres + Auth + Edge Functions</span>
+      <span class="pill">Turnkey · embedded wallets</span>
+      <span class="pill">Static FE · Vercel</span>
+      <span class="pill">v1 · June 2026</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <nav class="toc">
+    <b>Contents</b>
+    <a href="#overview">Overview</a>
+    <a href="#flow">User flow</a>
+    <a href="#arch">Architecture</a>
+    <a href="#data">Data model</a>
+    <a href="#auth">Auth &amp; Turnkey</a>
+    <a href="#api">API reference</a>
+    <a href="#jobs">Scheduled jobs</a>
+    <a href="#email">Email pipeline</a>
+    <a href="#security">Security &amp; RLS</a>
+    <a href="#env">Secrets</a>
+    <a href="#scope">MVP scope</a>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <h2>01 · Overview</h2>
+    <h3 class="lead">What the backend has to do</h3>
+    <p>The business objective is e-mail capture with marketing consent, so the heavy lifting happens once — at signup. Everything after that exists to keep users engaged (predictions) and to give the marketing team a warm, relevant reason to email them (race results → Privana upsell).</p>
+    <p>The backend has exactly five responsibilities:</p>
+    <ol>
+      <li><b>Onboard</b> — verify an email (OTP), capture marketing consent, and provision a Turnkey embedded wallet that becomes the user's durable account (it carries over to Privana later).</li>
+      <li><b>Mint the signup ticket</b> — one raffle ticket the moment the account exists.</li>
+      <li><b>Run predictions</b> — store a ranked <b>podium</b> (1st / 2nd / 3rd) per contest, editable until <code>24h before the race starts</code>.</li>
+      <li><b>Resolve &amp; reward</b> — when a race finishes, record the podium and award <code>+1 ticket per place</code> each user called exactly right, then trigger the result email.</li>
+      <li><b>Draw</b> — at the season's end, pick 10 winners weighted by ticket count.</li>
+    </ol>
+    <div class="note blue"><span>💡</span><div><b>Design principle:</b> tickets are the only state that matters, and they can <em>only</em> be created server-side (signup + correct prediction). No payments, no leaderboard, no scoring. That keeps the surface tiny and the sweepstakes clean ("no purchase necessary").</div></div>
+    <h4>Assumptions</h4>
+    <ul>
+      <li>Frontend is the existing static <code>index.html</code> (lander) + <code>portal.html</code>, talking to Supabase via <code>supabase-js</code> with the anon key.</li>
+      <li>Supabase provides Postgres, Auth (email OTP), PostgREST, Edge Functions (Deno), and <code>pg_cron</code>.</li>
+      <li>Turnkey is called only from Edge Functions (server-side keys), never the browser.</li>
+      <li>Transactional email via Resend (or Postmark) — interchangeable.</li>
+      <li>Five contests for v1: the Tour de France, plus the men's and women's World and European Championships.</li>
+    </ul>
+  </section>
+
+  <!-- FLOW -->
+  <section id="flow">
+    <h2>02 · User flow</h2>
+    <h3 class="lead">Signup → predict → resolve → draw</h3>
+    <div class="diagram">
+<pre class="mermaid">
+sequenceDiagram
+  autonumber
+  actor U as Visitor
+  participant FE as Frontend
+  participant SA as Supabase Auth
+  participant EF as Edge Function
+  participant TK as Turnkey
+  participant DB as Postgres (RLS)
+  participant ML as Email (Resend)
+  participant AD as Admin
+
+  rect rgb(234,240,255)
+  Note over U,DB: Onboarding (the business objective)
+  U->>FE: Click "Join the Raffle", enter email + consent
+  FE->>SA: signInWithOtp(email)
+  SA->>ML: send 6-digit code
+  ML-->>U: code email
+  U->>FE: enter code
+  FE->>SA: verifyOtp(email, code)
+  SA-->>FE: session (JWT)
+  FE->>EF: POST /onboard { marketing_consent }
+  EF->>TK: create sub-org + wallet
+  TK-->>EF: wallet_id, address
+  EF->>DB: upsert profile, mint signup ticket
+  EF-->>FE: { wallet_address, tickets: 1 }
+  FE-->>U: "You're in" → portal
+  end
+
+  rect rgb(231,246,236)
+  Note over U,DB: Predicting (until 24h before each race)
+  U->>FE: Predict podium (1st / 2nd / 3rd)
+  FE->>DB: upsert 3 prediction rows (RLS + picks_close_at check)
+  DB-->>FE: saved
+  end
+
+  rect rgb(255,248,230)
+  Note over AD,ML: Race concludes
+  AD->>EF: POST /admin/contests/{id}/resolve { podium }
+  EF->>DB: record podium, +1 ticket per exact-place match
+  EF->>ML: email predictors (result + Privana upsell)
+  ML-->>U: "You called it — and meet Privana"
+  end
+
+  Note over AD,DB: Season end
+  AD->>EF: POST /admin/draw
+  EF->>DB: weighted random → 10 winners
+</pre>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section id="arch">
+    <h2>03 · Backend architecture</h2>
+    <h3 class="lead">Components &amp; boundaries</h3>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  subgraph CLIENT[" Client (static, on Vercel) "]
+    LP["Landing<br/>index.html<br/><small>signup modal</small>"]
+    PT["Portal<br/>portal.html<br/><small>predictions + tickets</small>"]
+    ADM["Admin console<br/><small>resolve / draw</small>"]
+  end
+
+  subgraph SUPA[" Supabase project "]
+    AUTH["Auth<br/>email OTP"]
+    REST["PostgREST<br/>+ RLS"]
+    EFN["Edge Functions<br/>(Deno, service role)"]
+    PG[("Postgres<br/>tables + RLS + triggers")]
+    CRON["pg_cron"]
+  end
+
+  TK["Turnkey API<br/>sub-orgs + wallets"]
+  ML["Email provider<br/>Resend / Postmark"]
+
+  LP -->|signInWithOtp / verifyOtp| AUTH
+  LP -->|POST /onboard| EFN
+  PT -->|read contests, upsert prediction| REST
+  PT -->|read ticket count| REST
+  ADM -->|resolve / draw| EFN
+  AUTH --> PG
+  REST --> PG
+  EFN --> PG
+  EFN -->|provision wallet| TK
+  EFN -->|result + marketing email| ML
+  CRON -->|lock contests, reminders| PG
+  CRON -.->|optional triggers| EFN
+
+  classDef supa fill:#eaf0ff,stroke:#003CD8,color:#102d77;
+  classDef ext fill:#fff,stroke:#cdd4dd,color:#3a4250;
+  class AUTH,REST,EFN,PG,CRON supa;
+  class TK,ML,LP,PT,ADM ext;
+</pre>
+    </div>
+    <div class="grid2">
+      <div class="card"><h4>Client never holds secrets</h4><p>The browser uses only the Supabase anon key + the user's JWT. All privileged work (Turnkey, ticket minting, resolving, drawing) lives in Edge Functions using the service role key.</p></div>
+      <div class="card"><h4>Reads are cheap, writes are guarded</h4><p>Public reads (contests, riders) and own-row reads/writes (predictions) go straight through PostgREST + RLS. Only the two trust-sensitive actions — onboarding and admin — need Edge Functions.</p></div>
+    </div>
+  </section>
+
+  <!-- DATA MODEL -->
+  <section id="data">
+    <h2>04 · Data model</h2>
+    <h3 class="lead">Seven tables</h3>
+    <div class="diagram">
+<pre class="mermaid">
+erDiagram
+  profiles  ||--o{ predictions : makes
+  profiles  ||--o{ tickets     : holds
+  contests  ||--o{ riders      : lists
+  contests  ||--o{ predictions : receives
+  riders    ||--o{ predictions : chosen
+  contests  ||--o{ tickets     : awards
+  contests  ||--o{ results     : "decided by"
+  riders    ||--o{ results     : finishes
+  profiles  ||--o{ winners     : "may be"
+
+  profiles {
+    uuid   user_id PK
+    text   email
+    text   turnkey_sub_org_id
+    text   wallet_address
+    bool   marketing_consent
+    timestamptz consent_at
+  }
+  contests {
+    uuid   id PK
+    text   slug
+    text   name
+    text   category
+    timestamptz starts_at
+    timestamptz picks_close_at
+    text   status
+    bool   sponsor
+  }
+  results {
+    uuid   contest_id FK
+    int    position
+    uuid   rider_id FK
+  }
+  riders {
+    uuid   id PK
+    uuid   contest_id FK
+    text   name
+    text   team
+  }
+  predictions {
+    uuid   id PK
+    uuid   user_id FK
+    uuid   contest_id FK
+    int    position
+    uuid   rider_id FK
+    timestamptz updated_at
+  }
+  tickets {
+    uuid   id PK
+    uuid   user_id FK
+    text   source
+    uuid   contest_id FK
+    int    position
+  }
+  winners {
+    uuid   id PK
+    int    prize_rank
+    uuid   user_id FK
+  }
+</pre>
+    </div>
+
+    <h4><code>profiles</code> — 1:1 with <code>auth.users</code></h4>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+      <tr><td><code>user_id</code></td><td>uuid PK</td><td>FK → <code>auth.users.id</code></td></tr>
+      <tr><td><code>email</code></td><td>text</td><td>Mirrored from auth for the marketing export</td></tr>
+      <tr><td><code>turnkey_sub_org_id</code></td><td>text</td><td>Turnkey sub-organization id</td></tr>
+      <tr><td><code>turnkey_wallet_id</code></td><td>text</td><td>Turnkey wallet id</td></tr>
+      <tr><td><code>wallet_address</code></td><td>text</td><td>The durable account address (carries to Privana)</td></tr>
+      <tr><td><code>marketing_consent</code></td><td>bool</td><td>Captured at signup — the core asset</td></tr>
+      <tr><td><code>consent_at</code></td><td>timestamptz</td><td>Proof-of-consent timestamp</td></tr>
+      <tr><td><code>country</code></td><td>text null</td><td>Optional, for eligibility/segmentation</td></tr>
+      <tr><td><code>created_at</code></td><td>timestamptz</td><td>default <code>now()</code></td></tr>
+    </table>
+
+    <h4><code>contests</code></h4>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+      <tr><td><code>id</code></td><td>uuid PK</td><td></td></tr>
+      <tr><td><code>slug</code></td><td>text unique</td><td><code>tour</code> · <code>worlds-m</code> · <code>worlds-w</code> · <code>euros-m</code> · <code>euros-w</code> (men's &amp; women's)</td></tr>
+      <tr><td><code>name, flag, location, category</code></td><td>text</td><td>Display fields · <code>category</code> = men / women</td></tr>
+      <tr><td><code>starts_at</code></td><td>timestamptz</td><td>Official race start</td></tr>
+      <tr><td><code>picks_close_at</code></td><td>timestamptz</td><td><b>= <code>starts_at − 24h</code></b> · the last moment a podium can be made or changed</td></tr>
+      <tr><td><code>status</code></td><td>text</td><td>enum: <code>open</code> → <code>locked</code> → <code>resolved</code></td></tr>
+      <tr><td><code>sponsor</code></td><td>bool</td><td>true for Worlds &amp; Euros (Oasis sponsor badge)</td></tr>
+      <tr><td><code>resolved_at</code></td><td>timestamptz null</td><td></td></tr>
+    </table>
+    <div class="note blue"><span>🏁</span><div>The winning podium lives in <code>results</code> (one row per <code>contest_id</code> + <code>position</code> → <code>rider_id</code>), written on resolve. With 5 contests × 3 places, the maximum a user can earn is <b>1 signup + 15 = 16 tickets</b>.</div></div>
+
+    <h4><code>riders</code></h4>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+      <tr><td><code>id</code></td><td>uuid PK</td><td></td></tr>
+      <tr><td><code>contest_id</code></td><td>uuid FK</td><td>→ <code>contests.id</code></td></tr>
+      <tr><td><code>name, team</code></td><td>text</td><td>Team = national team for Worlds/Euros</td></tr>
+      <tr><td><code>sort</code></td><td>int</td><td>Display order</td></tr>
+    </table>
+
+    <h4><code>predictions</code> — a ranked podium (3 rows) per user per contest</h4>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+      <tr><td><code>id</code></td><td>uuid PK</td><td></td></tr>
+      <tr><td><code>user_id</code></td><td>uuid FK</td><td>→ <code>profiles.user_id</code></td></tr>
+      <tr><td><code>contest_id</code></td><td>uuid FK</td><td></td></tr>
+      <tr><td><code>position</code></td><td>int</td><td>1, 2 or 3 — the predicted finishing place</td></tr>
+      <tr><td><code>rider_id</code></td><td>uuid FK</td><td>The rider picked for that place</td></tr>
+      <tr><td><code>updated_at</code></td><td>timestamptz</td><td></td></tr>
+      <tr><td colspan="3"><b>Constraints:</b> <code>UNIQUE(user_id, contest_id, position)</code> (one rider per place) and <code>UNIQUE(user_id, contest_id, rider_id)</code> (the same rider can't fill two places). Saving a podium upserts the three rows.</td></tr>
+    </table>
+
+    <h4><code>tickets</code> — append-only ledger (source of truth for odds)</h4>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+      <tr><td><code>id</code></td><td>uuid PK</td><td></td></tr>
+      <tr><td><code>user_id</code></td><td>uuid FK</td><td></td></tr>
+      <tr><td><code>source</code></td><td>text</td><td>enum: <code>signup</code> · <code>prediction</code></td></tr>
+      <tr><td><code>contest_id</code></td><td>uuid null</td><td>set for <code>prediction</code> tickets</td></tr>
+      <tr><td><code>position</code></td><td>int null</td><td>1/2/3 — which podium place earned this ticket</td></tr>
+      <tr><td><code>created_at</code></td><td>timestamptz</td><td></td></tr>
+      <tr><td colspan="3"><b>Constraint:</b> <code>UNIQUE(user_id, source, contest_id, position)</code> — one signup ticket, and at most one ticket per contest <em>per place</em> (up to 3 per race), making awards idempotent. <code>ticket_count = count(*) where user_id = me</code>.</td></tr>
+    </table>
+
+    <h4><code>winners</code> (created by the draw)</h4>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+      <tr><td><code>id</code></td><td>uuid PK</td><td></td></tr>
+      <tr><td><code>prize_rank</code></td><td>int</td><td>1 = Colnago … 10 = jersey</td></tr>
+      <tr><td><code>user_id</code></td><td>uuid FK</td><td>unique — a user wins at most once</td></tr>
+      <tr><td><code>drawn_at</code></td><td>timestamptz</td><td></td></tr>
+    </table>
+
+    <div class="note blue"><span>🔎</span><div><b>Convenience view</b> <code>v_my_tickets</code>: <code>select user_id, count(*) as tickets, count(*) filter (where source='signup') as from_signup, count(*) filter (where source='prediction') as from_predictions from tickets group by user_id</code> — read with RLS so a user only sees their own row. The portal binds the nav pill, the big ring and the bar to this.</div></div>
+  </section>
+
+  <!-- AUTH & TURNKEY -->
+  <section id="auth">
+    <h2>05 · Auth &amp; Turnkey</h2>
+    <h3 class="lead">Supabase owns identity, Turnkey owns the wallet</h3>
+    <p>The cleanest minimal split: <b>Supabase Auth handles the email OTP</b> (the code in the signup modal <em>is</em> the Supabase OTP), giving you sessions and RLS for free. <b>Turnkey is provisioned server-side</b> on first login and produces the wallet that becomes the user's Privana account.</p>
+    <ol>
+      <li>Frontend calls <code>supabase.auth.signInWithOtp({ email })</code> → user receives the 6-digit code.</li>
+      <li>Frontend calls <code>supabase.auth.verifyOtp({ email, token })</code> → returns a session.</li>
+      <li>Frontend calls <code>POST /onboard</code> (with the session JWT). The Edge Function:
+        <ul>
+          <li>creates a Turnkey <em>sub-organization</em> + wallet for the user (idempotent — keyed on <code>user_id</code>),</li>
+          <li>upserts <code>profiles</code> with wallet + <code>marketing_consent</code> + <code>consent_at</code>,</li>
+          <li>inserts the <code>signup</code> ticket (<code>ON CONFLICT DO NOTHING</code>).</li>
+        </ul>
+      </li>
+    </ol>
+    <div class="note"><span>⚙️</span><div><b>Alternative:</b> Turnkey can also run the email auth itself (Turnkey Auth / passkeys) and you mint a Supabase session from a custom JWT. That removes one email step but adds a custom-token exchange — heavier than the MVP needs. Recommend the Supabase-OTP path above and revisit only if you want passkeys.</div></div>
+    <div class="note green"><span>🔁</span><div><b>Idempotency:</b> <code>/onboard</code> may be called more than once (refresh, retry). Look up <code>profiles.turnkey_sub_org_id</code> first; if present, skip provisioning and just return current state. The unique constraint on the signup ticket prevents double-minting.</div></div>
+  </section>
+
+  <!-- API -->
+  <section id="api">
+    <h2>06 · API reference</h2>
+    <h3 class="lead">Two surfaces</h3>
+    <p>Most of the app is plain <b>PostgREST + RLS</b> (auto-generated REST). Only trust-sensitive actions are custom <b>Edge Functions</b>. Base URLs:</p>
+    <pre><code>REST   https://&lt;project&gt;.supabase.co/rest/v1
+EDGE   https://&lt;project&gt;.supabase.co/functions/v1</code></pre>
+    <p class="small">All requests send <code>apikey: &lt;anon&gt;</code>. Authenticated calls add <code>Authorization: Bearer &lt;user-jwt&gt;</code>. Admin calls add <code>Authorization: Bearer &lt;admin-jwt&gt;</code> (or an <code>x-admin-secret</code> header).</p>
+
+    <h4>Public reads — PostgREST</h4>
+    <div class="ep">
+      <div class="ep__head"><span class="verb get">GET</span><span class="path">/rest/v1/contests?select=*,riders(*)&amp;order=starts_at</span><span class="tag pub">anon</span></div>
+      <div class="ep__body">
+        <p>All contests with their riders, status and (once set) the winner. Drives both the landing teaser and the portal cards.</p>
+<pre><code>200 OK
+[{ "id":"…", "slug":"tour", "name":"Tour de France", "status":"open",
+   "starts_at":"2026-07-04T12:00:00Z", "picks_close_at":"2026-07-03T12:00:00Z", "sponsor":false,
+   "category":"men", "riders":[{ "id":"…","name":"Tadej Pogačar","team":"UAE Team Emirates–XRG" }, …] }]</code></pre>
+      </div>
+    </div>
+
+    <h4>Predictions — PostgREST (RLS, own rows only)</h4>
+    <div class="ep">
+      <div class="ep__head"><span class="verb get">GET</span><span class="path">/rest/v1/predictions?select=contest_id,position,rider_id</span><span class="tag auth">user</span></div>
+      <div class="ep__body"><p>The caller's own podium picks, 3 rows per predicted contest (RLS filters to <code>user_id = auth.uid()</code>).</p></div>
+    </div>
+    <div class="ep">
+      <div class="ep__head"><span class="verb post">POST</span><span class="path">/rest/v1/predictions</span><span class="tag auth">user</span></div>
+      <div class="ep__body">
+        <p>Save or change a podium — upsert the 3 rows on the <code>(user_id, contest_id, position)</code> key. Header <code>Prefer: resolution=merge-duplicates</code>.</p>
+<pre><code>POST /rest/v1/predictions          // user_id is set by a DB default = auth.uid()
+[ { "contest_id": "…", "position": 1, "rider_id": "…" },
+  { "contest_id": "…", "position": 2, "rider_id": "…" },
+  { "contest_id": "…", "position": 3, "rider_id": "…" } ]
+
+201 Created   // or rejected 4xx if picks are closed (see trigger)</code></pre>
+        <div class="note"><span>🔒</span><div>A <code>BEFORE INSERT/UPDATE</code> trigger rejects the write unless <code>contest.status = 'open'</code> and <code>now() &lt; contest.picks_close_at</code> (i.e. more than 24h before the start). The deadline is enforced in the database, not the client — so the frontend's "edit until …" label and the server agree.</div></div>
+      </div>
+    </div>
+
+    <h4>Ticket count — PostgREST view</h4>
+    <div class="ep">
+      <div class="ep__head"><span class="verb get">GET</span><span class="path">/rest/v1/v_my_tickets</span><span class="tag auth">user</span></div>
+      <div class="ep__body"><p>Returns one row: <code>{ tickets, from_signup, from_predictions }</code> for the caller.</p></div>
+    </div>
+
+    <h4>Onboarding — Edge Function</h4>
+    <div class="ep">
+      <div class="ep__head"><span class="verb post">POST</span><span class="path">/functions/v1/onboard</span><span class="tag auth">user</span></div>
+      <div class="ep__body">
+        <p>Called once after <code>verifyOtp</code>. Provisions the Turnkey wallet, writes the profile + consent, mints the signup ticket. Idempotent.</p>
+<pre><code>POST /functions/v1/onboard
+{ "marketing_consent": true, "country": "SI" }
+
+200 OK
+{ "wallet_address": "0xA3…b91f", "tickets": 1, "is_new": true }</code></pre>
+      </div>
+    </div>
+
+    <h4>Admin — Edge Functions</h4>
+    <div class="ep">
+      <div class="ep__head"><span class="verb post">POST</span><span class="path">/functions/v1/admin/contests/{id}/resolve</span><span class="tag admin">admin</span></div>
+      <div class="ep__body">
+        <p>Record the finishing podium, flip status to <code>resolved</code>, award <code>+1 ticket</code> for every place a user predicted exactly right (one transaction), and enqueue the result emails.</p>
+<pre><code>POST /functions/v1/admin/contests/{id}/resolve
+{ "podium": ["rider_id_1st", "rider_id_2nd", "rider_id_3rd"] }
+
+200 OK
+{ "status":"resolved", "tickets_awarded": 3120, "predictors_emailed": 4217 }</code></pre>
+        <div class="note green"><span>✅</span><div>For each position, award a ticket to users whose <code>predictions(contest,position).rider_id</code> matches the result, via <code>INSERT INTO tickets … ON CONFLICT DO NOTHING</code> — so re-running resolve never double-awards.</div></div>
+      </div>
+    </div>
+    <div class="ep">
+      <div class="ep__head"><span class="verb post">POST</span><span class="path">/functions/v1/admin/contests/{id}/lock</span><span class="tag admin">admin</span></div>
+      <div class="ep__body"><p>Manually freeze picks (also done automatically by cron at <code>picks_close_at</code>). Sets <code>status='locked'</code>.</p></div>
+    </div>
+    <div class="ep">
+      <div class="ep__head"><span class="verb post">POST</span><span class="path">/functions/v1/admin/draw</span><span class="tag admin">admin</span></div>
+      <div class="ep__body">
+        <p>Weighted random draw at campaign end. Each ticket is one entry; draw 10 distinct users; write <code>winners</code>. Uses a seeded RNG and logs the seed for auditability.</p>
+<pre><code>POST /functions/v1/admin/draw
+{ "prizes": ["Colnago V4Rs","Signed jersey + helmet","Signed jersey","Helmet","Jersey","Jersey","Jersey","Jersey","Jersey","Jersey"], "seed": "optional" }
+
+200 OK
+{ "seed":"…", "winners":[{ "prize_rank":1, "user_id":"…", "tickets":3 }, …] }</code></pre>
+      </div>
+    </div>
+    <div class="ep">
+      <div class="ep__head"><span class="verb get">GET</span><span class="path">/functions/v1/admin/export?consent=true</span><span class="tag admin">admin</span></div>
+      <div class="ep__body"><p>CSV of consented emails for the marketing platform (the campaign's actual deliverable). Filterable by consent, country, activity.</p></div>
+    </div>
+  </section>
+
+  <!-- JOBS -->
+  <section id="jobs">
+    <h2>07 · Scheduled jobs (pg_cron)</h2>
+    <table>
+      <tr><th>Job</th><th>Cadence</th><th>Action</th></tr>
+      <tr><td>Lock contests</td><td>every 5 min</td><td><code>UPDATE contests SET status='locked' WHERE status='open' AND now() &gt;= picks_close_at</code> (24h before start)</td></tr>
+      <tr><td>Prediction reminders <span class="small">(optional)</span></td><td>daily</td><td>Email consented users with no pick for a contest locking in &lt; 48h (engagement + warm touch)</td></tr>
+      <tr><td>Draw <span class="small">(optional)</span></td><td>once, campaign end</td><td>Prefer a manual admin trigger; cron only as a safety net</td></tr>
+    </table>
+  </section>
+
+  <!-- EMAIL -->
+  <section id="email">
+    <h2>08 · Email / notification pipeline</h2>
+    <h3 class="lead">The warm-email engine</h3>
+    <p>This is where the campaign pays off: a race result is a non-cold reason to land in the inbox, and Privana rides along as the upsell.</p>
+    <ul>
+      <li><b>Transactional (triggered):</b> OTP code (Supabase Auth), "you're in" welcome, and the <b>result email</b> fired by <code>resolve</code> — "You called the Tour podium! +2 tickets" / "Here's the podium + your standing", each carrying a Privana CTA.</li>
+      <li><b>Marketing (broadcast):</b> sent from your ESP to the <code>marketing_consent = true</code> segment exported via <code>/admin/export</code>. Kept separate from transactional so consent and deliverability stay clean.</li>
+    </ul>
+    <p>Implementation: <code>resolve</code> writes rows to an <code>email_outbox</code> table; a small Edge Function (or cron) drains it through Resend with a templated payload. Decoupling the send keeps <code>resolve</code> fast and retry-safe.</p>
+  </section>
+
+  <!-- SECURITY -->
+  <section id="security">
+    <h2>09 · Security &amp; RLS</h2>
+    <ul>
+      <li><b>RLS on every user table.</b> <code>profiles</code>, <code>predictions</code>, <code>tickets</code>, <code>winners</code>: a user can read only <code>user_id = auth.uid()</code>. <code>contests</code> + <code>riders</code> are world-readable (anon select), write denied.</li>
+      <li><b>Tickets are server-minted only.</b> No insert/update/delete policy for clients on <code>tickets</code> — they appear only via Edge Functions using the service role. This is what keeps odds honest.</li>
+      <li><b>Lock enforced in the DB</b> via the predictions trigger, so a crafted client request can't sneak a late pick.</li>
+      <li><b>Service role key never leaves Edge Functions.</b> The browser only ever has the anon key + the user JWT.</li>
+      <li><b>Admin gating:</b> admin Edge Functions check an admin claim / allowlisted email, or a shared <code>x-admin-secret</code>. Keep the admin console off the public domain.</li>
+      <li><b>Idempotency &amp; audit:</b> unique constraints make onboarding and awards safe to retry; the append-only <code>tickets</code> ledger and the logged draw seed make the outcome auditable.</li>
+      <li><b>OTP abuse:</b> rely on Supabase Auth rate limits; optionally add a per-IP throttle on <code>/onboard</code>.</li>
+      <li><b>Sweepstakes hygiene:</b> no payment path exists, so "no purchase necessary" holds by construction. One-account-per-person enforcement (email is the natural key) is a known soft spot — flag duplicate detection as a fast-follow if abuse appears.</li>
+    </ul>
+  </section>
+
+  <!-- ENV -->
+  <section id="env">
+    <h2>10 · Secrets &amp; config</h2>
+    <table>
+      <tr><th>Key</th><th>Where</th><th>Purpose</th></tr>
+      <tr><td><code>SUPABASE_URL</code></td><td>frontend + edge</td><td>Project URL</td></tr>
+      <tr><td><code>SUPABASE_ANON_KEY</code></td><td>frontend</td><td>Public client key (RLS-bound)</td></tr>
+      <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>edge only</td><td>Privileged DB writes (tickets, resolve, draw)</td></tr>
+      <tr><td><code>TURNKEY_API_PUBLIC_KEY</code> / <code>…PRIVATE_KEY</code></td><td>edge only</td><td>Turnkey API credentials</td></tr>
+      <tr><td><code>TURNKEY_ORG_ID</code></td><td>edge only</td><td>Parent organization id</td></tr>
+      <tr><td><code>RESEND_API_KEY</code></td><td>edge only</td><td>Transactional email</td></tr>
+      <tr><td><code>ADMIN_SECRET</code></td><td>edge only</td><td>Gate for admin functions</td></tr>
+    </table>
+  </section>
+
+  <!-- SCOPE -->
+  <section id="scope">
+    <h2>11 · MVP scope</h2>
+    <h3 class="lead">What to build now vs. later</h3>
+    <div class="scope">
+      <div class="in">
+        <h4>✅ In scope (v1)</h4>
+        <ul>
+          <li>Supabase email OTP + <code>/onboard</code> (Turnkey wallet, consent, signup ticket)</li>
+          <li><code>contests</code> + <code>riders</code> seed data (5 races, men's &amp; women's)</li>
+          <li>Predictions upsert with DB-enforced lock</li>
+          <li>Tickets ledger + <code>v_my_tickets</code> view</li>
+          <li>Admin <code>resolve</code> (winner + award + email) and <code>draw</code></li>
+          <li>Consented-email CSV export</li>
+          <li>RLS, cron lock job, transactional email</li>
+        </ul>
+      </div>
+      <div class="out">
+        <h4>⏳ Deferred</h4>
+        <ul>
+          <li>Real-time updates (poll/refresh is fine at this scale)</li>
+          <li>Leaderboards / scoring (intentionally removed)</li>
+          <li>Payments, KYC, on-chain actions (none needed to enter)</li>
+          <li>Passkeys / Turnkey-native auth</li>
+          <li>Duplicate-account / fraud detection</li>
+          <li>Multi-language, rider photos/CDN, admin analytics</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note blue"><span>🧭</span><div><b>Build order:</b> (1) tables + RLS + seed, (2) Supabase OTP wired into the existing modal, (3) <code>/onboard</code> + Turnkey, (4) predictions read/write, (5) ticket view bound to the portal counters, (6) admin <code>resolve</code> + email, (7) <code>draw</code>. Steps 1–5 make the frontend fully live; 6–7 are operational and can land before the first race concludes.</div></div>
+  </section>
+
+</div>
+</main>
+
+<footer>
+  Oasis × Slovenian Cycling Federation — Minimal Backend Specification · v1 · June 2026 · Supabase + Turnkey
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#eaf0ff', primaryBorderColor: '#003CD8', primaryTextColor: '#102d77',
+      lineColor: '#6b7480', fontSize: '14px', fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+      actorBkg: '#eaf0ff', actorBorder: '#003CD8', actorTextColor: '#102d77',
+      noteBkgColor: '#fff8e6', noteBorderColor: '#f3e2b0'
+    }
+  });
+</script>
+</body>
+</html>
