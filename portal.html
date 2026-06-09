@@ -59,7 +59,7 @@ a { color: inherit; text-decoration: none; }
 button { cursor: pointer; font: inherit; color: inherit; background: none; border: none; }
 img, svg { display: block; max-width: 100%; }
 .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 32px; }
-@media (max-width: 720px) { .container { padding: 0 20px; } }
+@media (max-width: 720px) { .container { padding: 0 24px; } }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--oasis-blue); }
 .eyebrow.muted { color: var(--text-3); }
 .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
@@ -894,9 +894,10 @@ section { padding: 100px 0; position: relative; }
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: start;
-  padding: 64px 0 60px;
+  padding-top: 64px;
+  padding-bottom: 60px;
 }
-.ct2__body h2 { margin-top: 14px; font-size: clamp(24px, 3.2vw, 48px); white-space: nowrap; }
+.ct2__body h2 { margin-top: 14px; font-size: clamp(24px, 3.2vw, 48px); }
 .ct2__body .lead {
   margin-top: 16px;
   font-size: 14px;
@@ -1044,7 +1045,7 @@ section { padding: 100px 0; position: relative; }
   .ct2__body { gap: 40px; }
 }
 @media (max-width: 800px) {
-  .ct2__body { grid-template-columns: 1fr; gap: 32px; padding: 40px 0 36px; }
+  .ct2__body { grid-template-columns: 1fr; gap: 32px; padding-top: 40px; padding-bottom: 36px; }
   .ct2__cd-num { font-size: 40px; }
   .ct2__cd-cell { padding: 16px 10px; }
 }
