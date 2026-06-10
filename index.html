@@ -153,9 +153,35 @@ p { color: var(--text-2); }
 }
 
 @media (max-width: 1100px) {
-  .hero__grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero { min-height: auto; }
-  .hero__inner { padding: 80px 0 60px; }
+  .hero__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+
+  .hero__copy {
+    grid-column: 1;
+  }
+
+  .hero__rider {
+    grid-column: 2;
+    align-self: end;
+  }
+
+  .hero__gc-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__copy,
+  .hero__rider,
+  .hero__gc-panel {
+    grid-column: auto;
+  }
 }
 
 .hero__copy h1 { margin: 18px 0 20px; }
@@ -408,22 +434,41 @@ section { padding: 100px 0; position: relative; }
 }
 
 @media (max-width: 760px) {
-  .podium-top3 { grid-template-columns: 1fr; align-items: stretch; }
+  .podium-top3 { grid-template-columns: 1fr; align-items: stretch; margin-bottom: 0; }
   /* When the podium stacks vertically, restore natural 1-2-3 order
      (default source order is 2-1-3 to render the real podium shape on desktop) */
   .podium-col--gold   { order: 1; }
   .podium-col--silver { order: 2; }
   .podium-col--bronze { order: 3; }
+
+  .prize-rest{
+    max-width: 100%!important;
+    margin-top: 0!important;
+  }
 }
 
 /* Each podium column = card + step block below */
 .podium-col {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  transition: transform 260ms ease;
+  transition: all 260ms ease;
   cursor: default;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.45),
+    0 6px 18px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
 }
-.podium-col:hover { transform: translateY(-8px); }
+.podium-col:hover { transform: translateY(-8px); z-index: 5;
+    box-shadow:
+    0 32px 70px rgba(0, 0, 0, 0.65),
+    0 0 35px rgba(255, 219, 0, 0.16),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+
+}
+.podium-col .prize__emoji img.prize__img { transition: all 260ms ease; }
+.podium-col:hover .prize__emoji img.prize__img { transform: scale(1.05); }
 
 /* The prize card itself */
 .prize {
@@ -458,6 +503,10 @@ section { padding: 100px 0; position: relative; }
 .podium-col--bronze .podium-step { height: 60px; background: linear-gradient(140deg, #dba86c 0%, var(--bronze) 45%, #9a6230 100%); color: #050505; border-color: var(--bronze); }
 
 /* 1st place card — accent top border */
+.podium-col--gold{
+  z-index: 6;
+}
+
 .podium-col--gold .prize {
   background: radial-gradient(600px 320px at 50% 0%, rgba(255, 214, 10, 0.14), transparent 55%), var(--bg-1);
   border-color: rgba(255, 214, 10, 0.28);
@@ -557,7 +606,7 @@ section { padding: 100px 0; position: relative; }
   gap: 0;
   align-items: end;
   margin-top: 16px;
-  max-width: 720px;
+  max-width: 580px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -566,7 +615,7 @@ section { padding: 100px 0; position: relative; }
 .prize-rest .podium-step {
   height: 44px;
   font-size: 30px;
-  background: linear-gradient(140deg, #002DB3 0%, var(--oasis-blue) 100%);
+  background: linear-gradient(140deg, #002080 0%, var(--oasis-blue) 100%);
   color: white;
   border-color: rgba(0, 60, 216, 0.55);
 }
@@ -649,7 +698,10 @@ section { padding: 100px 0; position: relative; }
 
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; position: relative; }
 @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
-.step { border: 1px solid var(--line); border-radius: 0; padding: 28px; background: var(--bg-1); position: relative; min-height: 200px; display: flex; flex-direction: column; }
+.step { border: 1px solid var(--line); border-radius: 0; padding: 28px; background: var(--bg-1); position: relative; min-height: 200px; display: flex; flex-direction: column; box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(0, 45, 179, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035); }
 .step__num { font-family: var(--font-display); font-size: 44px; font-weight: 600; letter-spacing: -0.04em; color: var(--oasis-blue); line-height: 1; }
 .step__title { margin-top: 32px; font-family: var(--font-display); font-size: 24px; font-weight: 600; }
 .step__desc { margin-top: 0; font-size: 14px; color: var(--text-2); }
@@ -940,7 +992,7 @@ section { padding: 100px 0; position: relative; }
   font-size: 14px;
   line-height: 1.65;
   color: var(--text-2);
-  max-width: 420px;
+  max-width: 424px;
 }
 /* Unified countdown + stats panel */
 .ct2__panel {
@@ -1210,7 +1262,7 @@ section { padding: 100px 0; position: relative; }
 .hgc__footer {
   display: flex; align-items: center;
   justify-content: space-between;
-  padding: 12px 18px;
+  padding: 12px;
   background: rgba(255,255,255,0.02);
   border-top: 1px solid rgba(255,255,255,0.07);
   flex-shrink: 0;
@@ -1219,12 +1271,14 @@ section { padding: 100px 0; position: relative; }
   font-family: var(--font-mono); font-size: 12px;
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--text-3);
+  width: 57%;
 }
 .hgc__footer-link {
   font-family: var(--font-mono); font-size: 12px;
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--oasis-blue);
   transition: color 150ms;
+  width: 38%
 }
 .hgc__footer-link:hover { color: white; }
 
@@ -1237,12 +1291,14 @@ section { padding: 100px 0; position: relative; }
   bottom: -60px;
   left: 50%;
   transform: translateX(-40%);
-  height: 84vh;
+  /* height: 84vh; */
   width: auto;
   z-index: 10;
   pointer-events: none;
   -webkit-mask-image: linear-gradient(to top, transparent 0%, black 8%);
   mask-image: linear-gradient(to top, transparent 0%, black 8%);
+  width: 100%;
+  max-width: 525px;
 }
 @media (max-width: 1100px) {
   /* In-flow between copy and GC panel on narrow viewports — no longer absolute, scales with content */
@@ -1250,13 +1306,27 @@ section { padding: 100px 0; position: relative; }
     position: static;
     display: block;
     height: auto;
-    width: auto;
-    max-width: 100%;
-    max-height: 56vh;
-    margin: 8px auto 24px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
     transform: none;
-    -webkit-mask-image: none;
-    mask-image: none;
+      -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 82%,
+    transparent 100%
+  );
+  }
+
+  .hgc__footer-stat, 
+  .hgc__footer-link{
+    width: auto;
   }
 }
 
@@ -2136,7 +2206,10 @@ section { padding: 100px 0; position: relative; }
   <!-- ============================================================
        Prize podium
        ============================================================ -->
-  <section id="prizes" style="position:relative;overflow:hidden;">
+  <section id="prizes" style="
+    position: relative;
+    overflow: hidden;
+  ">
     <div style="position:absolute;inset:0;background-image:url('Photos/2025_09_28 SP Kigali ME 279.jpg');background-size:cover;background-position:center 25%;opacity:0.35;pointer-events:none;z-index:0;"></div>
     <div class="container" style="position:relative;z-index:1;">
       <div class="section__head">
@@ -2206,10 +2279,13 @@ section { padding: 100px 0; position: relative; }
       </div>
 
       <div style="width: 100%;
-    max-width: 800px;
-    margin: 32px auto 0; padding: 18px 24px; border-radius: 0; background: rgba(255, 214, 10, 0.04); border: 1px solid rgba(255, 214, 10, 0.16); display: flex; gap: 14px; align-items: center; font-size: 14px; color: var(--text-2);">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0;"><path d="M10 1l2.5 6h6l-5 4 2 7-5.5-4-5.5 4 2-7-5-4h6z" fill="rgba(255,214,10,0.6)" stroke="var(--maillot-jaune)" stroke-width="1"/></svg>
-        <span><strong style="color: var(--text);">How to win:</strong> Create a free account to claim your first ticket, then predict race winners to earn more. The 10 winners are drawn at the season's close, weighted by tickets — more tickets, better odds, and anyone with a ticket can win. No purchase necessary. <strong style="color: var(--maillot-jaune);">Total prize value ≈ €2,700.</strong></span>
+    max-width: 720px;
+    margin: 32px auto 0; padding: 18px 24px; border-radius: 0; background: rgba(255, 214, 10, 0.15); border: 1px solid rgba(255, 214, 10, 0.16); gap: 14px; align-items: center; font-size: 14px; color: var(--text-2); border-radius: 2px;">
+        <div style="display: flex; justify-content: center; gap: 8px; align-items: center;">
+           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; margin-top: -7px;"><path d="M10 1l2.5 6h6l-5 4 2 7-5.5-4-5.5 4 2-7-5-4h6z" fill="rgba(255,214,10,0.6)" stroke="var(--maillot-jaune)" stroke-width="1"/></svg>
+           <span style="display: block; color: var(--text); font-family: 'Bebas Neue'; font-size: x-large; letter-spacing: 1px; font-weight: 400;">How to win</span>
+          </div>
+        <p style="text-align: center;">Create a free account to claim your first ticket, then predict race winners to earn more. The 10 winners are drawn at the season's close, weighted by tickets — more tickets, better odds, and anyone with a ticket can win. No purchase necessary. <strong style="margin-top: 8px; display: block; color: var(--maillot-jaune);">Total prize value ≈ €2,700.</strong></p>
       </div>
     </div>
   </section>
