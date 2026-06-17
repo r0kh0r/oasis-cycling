@@ -1240,7 +1240,7 @@ section { padding: 100px 0; position: relative; }
 
     .portal-hero { padding: 60px 0 40px; }
     .portal-hero__top { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 32px; margin-bottom: 40px; }
-    .portal-hero h1 { font-size: clamp(28px, 3.4vw, 44px); max-width: 620px; }
+    .portal-hero h1 { font-size: clamp(32px, 4vw, 54px); max-width: 620px; }
     .portal-hero__sub { font-size: 15px; max-width: 520px; margin-top: 12px; line-height: 1.5; }
 
     .portal-grid { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
@@ -1586,8 +1586,8 @@ section { padding: 100px 0; position: relative; }
       <div class="portal-hero__top">
         <div>
           <span class="eyebrow"><span class="dot"></span> WELCOME BACK, ROK</span>
-          <h1 style="margin-top: 14px;">You're in the raffle. Now stack the odds.</h1>
-          <p class="portal-hero__sub text-2">Creating your account already earned you <strong style="color:var(--text);">1 free ticket</strong> in the draw for a Canyon Endurance CF 5. Predict the <strong style="color:var(--text);">podium</strong> — top three — in each race and earn <strong style="color:var(--text);">+1 ticket for every place you call right</strong>, up to <strong style="color:var(--text);">16 tickets</strong> in all.</p>
+          <h1 style="margin-top: 14px;">You're in the draw. Now stack the odds.</h1>
+          <p class="portal-hero__sub text-2">Signing up banked your first ticket. Every correct prediction adds another, up to <strong style="color:var(--text);">sixteen in total</strong>.</p>
         </div>
         <div class="countdown" id="countdown-portal" style="min-width: 360px;">
           <div class="countdown__cell"><span class="num" data-cd="d">67</span><span class="lbl">Days</span></div>
@@ -1627,9 +1627,8 @@ section { padding: 100px 0; position: relative; }
                 <text id="ringMax" x="60" y="74" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Geist Mono" font-size="9" letter-spacing="2">OF 16</text>
               </svg>
               <div>
-                <div class="progress-ring__lbl">YOUR RAFFLE TICKETS</div>
-                <div class="progress-ring__num"><span id="ticketCountBig">1</span> of <span class="js-maxtickets">16</span> tickets earned</div>
-                <p style="color: var(--text-2); font-size: 14px;">The ring shows how many of the <strong style="color:var(--text);">16 possible</strong> tickets you've banked so far — 1 just for signing up, plus 1 for each podium place you call correctly across the 5 races. Each ticket is one entry in the final draw, so <strong style="color:var(--text);">the more you collect, the better your odds</strong>. We'll email you every race result, win or lose.</p>
+                <div class="progress-ring__lbl">YOUR TICKETS</div>
+                <div class="progress-ring__num"><span id="ticketCountBig">1</span> of <span class="js-maxtickets">16</span> earned</div>
                 <div class="points-breakdown" style="grid-template-columns:repeat(3,1fr);">
                   <div>
                     <div class="k">FROM SIGNUP</div>
@@ -1637,7 +1636,7 @@ section { padding: 100px 0; position: relative; }
                     <div class="d">Banked automatically when you created your account.</div>
                   </div>
                   <div>
-                    <div class="k">CORRECT PLACES</div>
+                    <div class="k">CORRECT PICKS</div>
                     <div class="v" id="bdPicks">0</div>
                     <div class="d">Podium places you've already called right — each one is a locked-in ticket.</div>
                   </div>
@@ -1653,19 +1652,19 @@ section { padding: 100px 0; position: relative; }
 
           <!-- How the raffle works -->
           <div class="portal-tile">
-            <span class="eyebrow muted"><span class="dot"></span> HOW THE RAFFLE WORKS</span>
+            <span class="eyebrow muted"><span class="dot"></span> <strong>HOW IT WORKS</strong></span>
             <div style="display:flex; gap:20px; margin-top:16px; flex-wrap:wrap;">
               <div style="flex:1; min-width:160px;">
                 <div class="text-mono text-3" style="font-size: 12px; letter-spacing:0.14em;">01 · JOIN</div>
-                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">Creating your account gives you your first raffle ticket automatically.</p>
+                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">Creating an account gives you your first ticket automatically.</p>
               </div>
               <div style="flex:1; min-width:160px;">
                 <div class="text-mono text-3" style="font-size: 12px; letter-spacing:0.14em;">02 · PREDICT</div>
-                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">Predict the podium of each race. Every place you call right earns one more ticket — up to 16.</p>
+                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">Pick the podium. Every place you call right is another ticket.</p>
               </div>
               <div style="flex:1; min-width:160px;">
                 <div class="text-mono text-3" style="font-size: 12px; letter-spacing:0.14em;">03 · WIN</div>
-                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">10 winners are drawn at the season's end. More tickets, better odds.</p>
+                <p style="font-size: 15px; color:var(--text-2); margin-top:6px;">Ten winners drawn at season's end. More tickets, better odds.</p>
               </div>
             </div>
             <a class="pbtn" href="#predictions" style="margin-top:20px; text-decoration:none;">Make your predictions ↓</a>
@@ -1715,17 +1714,9 @@ section { padding: 100px 0; position: relative; }
   <section id="predictions" style="background: linear-gradient(180deg, transparent, rgba(0, 60, 216, 0.03), transparent);">
     <div class="container">
       <div class="section__head">
-        <div class="stage-tag"><b>Predictions</b><span>One Ticket Per Correct Call</span></div>
-        <h2>Predict the champions.<br/>Earn tickets to the draw.</h2>
-        <p class="lead">Predict the full podium — 1st, 2nd and 3rd — for each of cycling's biggest races, men's and women's. When a race finishes we update the result here, and every place you called correctly adds <strong style="color:var(--text);">one more ticket</strong> to your raffle entry (up to 3 per race, 16 in total). You can change your podium any time up until <strong style="color:var(--text);">24 hours before each race starts</strong> — and we'll email you the outcome once it's decided.</p>
-      </div>
-
-      <div class="pred-notice">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="flex-shrink:0;">
-          <circle cx="10" cy="10" r="8.5" stroke="var(--oasis-blue)" stroke-width="1.4"/>
-          <path d="M10 5.5v5M10 13.5h.01" stroke="var(--oasis-blue)" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-        <span><strong style="color:var(--text);">World &amp; European Championships have two separate races</strong> — one for men and one for women, each with its own podium. That's why you'll see them as separate cards below. Predict both for double the ticket chances.</span>
+        <div class="stage-tag"><b>Predictions</b><span>Level Up</span></div>
+        <h2>Call the podium.</h2>
+        <p class="lead">Three predictions per race: 1st, 2nd, 3rd. Picks lock 24 hours before the start. Results land here and in your inbox.</p>
       </div>
 
       <div class="predictions-grid">
@@ -1830,17 +1821,17 @@ section { padding: 100px 0; position: relative; }
     <div class="container">
       <div class="section__head">
         <div class="stage-tag"><b>FAQ</b><span>Race rules</span></div>
-        <h2>Frequently asked, plainly answered.</h2>
+        <h2>Frequently asked questions.</h2>
       </div>
 
       <div class="faq">
 
         <div class="faq__item">
           <div class="faq__q">
-            <span>How do I enter the raffle?</span>
+            <span>How do I enter the draw?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">ENTRY</span>
           </div>
-          <p class="faq__a">Just create an account with your email — that alone gives you your first raffle ticket. From there, predicting race podiums is the way to earn more tickets and improve your odds, up to 16 in total. No purchase is ever necessary to enter or win.</p>
+          <p class="faq__a">Create an account with your email. That alone earns your first ticket. Predicting podiums earns more, up to 16 in total. No purchase is ever necessary to enter or win.</p>
         </div>
 
         <div class="faq__item">
@@ -1848,7 +1839,7 @@ section { padding: 100px 0; position: relative; }
             <span>How do the predictions work?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">PREDICTIONS</span>
           </div>
-          <p class="faq__a">For each listed race, predict the full podium — 1st, 2nd and 3rd — before the race starts. You can change your picks right up until the start. When the race finishes we update the result in the portal and award <strong>+1 ticket for every place you got exactly right</strong> (so up to 3 per race, 16 across all five). We'll email you the outcome of each race either way, win or lose.</p>
+          <p class="faq__a">Pick the full podium, 1st through 3rd, for each race before the deadline. Every place you get exactly right earns one ticket, up to three per race and 16 across the season. We email you each result, win or lose.</p>
         </div>
 
         <div class="faq__item">
@@ -1856,7 +1847,7 @@ section { padding: 100px 0; position: relative; }
             <span>What can I win?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">PRIZES</span>
           </div>
-          <p class="faq__a">A Canyon Endurance CF 5 race bike for first place, a signed Slovenia team jersey for second, three unsigned team jerseys for third, and five Canyon helmets for places 4 through 10 — ten winners in total, drawn from all tickets when the season ends. More tickets, better odds.</p>
+          <p class="faq__a">A Canyon Endurance CF 5 race bike for first, a signed Slovenia team jersey for second, three team jerseys for places three through five, and five Canyon helmets for places six through ten. Ten winners in total, drawn from all tickets when the season ends.</p>
         </div>
 
         <div class="faq__item">
@@ -1864,15 +1855,15 @@ section { padding: 100px 0; position: relative; }
             <span>Do I need crypto to participate?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">REQUIREMENTS</span>
           </div>
-          <p class="faq__a">No. Entering and predicting is completely free and requires no crypto. Your account is a secure wallet created from your email through Turnkey — there's no seed phrase to manage and nothing to buy.</p>
+          <p class="faq__a">No. Entering and predicting is completely free. Your account is a secure wallet created from your email through Turnkey: no seed phrase, nothing to buy.</p>
         </div>
 
         <div class="faq__item">
           <div class="faq__q">
-            <span>What is the "campaign portal" vs Privana?</span>
+            <span>What's the campaign portal vs Privana?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">ARCHITECTURE</span>
           </div>
-          <p class="faq__a">The campaign portal is the frontend where you make predictions and track your raffle tickets. Privana is the underlying product — a non-custodial app. Both share the same Turnkey wallet, so when the portal retires, your account simply continues as a Privana account. No migration, no new login.</p>
+          <p class="faq__a">The portal is where you predict and track your tickets. Privana is the product behind it, a non-custodial private trading app built on Oasis. Both share the same Turnkey wallet, so when the portal retires your account simply continues as a Privana account. No migration, no new login.</p>
         </div>
 
         <div class="faq__item">
@@ -1880,7 +1871,7 @@ section { padding: 100px 0; position: relative; }
             <span>When are winners drawn?</span>
             <span class="text-3 text-mono" style="font-size: 11px;">THE DRAW</span>
           </div>
-          <p class="faq__a">At the close of the season, once the final listed race has been decided. Winners are drawn at random from all tickets — so every entrant has a chance, and those who collected more tickets have proportionally better odds. All winners are notified by email.</p>
+          <p class="faq__a">At the close of the season, once the final race is decided. Winners are drawn at random from all tickets: everyone with a ticket has a chance, and more tickets mean better odds. Winners are notified by email.</p>
         </div>
 
       </div>
@@ -1947,7 +1938,8 @@ section { padding: 100px 0; position: relative; }
       </div>
 
       <p class="foot__legal">
-        No purchase necessary to enter or win. The Oasis × Cycling Campaign runs from May 15 to October 15, 2026. A free account earns one raffle ticket; each correctly predicted race winner earns one additional ticket. Ten prize winners are drawn at random from all tickets at the close of the campaign — odds of winning depend on the total number of tickets entered. Prizes are physical goods (a race bike, helmets and jerseys) and are non-transferable and non-exchangeable for cash. Accounts are secured via Turnkey; no cryptocurrency purchase is required to participate. Always read the campaign rules and consult local regulations before participating. Void where prohibited. Confidential — Specification v2, June 2026.
+        The World and European Championships each run two races — one men's and one women's, each with its own podium. That's why they appear as separate cards in the predictions section. Predict both for double the tickets.<br><br>
+        No purchase necessary to enter or win. The Oasis × Cycling Campaign runs from May 15 to October 15, 2026. A free account earns one raffle ticket; each correctly predicted race winner earns one additional ticket. Ten prize winners are drawn at random from all tickets at the close of the campaign — odds of winning depend on the total number of tickets entered. Prizes are physical goods (a race bike, helmets and jerseys) and are non-transferable and non-exchangeable for cash. Accounts are secured via Turnkey; no cryptocurrency purchase is required to participate. Always read the campaign rules and consult local regulations before participating. Void where prohibited.
       </p>
     </div>
   </footer>
@@ -2105,7 +2097,7 @@ section { padding: 100px 0; position: relative; }
         pk.innerHTML=podiumRows(k, false);
         btn.disabled=false; btn.onclick=()=>openPicker(k);
         btn.className = has ? 'pbtn pbtn--ghost' : 'pbtn';
-        btn.textContent = has ? 'Edit podium' : 'Predict the podium →';
+        btn.textContent = has ? 'Edit podium' : 'Predict now →';
       }
     }
     function renderAll(){ ['tour','worldsm','worldsw','eurosm','eurosw'].forEach(renderCard); updateTickets(); }
